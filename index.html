@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Marcus Vane — Founder · Investor · Operator</title>
+<meta name="description" content="Marcus Vane starts companies that shouldn't be possible — then makes them inevitable. Four exits, one playbook: conviction before consensus.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Onest:wght@400;500;600&display=swap" rel="stylesheet">
+<script type="importmap">
+{ "imports": { "lenis": "https://cdn.jsdelivr.net/npm/lenis@1.3.19/dist/lenis.mjs" } }
+</script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+img,video{display:block;max-width:100%}
+ul,ol{list-style:none}
+a{color:inherit;text-decoration:none}
+button{font:inherit;background:none;border:0;color:inherit;cursor:pointer;appearance:none}
+:root{
+  --font-display:"Anton",sans-serif;
+  --font-sans:"Onest",sans-serif;
+  --background:#08080a;--foreground:#f3f1ea;--surface:#111114;--surface-2:#17171b;
+  --muted:#807f78;--line:rgba(243,241,234,0.1);--line-strong:rgba(243,241,234,0.22);
+  --accent:#ff3b1d;--accent-2:#ff6a3d;
+  --gutter:2.5rem;--section:9rem;
+  --ease-expo:cubic-bezier(0.16,1,0.3,1);--ease-quart:cubic-bezier(0.165,0.84,0.44,1);--ease-out:cubic-bezier(0.22,1,0.36,1);
+}
+html{font-size:16px;background:#08080a}
+@media (max-width:1920px){html{font-size:0.833333vw}}
+@media (max-width:1440px){html{font-size:1.111111vw}}
+@media (max-width:1024px){html{font-size:1.5625vw}}
+@media (max-width:640px){html{font-size:4.444444vw}:root{--gutter:16px}}
+body{background:#08080a;color:#f3f1ea;font-family:var(--font-sans);-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;overflow-x:hidden}
+::selection{background:#ff3b1d;color:#08080a}
+html.lenis,html.lenis body{height:auto}
+.lenis.lenis-smooth{scroll-behavior:auto!important}
+main{position:relative;width:100%;overflow-x:hidden}
+.eyebrow{display:flex;align-items:center;gap:0.75rem;font-size:0.8125rem;font-weight:500;text-transform:uppercase;letter-spacing:0.22em;color:var(--muted)}
+.eyebrow::before{content:"";flex:0 0 auto;width:0.5rem;height:0.5rem;border-radius:9999px;background:var(--accent)}
+/* ---------- Preloader ---------- */
+#preloader{position:fixed;inset:0;z-index:100;background:var(--background)}
+#preloader .pl-bg{position:absolute;inset:0;z-index:-10;background:var(--background)}
+#preloader .pl-inner{position:relative;height:100%;display:flex;flex-direction:column;align-items:flex-start;justify-content:flex-end;gap:0.75rem;padding:var(--gutter);transition:opacity 300ms ease}
+@media (min-width:640px){#preloader .pl-inner{flex-direction:row;align-items:flex-end;justify-content:space-between;gap:1rem}}
+#preloader .pl-brand{font-family:var(--font-display);font-size:1.75rem;text-transform:uppercase;line-height:1;letter-spacing:-0.01em;color:var(--foreground)}
+#preloader .pl-count{font-family:var(--font-display);font-size:7.5rem;line-height:1;font-variant-numeric:tabular-nums;color:var(--foreground)}
+#preloader .pl-count span{color:var(--accent)}
+#preloader.wiping{transition:transform 650ms var(--ease-out);transform:translateY(-100%)}
+#preloader.done{pointer-events:none;visibility:hidden}
+/* ---------- Nav ---------- */
+.site-nav{position:fixed;inset-inline:0;top:0;z-index:60;pointer-events:none}
+.site-nav nav{pointer-events:auto;display:flex;align-items:center;justify-content:space-between;padding:1.5rem var(--gutter)}
+.logo{display:flex;align-items:center;gap:0.75rem}
+.logo-badge{display:grid;place-items:center;width:2.5rem;height:2.5rem;border-radius:9999px;border:1px solid var(--line-strong);font-weight:600;letter-spacing:-0.01em}
+.logo-name{font-size:0.8125rem;font-weight:500;text-transform:uppercase;letter-spacing:0.22em;color:var(--muted)}
+@media (max-width:639px){.logo-name{display:none}}
+.nav-links{display:flex;gap:2.5rem}
+@media (max-width:767px){.nav-links{display:none}}
+.nav-links a{position:relative;font-size:0.8125rem;font-weight:500;text-transform:uppercase;letter-spacing:0.18em;color:var(--muted);transition:color 340ms ease}
+.nav-links a::after{content:"";position:absolute;bottom:-0.25rem;left:0;height:1px;background:var(--accent);width:0;transition:width 340ms ease}
+.nav-links a:hover{color:var(--foreground)}
+.nav-links a:hover::after{width:100%}
+.burger{display:flex;flex-direction:column;gap:0.375rem;width:2.5rem;height:2.5rem;align-items:center;justify-content:center}
+@media (min-width:768px){.burger{display:none}}
+.burger span{display:block;height:0.125rem;width:1.5rem;background:var(--foreground);transition:transform 340ms ease,opacity 340ms ease}
+.burger.open span:nth-child(1){transform:translateY(0.5rem) rotate(45deg)}
+.burger.open span:nth-child(2){opacity:0}
+.burger.open span:nth-child(3){transform:translateY(-0.5rem) rotate(-45deg)}
+.mobile-menu{position:fixed;inset:0;z-index:50;background:var(--background);display:flex;flex-direction:column;justify-content:center;padding-inline:var(--gutter);opacity:0;pointer-events:none;transition:opacity 450ms ease-out}
+.mobile-menu.open{opacity:1;pointer-events:auto}
+.mobile-menu a{display:block;font-family:var(--font-display);font-size:3.25rem;text-transform:uppercase;line-height:1;letter-spacing:-0.01em;padding:0.75rem 0;opacity:0;transform:translateY(48px);transition:opacity 420ms ease-out,transform 420ms ease-out}
+.mobile-menu.open a{opacity:1;transform:translateY(0)}
+.mobile-menu.open a:nth-child(1){transition-delay:120ms}.mobile-menu.open a:nth-child(2){transition-delay:200ms}.mobile-menu.open a:nth-child(3){transition-delay:280ms}.mobile-menu.open a:nth-child(4){transition-delay:360ms}.mobile-menu.open a:nth-child(5){transition-delay:440ms}
+/* ---------- Reveal helpers ---------- */
+.rl{display:block;overflow:hidden}
+.rl-inner{display:block;transform:translateY(110%);opacity:0;transition:transform 850ms var(--ease-expo),opacity 850ms var(--ease-expo)}
+.in-view .rl-inner,.revealed .rl-inner{transform:translateY(0);opacity:1}
+.rv{opacity:0;transform:translateY(16px);transition:opacity 520ms var(--ease-expo),transform 520ms var(--ease-expo)}
+.rv.in-view{opacity:1;transform:translateY(0)}
+.rv-big{opacity:0;transform:translateY(60px);transition:opacity 620ms var(--ease-expo),transform 620ms var(--ease-expo)}
+.rv-big.in-view{opacity:1;transform:translateY(0)}
+/* ---------- Hero ---------- */
+.hero{position:relative;display:flex;flex-direction:column;min-height:100svh;overflow:hidden}
+.hero-top{position:relative;z-index:30;display:flex;flex-direction:column;gap:2rem;padding:7rem var(--gutter) 0}
+@media (min-width:640px){.hero-top{flex-direction:row;align-items:flex-start;justify-content:space-between;padding-top:8rem}}
+.hero-roles{font-family:var(--font-display);text-transform:uppercase;line-height:1.05;letter-spacing:-0.01em;color:var(--foreground);font-size:1.75rem}
+@media (min-width:640px){.hero-roles{font-size:3.25rem}}
+.hero-roles .rl-inner{transition-duration:760ms}
+.hero-desc{max-width:26rem;font-size:1.0625rem;line-height:1.6;color:var(--muted)}
+@media (min-width:640px){.hero-desc{text-align:right}}
+.hero-portrait{position:absolute;bottom:0;left:50%;transform:translateX(-50%);height:86vh;width:80vw;z-index:20;pointer-events:none}
+@media (min-width:640px){.hero-portrait{width:48vw}}
+@media (min-width:1024px){.hero-portrait{width:36vw}}
+.hero-portrait .liquid{pointer-events:auto;height:100%}
+.hero-gradient{position:absolute;inset-inline:0;bottom:0;z-index:20;height:26vh;background:linear-gradient(to bottom,transparent,#08080a);pointer-events:none}
+.hero-name{position:absolute;inset-inline:0;bottom:0;transform:translateY(6%);z-index:10;display:flex;flex-direction:column;align-items:center;font-family:var(--font-display);text-transform:uppercase;line-height:0.78;letter-spacing:-0.01em;color:var(--accent);font-size:13rem}
+@media (min-width:640px){.hero-name{font-size:28rem}}
+.hero-name .name-line{display:block;white-space:nowrap;overflow:hidden}
+.hero-name .letter{display:inline-block;transform:translateY(100%);opacity:0;transition:transform 900ms var(--ease-expo),opacity 900ms var(--ease-expo)}
+.hero-name.revealed .letter{transform:translateY(0);opacity:1}
+.scroll-cue{position:absolute;bottom:2rem;left:var(--gutter);z-index:30;display:flex;align-items:center;gap:0.75rem;font-size:0.8125rem;text-transform:uppercase;letter-spacing:0.22em;color:var(--muted);opacity:0;transition:opacity 520ms ease}
+.scroll-cue::before{content:"";width:2.5rem;height:1px;background:var(--accent)}
+.scroll-cue.revealed{opacity:1}
+/* ---------- Marquee ---------- */
+.marquee{overflow:hidden;border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:2rem 0}
+.marquee-track{display:flex;width:max-content;flex-wrap:nowrap;align-items:center;animation:marquee 22s linear infinite}
+@keyframes marquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+.marquee-word{font-family:var(--font-display);font-size:3.25rem;text-transform:uppercase;letter-spacing:-0.01em;white-space:nowrap}
+.marquee-dot{margin-inline:2rem;width:0.625rem;height:0.625rem;flex:0 0 auto;border-radius:9999px;background:var(--accent)}
+/* ---------- Sections ---------- */
+.section{padding:var(--section) var(--gutter)}
+.sec-head{margin-top:1.5rem;font-family:var(--font-display);text-transform:uppercase;line-height:0.95;letter-spacing:-0.01em;font-size:3.25rem}
+@media (min-width:640px){.sec-head{font-size:5rem}}
+.lead{margin-top:2rem;max-width:46ch;font-size:1.375rem;line-height:1.45;color:var(--muted)}
+.story-grid{display:grid;grid-template-columns:1fr;gap:3rem}
+@media (min-width:1024px){.story-grid{grid-template-columns:repeat(12,1fr);gap:var(--gutter)}}
+@media (min-width:1024px){.story-left{grid-column:span 6}.story-right{grid-column:span 6;padding-top:0.5rem}}
+.principles li{display:grid;grid-template-columns:auto 1fr;column-gap:1.5rem;border-top:1px solid var(--line);padding:2rem 0}
+.principles li:last-child{border-bottom:1px solid var(--line)}
+.principles .num{font-size:1.75rem;font-weight:600;font-variant-numeric:tabular-nums;color:var(--accent)}
+.principles h3{font-size:1.75rem;font-weight:600;letter-spacing:-0.01em;line-height:1.15}
+.principles p{margin-top:0.75rem;max-width:44ch;font-size:1.0625rem;line-height:1.6;color:var(--muted)}
+.head-row{display:flex;flex-direction:column;gap:1.5rem}
+@media (min-width:640px){.head-row{flex-direction:row;align-items:flex-end;justify-content:space-between}}
+.head-label{font-size:0.8125rem;text-transform:uppercase;letter-spacing:0.22em;color:var(--muted);white-space:nowrap}
+.ventures-grid{margin-top:4rem;display:grid;grid-template-columns:1fr;column-gap:var(--gutter);row-gap:4rem}
+@media (min-width:768px){.ventures-grid{grid-template-columns:1fr 1fr}.ventures-grid li:nth-child(even){margin-top:6rem}}
+.venture .liquid{aspect-ratio:16/11;width:100%;border-radius:0.125rem}
+.venture-row{margin-top:1.5rem;border-top:1px solid var(--line);padding-top:1.25rem;display:flex;align-items:flex-start;justify-content:space-between;gap:1.5rem}
+.venture-row h3{font-size:1.75rem;font-weight:600;letter-spacing:-0.01em;line-height:1.15;transition:color 340ms ease}
+.venture:hover .venture-row h3{color:var(--accent)}
+.venture-row p{margin-top:0.5rem;max-width:42ch;font-size:1.0625rem;line-height:1.6;color:var(--muted)}
+.venture-meta{flex-shrink:0;text-align:right}
+.venture-meta .year{font-size:0.8125rem;text-transform:uppercase;letter-spacing:0.18em;color:var(--muted)}
+.venture-meta .outcome{margin-top:0.5rem;font-size:0.8125rem;font-weight:500;text-transform:uppercase;letter-spacing:0.18em;color:var(--accent)}
+.venture-cat{margin-top:0.75rem;font-size:0.8125rem;text-transform:uppercase;letter-spacing:0.22em;color:var(--muted)}
+/* LiquidImage */
+.liquid{position:relative;overflow:hidden;background:radial-gradient(130% 130% at 30% 15%,var(--surface-2),var(--background))}
+.liquid svg{position:absolute;width:0;height:0}
+.liquid-media{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center bottom;transition:filter 380ms ease-out}
+.liquid:not(.bare) .liquid-media{filter:var(--liq) grayscale(1)}
+.liquid:not(.bare):hover .liquid-media,.liquid:not(.bare).is-hover .liquid-media{filter:var(--liq) grayscale(0)}
+.liquid.bare .liquid-media{filter:var(--liq)}
+.liquid-veil{position:absolute;inset:0;background:var(--foreground);mix-blend-mode:color;opacity:0.88;pointer-events:none;transition:opacity 380ms ease-out}
+.liquid:hover .liquid-veil,.liquid.is-hover .liquid-veil{opacity:0}
+.liquid-glow{position:absolute;inset:0;background:linear-gradient(120deg,transparent 30%,rgba(255,59,29,0.35) 50%,transparent 70%);opacity:0;pointer-events:none;transition:opacity 340ms ease-out}
+.liquid:hover .liquid-glow,.liquid.is-hover .liquid-glow{opacity:1}
+.liquid-vignette{position:absolute;inset:0;background:radial-gradient(120% 120% at 50% 120%,rgba(8,8,10,0.7),transparent 60%);pointer-events:none}
+.liquid.bare .liquid-veil,.liquid.bare .liquid-glow,.liquid.bare .liquid-vignette{display:none}
+/* Impact */
+.impact-head{font-size:3.25rem;line-height:1}
+.stats{margin-top:4rem;display:grid;grid-template-columns:1fr;border-top:1px solid var(--line)}
+@media (min-width:640px){.stats{grid-template-columns:1fr 1fr}}
+@media (min-width:1024px){.stats{grid-template-columns:repeat(4,1fr)}}
+.stat{display:flex;flex-direction:column;gap:1rem;border-bottom:1px solid var(--line);padding:2.5rem 0}
+@media (min-width:1024px){.stat{padding:3rem 0}}
+@media (min-width:640px){.stat:nth-child(even){border-left:1px solid var(--line);padding-left:2rem}}
+@media (min-width:1024px){.stat{border-left:0;padding-left:0}.stat:nth-child(4n+2),.stat:nth-child(4n+3),.stat:nth-child(4n+4){border-left:1px solid var(--line);padding-left:2rem}}
+.stat dd{font-family:var(--font-display);font-size:7.5rem;line-height:1;letter-spacing:-0.01em;transition:color 340ms ease}
+.stat:hover dd{color:var(--accent)}
+.stat dt{max-width:20ch;font-size:1.0625rem;text-transform:uppercase;letter-spacing:0.14em;color:var(--muted);line-height:1.6}
+/* Voices */
+.voices-grid{margin-top:4rem;display:grid;grid-template-columns:1fr;gap:3rem}
+@media (min-width:1024px){.voices-grid{grid-template-columns:repeat(12,1fr);gap:var(--gutter)}}
+@media (min-width:1024px){.voices-list{grid-column:span 5}.voices-panel{grid-column:span 7}}
+.voice-btn{display:flex;align-items:baseline;gap:1.25rem;width:100%;border-top:1px solid var(--line);padding:1.75rem 0;text-align:left}
+.voice-btn:last-child{border-bottom:1px solid var(--line)}
+.voice-btn .v-index{font-size:0.8125rem;font-variant-numeric:tabular-nums;letter-spacing:0.18em;color:var(--muted)}
+.voice-btn.active .v-index{color:var(--accent)}
+.voice-btn .v-name{font-size:1.75rem;font-weight:600;letter-spacing:-0.01em;color:var(--muted)}
+.voice-btn.active .v-name{color:var(--foreground)}
+.voice-btn .v-role{margin-top:0.25rem;font-size:0.8125rem;text-transform:uppercase;letter-spacing:0.18em;color:var(--muted)}
+.voice-btn .v-rule{margin-left:auto;height:1px;background:var(--accent);width:0;flex:0 0 auto;transition:width 340ms ease}
+.voice-btn.active .v-rule{width:2.5rem}
+.voices-panel{display:grid;grid-template-columns:1fr;gap:2rem;align-items:flex-start}
+@media (min-width:640px){.voices-panel{grid-template-columns:1fr auto}}
+.voice-quote-wrap{order:2}
+@media (min-width:640px){.voice-quote-wrap{order:1}}
+.voice-portrait{order:1;width:100%}
+@media (min-width:640px){.voice-portrait{order:2;width:16rem}}
+.voice-portrait .liquid{aspect-ratio:4/5;width:100%;border-radius:0.125rem}
+.voice-quote{max-width:30ch;font-size:1.75rem;font-weight:500;line-height:1.3;letter-spacing:-0.01em;color:var(--foreground)}
+.voice-quote .wq{display:inline-block;transform:translateY(18px);opacity:0;transition:transform 520ms var(--ease-quart),opacity 520ms var(--ease-quart)}
+.voice-quote.go .wq{transform:translateY(0);opacity:1}
+.voice-footer{margin-top:2rem;font-size:0.8125rem;text-transform:uppercase;letter-spacing:0.18em;color:var(--muted)}
+.portrait-in{opacity:0;transform:scale(1.06);transition:opacity 640ms var(--ease-expo),transform 640ms var(--ease-expo)}
+.portrait-in.in-view{opacity:1;transform:scale(1)}
+/* Footer */
+footer.contact{padding:var(--section) var(--gutter) 0}
+.contact-head{font-size:5rem}
+@media (min-width:640px){.contact-head{font-size:7.5rem}}
+.email-link{margin-top:3rem;display:inline-flex;align-items:baseline;gap:0.75rem;font-size:1.75rem;font-weight:600;letter-spacing:-0.01em;word-break:break-all;transition:color 340ms ease,transform 340ms ease}
+@media (min-width:640px){.email-link{gap:1rem;font-size:5rem}}
+.email-link:hover{color:var(--accent);transform:translateX(14px)}
+.email-link .arrow{color:var(--accent)}
+.footer-bar{margin-top:var(--section);border-top:1px solid var(--line);padding:3rem 0;display:grid;grid-template-columns:1fr;gap:2.5rem}
+@media (min-width:1024px){.footer-bar{grid-template-columns:repeat(12,1fr);gap:2.5rem}.footer-left{grid-column:span 6}.footer-social{grid-column:span 3}.footer-copy{grid-column:span 3;text-align:right}}
+.signature{font-family:var(--font-display);font-size:3.25rem;text-transform:uppercase;line-height:1;letter-spacing:-0.01em}
+.footer-tag{margin-top:1rem;font-size:0.8125rem;text-transform:uppercase;letter-spacing:0.22em;color:var(--muted)}
+.social-links li{margin-bottom:0.75rem}
+.social-links a{position:relative;font-size:1.0625rem;color:var(--muted);transition:color 340ms ease;padding-left:0}
+.social-links a::before{content:"";position:absolute;left:0;top:50%;height:1px;background:var(--accent);width:0;transition:width 340ms ease}
+.social-links a:hover{color:var(--foreground);padding-left:2rem}
+.social-links a:hover::before{width:1.5rem}
+.footer-copy p{font-size:0.8125rem;text-transform:uppercase;letter-spacing:0.18em;color:var(--muted)}
+@media (prefers-reduced-motion:reduce){
+  #preloader{display:none}
+  .marquee-track{animation:none}
+  .rl-inner,.rv,.rv-big,.hero-name .letter,.voice-quote .wq,.portrait-in{transition:none!important;transform:none!important;opacity:1!important}
+}
+</style>
+</head>
+<body>
+<!-- Preloader -->
+<div id="preloader" aria-hidden="false"><div class="pl-bg"></div>
+  <div class="pl-inner" id="plInner">
+    <div class="pl-brand">Marcus Vane</div>
+    <div class="pl-count"><span id="plNum">0</span><span>%</span></div>
+  </div>
+</div>
+
+<header class="site-nav"><nav>
+  <a class="logo" href="#top" data-scroll="#top"><span class="logo-badge">MV</span><span class="logo-name">Marcus Vane</span></a>
+  <ul class="nav-links">
+    <li><a href="#story" data-scroll="#story">Story</a></li>
+    <li><a href="#ventures" data-scroll="#ventures">Ventures</a></li>
+    <li><a href="#impact" data-scroll="#impact">Impact</a></li>
+    <li><a href="#voices" data-scroll="#voices">Voices</a></li>
+    <li><a href="#contact" data-scroll="#contact">Contact</a></li>
+  </ul>
+  <button class="burger" id="burger" aria-label="Open menu" aria-expanded="false"><span></span><span></span><span></span></button>
+</nav></header>
+
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#story" data-scroll="#story">Story</a>
+  <a href="#ventures" data-scroll="#ventures">Ventures</a>
+  <a href="#impact" data-scroll="#impact">Impact</a>
+  <a href="#voices" data-scroll="#voices">Voices</a>
+  <a href="#contact" data-scroll="#contact">Contact</a>
+</div>
+
+<main>
+<!-- Hero -->
+<section class="hero" id="top">
+  <div class="hero-top">
+    <h2 class="hero-roles" id="heroRoles">
+      <span class="rl"><span class="rl-inner" style="transition-delay:0ms">Founder</span></span>
+      <span class="rl"><span class="rl-inner" style="transition-delay:80ms">Investor</span></span>
+      <span class="rl"><span class="rl-inner" style="transition-delay:160ms">Operator</span></span>
+      <span class="rl"><span class="rl-inner" style="transition-delay:240ms">Contrarian</span></span>
+    </h2>
+    <p class="hero-desc rv" id="heroDesc">I start companies that shouldn't be possible — then make them inevitable. Four exits, one playbook: conviction before consensus.</p>
+  </div>
+
+  <div class="hero-portrait">
+    <figure class="liquid bare" data-liquid="hero" data-scale="30" style="--liq:url(#liquid-hero)">
+      <svg aria-hidden="true"><defs>
+        <filter id="liquid-hero" x="-20%" y="-20%" width="140%" height="140%">
+          <feTurbulence type="fractalNoise" baseFrequency="0.009" numOctaves="2" result="noise"></feTurbulence>
+          <feDisplacementMap in="SourceGraphic" in2="noise" scale="1"></feDisplacementMap>
+        </filter>
+      </defs></svg>
+      <video class="liquid-media" autoplay muted loop playsinline preload="auto" poster="https://api.getlayers.ai/storage/v1/object/public/public/assets/marcus-vane-6799bd1fb6/hero/portrait.webp">
+        <source src="https://api.getlayers.ai/storage/v1/object/public/public/assets/marcus-vane-6799bd1fb6/hero/hero.mp4" type="video/mp4">
+      </video>
+    </figure>
+  </div>
+  <div class="hero-gradient"></div>
+
+  <h1 class="hero-name" id="heroName" aria-label="Marcus Vane">
+    <span class="name-line" id="nameLine1"></span>
+    <span class="name-line" id="nameLine2"></span>
+  </h1>
+
+  <div class="scroll-cue" id="scrollCue">Scroll to enter</div>
+</section>
+
+<!-- Marquee -->
+<section class="marquee" aria-label="Operating principles"><div class="marquee-track" id="marqueeTrack"></div></section>
+
+<!-- Story -->
+<section class="section" id="story"><div class="story-grid">
+  <div class="story-left">
+    <div class="eyebrow">The Story</div>
+    <h2 class="sec-head line-reveal">
+      <span class="rl"><span class="rl-inner" style="transition-delay:0ms">Conviction is a</span></span>
+      <span class="rl"><span class="rl-inner" style="transition-delay:90ms">competitive</span></span>
+      <span class="rl"><span class="rl-inner" style="transition-delay:180ms">advantage.</span></span>
+    </h2>
+    <p class="lead rv" style="transition-duration:520ms">For twenty years I've backed the version of the future most people couldn't see yet. From a dorm-room prototype to companies serving a hundred million people, the through-line never changed: find the hard problem everyone avoids, assemble the team nobody else could, and out-stubborn the doubt.</p>
+  </div>
+  <div class="story-right">
+    <ul class="principles">
+      <li class="rv" style="transition-duration:560ms;transition-delay:0ms"><span class="num">01</span><div><h3>Move before it's obvious</h3><p>The best opportunities look like mistakes right up until they look inevitable. I commit while the room is still hesitating.</p></div></li>
+      <li class="rv" style="transition-duration:560ms;transition-delay:90ms"><span class="num">02</span><div><h3>Hire founders, not employees</h3><p>I build teams of people who would start their own thing — then give them a reason not to. Ownership compounds faster than talent alone.</p></div></li>
+      <li class="rv" style="transition-duration:560ms;transition-delay:180ms"><span class="num">03</span><div><h3>Distribution is the product</h3><p>Genius unshipped is a hobby. Every venture is engineered around how it reaches the people it was built for.</p></div></li>
+      <li class="rv" style="transition-duration:560ms;transition-delay:270ms"><span class="num">04</span><div><h3>Play the long game loudly</h3><p>Patience and ambition are not opposites. I think in decades and act with urgency every single day.</p></div></li>
+    </ul>
+  </div>
+</div></section>
+
+<!-- Ventures -->
+<section class="section" id="ventures">
+  <div class="head-row">
+    <div>
+      <div class="eyebrow">Selected Ventures</div>
+      <h2 class="sec-head line-reveal">
+        <span class="rl"><span class="rl-inner" style="transition-delay:0ms">The work that</span></span>
+        <span class="rl"><span class="rl-inner" style="transition-delay:90ms">moved markets.</span></span>
+      </h2>
+    </div>
+    <div class="head-label">04 / Companies</div>
+  </div>
+  <ul class="ventures-grid" id="venturesGrid"></ul>
+</section>
+
+<!-- Impact -->
+<section class="section" id="impact">
+  <div class="eyebrow">By The Numbers</div>
+  <h2 class="sec-head impact-head line-reveal">
+    <span class="rl"><span class="rl-inner" style="transition-delay:0ms">Two decades,</span></span>
+    <span class="rl"><span class="rl-inner" style="transition-delay:90ms">measured.</span></span>
+  </h2>
+  <dl class="stats">
+    <div class="stat rv" style="transition-duration:560ms;transition-delay:0ms"><dd>4</dd><dt>Companies founded &amp; exited</dt></div>
+    <div class="stat rv" style="transition-duration:560ms;transition-delay:110ms"><dd>$3.2B</dd><dt>Enterprise value created</dt></div>
+    <div class="stat rv" style="transition-duration:560ms;transition-delay:220ms"><dd>120M+</dd><dt>People served by his products</dt></div>
+    <div class="stat rv" style="transition-duration:560ms;transition-delay:330ms"><dd>2,400</dd><dt>Jobs created across ventures</dt></div>
+  </dl>
+</section>
+
+<!-- Voices -->
+<section class="section" id="voices">
+  <div class="eyebrow">Voices</div>
+  <h2 class="sec-head line-reveal"><span class="rl"><span class="rl-inner">What they say.</span></span></h2>
+  <div class="voices-grid">
+    <ul class="voices-list" id="voicesList"></ul>
+    <div class="voices-panel">
+      <div class="voice-quote-wrap">
+        <blockquote>
+          <p class="voice-quote" id="voiceQuote"></p>
+          <footer class="voice-footer" id="voiceFooter"></footer>
+        </blockquote>
+      </div>
+      <div class="voice-portrait portrait-in" id="voicePortraitWrap">
+        <figure class="liquid" data-liquid="voice" data-scale="22" style="--liq:url(#liquid-voice)">
+          <svg aria-hidden="true"><defs>
+            <filter id="liquid-voice" x="-20%" y="-20%" width="140%" height="140%">
+              <feTurbulence type="fractalNoise" baseFrequency="0.009" numOctaves="2" result="noise"></feTurbulence>
+              <feDisplacementMap in="SourceGraphic" in2="noise" scale="1"></feDisplacementMap>
+            </filter>
+          </defs></svg>
+          <img class="liquid-media" id="voiceImg" src="https://api.getlayers.ai/storage/v1/object/public/public/assets/marcus-vane-6799bd1fb6/voices/voice-01.webp" alt="Portrait of the featured voice">
+          <div class="liquid-veil"></div><div class="liquid-glow"></div><div class="liquid-vignette"></div>
+        </figure>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Contact Footer -->
+<footer class="contact" id="contact">
+  <div class="eyebrow">Let's Build</div>
+  <h2 class="sec-head contact-head line-reveal">
+    <span class="rl"><span class="rl-inner" style="transition-delay:0ms">Have something</span></span>
+    <span class="rl"><span class="rl-inner" style="transition-delay:90ms">the world says</span></span>
+    <span class="rl"><span class="rl-inner" style="transition-delay:180ms">can't be done?</span></span>
+  </h2>
+  <p class="lead rv" style="transition-duration:520ms">That's usually where I start. I read every message I'm sent.</p>
+  <div><a class="email-link rv" style="transition-duration:340ms" href="mailto:hello@marcusvane.com">hello@marcusvane.com <span class="arrow">↗</span></a></div>
+
+  <div class="footer-bar">
+    <div class="footer-left">
+      <p class="signature">Marcus Vane</p>
+      <p class="footer-tag">Designed &amp; built with conviction.</p>
+    </div>
+    <nav class="footer-social" aria-label="Social"><ul class="social-links">
+      <li><a href="https://www.linkedin.com" target="_blank" rel="noreferrer noopener">LinkedIn</a></li>
+      <li><a href="https://x.com" target="_blank" rel="noreferrer noopener">X / Twitter</a></li>
+      <li><a href="https://substack.com" target="_blank" rel="noreferrer noopener">Substack</a></li>
+    </ul></nav>
+    <div class="footer-copy"><p>© 2026 Marcus Vane. All rights reserved.</p></div>
+  </div>
+</footer>
+</main>
+<script>
+/* Adaptive grid above 1920px (damped scale-up) */
+const FONT_BASE = 16, BASE_W = 1920, COEF = 0.6666;
+function applyAdaptiveGrid(){
+  const w = window.innerWidth;
+  const reduction = ((BASE_W - w) / BASE_W) * 100 * COEF;
+  const size = FONT_BASE - (FONT_BASE * reduction) / 100;
+  if (size > FONT_BASE) document.documentElement.style.fontSize = size + "px";
+  else document.documentElement.style.removeProperty("font-size");
+}
+applyAdaptiveGrid();
+addEventListener("resize", applyAdaptiveGrid);
+
+/* Data — verbatim copy, full bucket URLs */
+const BASE = "https://api.getlayers.ai/storage/v1/object/public/public/assets/marcus-vane-6799bd1fb6";
+const MARQUEE_WORDS = ["Build Bold","Scale Relentlessly","Think In Decades","Bet On People","Ship The Future"];
+const VENTURES = [
+  {name:"Helix Robotics",cat:"Industrial Automation",year:"2019",outcome:"Acquired — $1.1B",blurb:"Reinvented warehouse logistics with autonomous fleets now running in 40 countries.",img:BASE+"/ventures/venture-01.webp"},
+  {name:"Northwind Energy",cat:"Climate Infrastructure",year:"2015",outcome:"IPO — NYSE: NWND",blurb:"Brought utility-scale storage to the grid years before the market believed it was viable.",img:BASE+"/ventures/venture-02.webp"},
+  {name:"Cadence Health",cat:"Digital Medicine",year:"2011",outcome:"Acquired — $640M",blurb:"Put a clinician in every pocket and rewired how chronic care gets delivered.",img:BASE+"/ventures/venture-03.webp"},
+  {name:"Vane Capital",cat:"Venture Investing",year:"2008",outcome:"Active — $900M AUM",blurb:"Backing the next generation of contrarian founders building hard, durable companies.",img:BASE+"/ventures/venture-04.webp"}
+];
+const VOICES = [
+  {quote:"Marcus saw the market three years before the rest of us. Betting alongside him changed the trajectory of my entire career.",name:"Elena Cardoso",role:"Managing Partner, Meridian Ventures",img:BASE+"/voices/voice-01.webp"},
+  {quote:"He doesn't just write checks — he gets in the trenches at 6am and refuses to leave until the impossible part is solved.",name:"David Okonkwo",role:"Founder & CEO, Cadence Health",img:BASE+"/voices/voice-02.webp"},
+  {quote:"The most demanding mentor I've ever had, and the only reason our company survived its first winter. Relentless, generous, right.",name:"Priya Nandakumar",role:"CEO, Northwind Energy",img:BASE+"/voices/voice-03.webp"}
+];
+
+/* Marquee — list rendered twice for a seamless loop */
+(function(){
+  const track = document.getElementById("marqueeTrack");
+  const one = MARQUEE_WORDS.map(function(w){ return '<span class="marquee-word">'+w+'</span><span class="marquee-dot"></span>'; }).join("");
+  track.innerHTML = one + one;
+})();
+
+/* Ventures */
+(function(){
+  const grid = document.getElementById("venturesGrid");
+  grid.innerHTML = VENTURES.map(function(v,i){
+    const id = "liquid-v"+(i+1);
+    return '<li class="venture rv-big" style="transition-delay:'+(i%2===1?120:0)+'ms"><article class="group">'
+      + '<figure class="liquid" data-liquid="v'+(i+1)+'" data-scale="28" style="--liq:url(#'+id+')">'
+      + '<svg aria-hidden="true"><defs><filter id="'+id+'" x="-20%" y="-20%" width="140%" height="140%">'
+      + '<feTurbulence type="fractalNoise" baseFrequency="0.009" numOctaves="2" result="noise"></feTurbulence>'
+      + '<feDisplacementMap in="SourceGraphic" in2="noise" scale="1"></feDisplacementMap>'
+      + '</filter></defs></svg>'
+      + '<img class="liquid-media" src="'+v.img+'" alt="'+v.name+'" loading="lazy" style="object-position:center center">'
+      + '<div class="liquid-veil"></div><div class="liquid-glow"></div><div class="liquid-vignette"></div></figure>'
+      + '<div class="venture-row"><div><h3>'+v.name+'</h3><p>'+v.blurb+'</p></div>'
+      + '<div class="venture-meta"><div class="year">'+v.year+'</div><div class="outcome">'+v.outcome+'</div></div></div>'
+      + '<div class="venture-cat">'+v.cat+'</div></article></li>';
+  }).join("");
+})();
+
+/* Hero name — letter by letter */
+(function(){
+  function letters(el, word, baseDelay){
+    el.innerHTML = word.split("").map(function(ch,i){
+      return '<span class="letter" style="transition-delay:'+(baseDelay + i*52)+'ms">'+ch+'</span>';
+    }).join("");
+  }
+  letters(document.getElementById("nameLine1"), "Marcus", 0);
+  letters(document.getElementById("nameLine2"), "Vane", 240);
+})();
+
+/* In-view reveals — IntersectionObserver, threshold 0, once */
+const io = new IntersectionObserver(function(entries){
+  entries.forEach(function(e){
+    if (e.isIntersecting){ e.target.classList.add("in-view"); io.unobserve(e.target); }
+  });
+}, {threshold:0, rootMargin:"0px"});
+document.querySelectorAll(".rv, .rv-big, .line-reveal, .portrait-in").forEach(function(el){ io.observe(el); });
+
+/* Hero reveal sequencing (from page load) */
+const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+if (!reduced){
+  setTimeout(function(){ document.getElementById("heroName").classList.add("revealed"); }, 2500);
+  setTimeout(function(){ document.getElementById("heroRoles").classList.add("revealed"); }, 2700);
+  setTimeout(function(){ document.getElementById("heroDesc").classList.add("in-view"); }, 2900);
+  setTimeout(function(){ document.getElementById("scrollCue").classList.add("revealed"); }, 3400);
+} else {
+  document.getElementById("heroName").classList.add("revealed");
+  document.getElementById("heroRoles").classList.add("revealed");
+  document.getElementById("heroDesc").classList.add("in-view");
+  document.getElementById("scrollCue").classList.add("revealed");
+}
+
+/* Mobile menu */
+const burger = document.getElementById("burger"), menu = document.getElementById("mobileMenu");
+function closeMenu(){ burger.classList.remove("open"); burger.setAttribute("aria-expanded","false"); menu.classList.remove("open"); }
+burger.addEventListener("click", function(){
+  const open = menu.classList.toggle("open");
+  burger.classList.toggle("open", open); burger.setAttribute("aria-expanded", String(open));
+});
+
+/* Smooth anchors — Lenis when available, native otherwise */
+document.querySelectorAll("[data-scroll]").forEach(function(a){
+  a.addEventListener("click", function(e){
+    const target = document.querySelector(a.getAttribute("data-scroll"));
+    if (!target) return;
+    e.preventDefault(); closeMenu();
+    if (window.lenis) window.lenis.scrollTo(target);
+    else target.scrollIntoView({behavior:"smooth"});
+  });
+});
+
+/* Voices — selector + word-by-word quote replay */
+const voicesList = document.getElementById("voicesList");
+const quoteEl = document.getElementById("voiceQuote");
+const footerEl = document.getElementById("voiceFooter");
+const voiceImg = document.getElementById("voiceImg");
+voicesList.innerHTML = VOICES.map(function(v,i){
+  return '<li><button class="voice-btn'+(i===0?" active":"")+'" data-index="'+i+'">'
+    + '<span class="v-index">0'+(i+1)+'</span><span><span class="v-name">'+v.name+'</span><span class="v-role" style="display:block">'+v.role+'</span></span>'
+    + '<span class="v-rule"></span></button></li>';
+}).join("");
+function renderVoice(i){
+  const v = VOICES[i];
+  document.querySelectorAll(".voice-btn").forEach(function(b){ b.classList.toggle("active", Number(b.dataset.index)===i); });
+  const words = v.quote.split(" ");
+  quoteEl.innerHTML = words.map(function(w,j){
+    const pre = j===0 ? "“" : "", suf = j===words.length-1 ? "”" : "";
+    return '<span class="wq" style="transition-delay:'+(j*22)+'ms">'+pre+w+suf+'</span>';
+  }).join(" ");
+  quoteEl.classList.remove("go"); void quoteEl.offsetWidth; quoteEl.classList.add("go");
+  footerEl.textContent = v.name + " — " + v.role;
+  voiceImg.src = v.img; voiceImg.alt = "Portrait of " + v.name;
+}
+voicesList.addEventListener("click", function(e){
+  const btn = e.target.closest(".voice-btn");
+  if (btn) renderVoice(Number(btn.dataset.index));
+});
+renderVoice(0);
+
+/* LiquidImage hover distortion — imperative SVG attribute animation, desktop only */
+function easeOutBack(t){ const c=1.70158, u=t-1; return 1 + (c+1)*u*u*u + c*u*u; }
+function animateLiquid(fig, toScale, toFreq){
+  const turb = fig.querySelector("feTurbulence"), disp = fig.querySelector("feDisplacementMap");
+  if (!turb || !disp) return;
+  const fromScale = parseFloat(disp.getAttribute("scale")||"1");
+  const fromFreq = parseFloat(turb.getAttribute("baseFrequency")||"0.009");
+  if (fig._liqRaf) cancelAnimationFrame(fig._liqRaf);
+  const start = performance.now(), dur = 520;
+  (function step(now){
+    const t = Math.min(1, (now-start)/dur), e = easeOutBack(t);
+    disp.setAttribute("scale", (fromScale + (toScale-fromScale)*e).toFixed(2));
+    turb.setAttribute("baseFrequency", (fromFreq + (toFreq-fromFreq)*e).toFixed(4));
+    if (t < 1) fig._liqRaf = requestAnimationFrame(step);
+  })(start);
+}
+function setupLiquid(){
+  if (!window.matchMedia("(hover: hover) and (pointer: fine)").matches || window.innerWidth <= 768) return;
+  document.querySelectorAll(".liquid").forEach(function(fig){
+    const target = parseFloat(fig.dataset.scale||"28");
+    fig.addEventListener("mouseenter", function(){ fig.classList.add("is-hover"); animateLiquid(fig, target, 0.022); });
+    fig.addEventListener("mouseleave", function(){ fig.classList.remove("is-hover"); animateLiquid(fig, 1, 0.009); });
+  });
+}
+setupLiquid();
+
+/* Preloader — 0→100 in 2000ms, fade labels 300ms, 200ms delay, wipe 650ms */
+(function(){
+  const pre = document.getElementById("preloader");
+  if (!pre) return;
+  if (reduced){ pre.classList.add("done"); pre.setAttribute("aria-hidden","true"); pre.remove(); return; }
+  window.scrollTo(0,0);
+  if (window.lenis) window.lenis.stop();
+  const num = document.getElementById("plNum"), inner = document.getElementById("plInner");
+  const start = performance.now();
+  function tick(now){
+    const t = Math.min(1, (now-start)/2000);
+    num.textContent = Math.round(t*100);
+    if (t < 1) requestAnimationFrame(tick);
+    else {
+      inner.style.opacity = "0";
+      setTimeout(function(){
+        pre.classList.add("wiping");
+        setTimeout(function(){
+          pre.classList.add("done"); pre.setAttribute("aria-hidden","true");
+          if (window.lenis) window.lenis.start();
+          window.__preloaderDone = true;
+          setTimeout(function(){ pre.remove(); }, 100);
+        }, 650);
+      }, 500);
+    }
+  }
+  requestAnimationFrame(tick);
+  /* Safety net if Lenis/module or the counter stalls: never trap the user behind the preloader */
+  setTimeout(function(){
+    if (!window.__preloaderDone && document.body.contains(pre)){
+      pre.classList.add("done"); pre.setAttribute("aria-hidden","true");
+      if (window.lenis) window.lenis.start();
+      pre.remove();
+    }
+  }, 7000);
+})();
+</script>
+<script type="module">
+  import Lenis from "lenis";
+  const lenis = new Lenis({ smoothWheel: true });
+  window.lenis = lenis;
+  const pre = document.getElementById("preloader");
+  if (pre && !window.__preloaderDone) lenis.stop();
+  function raf(t){ lenis.raf(t); requestAnimationFrame(raf); }
+  requestAnimationFrame(raf);
+</script>
+</body>
+</html>
