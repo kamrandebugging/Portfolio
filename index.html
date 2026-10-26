@@ -89,12 +89,13 @@ main{position:relative;width:100%;overflow-x:hidden}
 .hero-roles .rl-inner{transition-duration:760ms}
 .hero-desc{max-width:26rem;font-size:1.0625rem;line-height:1.6;color:var(--muted)}
 @media (min-width:640px){.hero-desc{text-align:right}}
-.hero-portrait{position:absolute;bottom:0;left:50%;transform:translateX(-50%);height:86vh;width:80vw;z-index:20;pointer-events:none}
-@media (min-width:640px){.hero-portrait{width:48vw}}
-@media (min-width:1024px){.hero-portrait{width:36vw}}
-.hero-portrait .liquid{pointer-events:auto;height:100%}
+.hero-portrait{position:absolute;bottom:0;left:50%;transform:translateX(-50%);height:80vh;width:70vw;z-index:20;pointer-events:none}
+@media (min-width:640px){.hero-portrait{width:42vw}}
+@media (min-width:1024px){.hero-portrait{width:30vw}}
+.hero-portrait .liquid{pointer-events:auto;height:100%;background:transparent}
+.hero-portrait .liquid-media{object-fit:contain;object-position:center center}
 .hero-portrait .liquid-media{animation:hero-drift 18s ease-in-out infinite alternate}
-@keyframes hero-drift{from{transform:scale(1.02)}to{transform:scale(1.12) translateY(-1.5%)}}
+@keyframes hero-drift{from{transform:scale(1)}to{transform:scale(1.05) translateY(-0.5%)}}
 .hero-gradient{position:absolute;inset-inline:0;bottom:0;z-index:20;height:26vh;background:linear-gradient(to bottom,transparent,#08080a);pointer-events:none}
 .hero-name{position:absolute;inset-inline:0;bottom:0;transform:translateY(6%);z-index:10;display:flex;flex-direction:column;align-items:center;font-family:var(--font-display);text-transform:uppercase;line-height:0.78;letter-spacing:-0.01em;color:var(--accent);font-size:min(13rem,22vw)}
 @media (min-width:640px){.hero-name{font-size:min(28rem,22vw)}}
