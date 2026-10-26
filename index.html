@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Marcus Vane — Founder · Investor · Operator</title>
-<meta name="description" content="Marcus Vane starts companies that shouldn't be possible — then makes them inevitable. Four exits, one playbook: conviction before consensus.">
+<title>Muhammad Kamran — Full-Stack Developer</title>
+<meta name="description" content="Muhammad Kamran builds real, working software — from a live FBR-integrated invoicing system in Laravel to LabFlow, a multi-tenant SaaS for diagnostic labs. Open to paid remote internships.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Anton&family=Onest:wght@400;500;600&display=swap" rel="stylesheet">
@@ -148,6 +148,7 @@ main{position:relative;width:100%;overflow-x:hidden}
 .liquid:hover .liquid-glow,.liquid.is-hover .liquid-glow{opacity:1}
 .liquid-vignette{position:absolute;inset:0;background:radial-gradient(120% 120% at 50% 120%,rgba(8,8,10,0.7),transparent 60%);pointer-events:none}
 .liquid.bare .liquid-veil,.liquid.bare .liquid-glow,.liquid.bare .liquid-vignette{display:none}
+.project-visual{aspect-ratio:16/11;width:100%;border-radius:0.125rem;background:var(--surface-2);border:1px solid var(--line);display:grid;place-items:center}.project-visual span{font-family:var(--font-display);font-size:5rem;letter-spacing:-0.01em;color:var(--muted)}
 /* Impact */
 .impact-head{font-size:3.25rem;line-height:1}
 .stats{margin-top:4rem;display:grid;grid-template-columns:1fr;border-top:1px solid var(--line)}
@@ -215,18 +216,18 @@ footer.contact{padding:var(--section) var(--gutter) 0}
 <!-- Preloader -->
 <div id="preloader" aria-hidden="false"><div class="pl-bg"></div>
   <div class="pl-inner" id="plInner">
-    <div class="pl-brand">Marcus Vane</div>
+    <div class="pl-brand">Muhammad Kamran</div>
     <div class="pl-count"><span id="plNum">0</span><span>%</span></div>
   </div>
 </div>
 
 <header class="site-nav"><nav>
-  <a class="logo" href="#top" data-scroll="#top"><span class="logo-badge">MV</span><span class="logo-name">Marcus Vane</span></a>
+  <a class="logo" href="#top" data-scroll="#top"><span class="logo-badge">MK</span><span class="logo-name">Muhammad Kamran</span></a>
   <ul class="nav-links">
     <li><a href="#story" data-scroll="#story">Story</a></li>
-    <li><a href="#ventures" data-scroll="#ventures">Ventures</a></li>
+    <li><a href="#projects" data-scroll="#projects">Projects</a></li>
     <li><a href="#impact" data-scroll="#impact">Impact</a></li>
-    <li><a href="#voices" data-scroll="#voices">Voices</a></li>
+    <li><a href="#experience" data-scroll="#experience">Experience</a></li>
     <li><a href="#contact" data-scroll="#contact">Contact</a></li>
   </ul>
   <button class="burger" id="burger" aria-label="Open menu" aria-expanded="false"><span></span><span></span><span></span></button>
@@ -234,9 +235,9 @@ footer.contact{padding:var(--section) var(--gutter) 0}
 
 <div class="mobile-menu" id="mobileMenu">
   <a href="#story" data-scroll="#story">Story</a>
-  <a href="#ventures" data-scroll="#ventures">Ventures</a>
+  <a href="#projects" data-scroll="#projects">Projects</a>
   <a href="#impact" data-scroll="#impact">Impact</a>
-  <a href="#voices" data-scroll="#voices">Voices</a>
+  <a href="#experience" data-scroll="#experience">Experience</a>
   <a href="#contact" data-scroll="#contact">Contact</a>
 </div>
 
@@ -245,12 +246,12 @@ footer.contact{padding:var(--section) var(--gutter) 0}
 <section class="hero" id="top">
   <div class="hero-top">
     <h2 class="hero-roles" id="heroRoles">
-      <span class="rl"><span class="rl-inner" style="transition-delay:0ms">Founder</span></span>
-      <span class="rl"><span class="rl-inner" style="transition-delay:80ms">Investor</span></span>
-      <span class="rl"><span class="rl-inner" style="transition-delay:160ms">Operator</span></span>
-      <span class="rl"><span class="rl-inner" style="transition-delay:240ms">Contrarian</span></span>
+      <span class="rl"><span class="rl-inner" style="transition-delay:0ms">Full-Stack Developer</span></span>
+      <span class="rl"><span class="rl-inner" style="transition-delay:80ms">Laravel Developer</span></span>
+      <span class="rl"><span class="rl-inner" style="transition-delay:160ms">LabFlow Builder</span></span>
+      <span class="rl"><span class="rl-inner" style="transition-delay:240ms">Python Teacher</span></span>
     </h2>
-    <p class="hero-desc rv" id="heroDesc">I start companies that shouldn't be possible — then make them inevitable. Four exits, one playbook: conviction before consensus.</p>
+    <p class="hero-desc rv" id="heroDesc">I build real, working software — not just demos. From a live FBR-integrated invoicing system in Laravel to LabFlow, a multi-tenant SaaS for diagnostic labs in Django and React. Open to paid remote internships.</p>
   </div>
 
   <div class="hero-portrait">
@@ -261,14 +262,12 @@ footer.contact{padding:var(--section) var(--gutter) 0}
           <feDisplacementMap in="SourceGraphic" in2="noise" scale="1"></feDisplacementMap>
         </filter>
       </defs></svg>
-      <video class="liquid-media" autoplay muted loop playsinline preload="auto" poster="https://api.getlayers.ai/storage/v1/object/public/public/assets/marcus-vane-6799bd1fb6/hero/portrait.webp">
-        <source src="https://api.getlayers.ai/storage/v1/object/public/public/assets/marcus-vane-6799bd1fb6/hero/hero.mp4" type="video/mp4">
-      </video>
+      <img class="liquid-media" src="assets/hero-portrait.png" alt="Muhammad Kamran, centred portrait">
     </figure>
   </div>
   <div class="hero-gradient"></div>
 
-  <h1 class="hero-name" id="heroName" aria-label="Marcus Vane">
+  <h1 class="hero-name" id="heroName" aria-label="Muhammad Kamran">
     <span class="name-line" id="nameLine1"></span>
     <span class="name-line" id="nameLine2"></span>
   </h1>
@@ -277,110 +276,94 @@ footer.contact{padding:var(--section) var(--gutter) 0}
 </section>
 
 <!-- Marquee -->
-<section class="marquee" aria-label="Operating principles"><div class="marquee-track" id="marqueeTrack"></div></section>
+<section class="marquee" aria-label="Skills"><div class="marquee-track" id="marqueeTrack"></div></section>
 
 <!-- Story -->
 <section class="section" id="story"><div class="story-grid">
   <div class="story-left">
-    <div class="eyebrow">The Story</div>
+    <div class="eyebrow">About Me</div>
     <h2 class="sec-head line-reveal">
-      <span class="rl"><span class="rl-inner" style="transition-delay:0ms">Conviction is a</span></span>
-      <span class="rl"><span class="rl-inner" style="transition-delay:90ms">competitive</span></span>
-      <span class="rl"><span class="rl-inner" style="transition-delay:180ms">advantage.</span></span>
+      <span class="rl"><span class="rl-inner" style="transition-delay:0ms">Building real</span></span>
+      <span class="rl"><span class="rl-inner" style="transition-delay:90ms">software, not</span></span>
+      <span class="rl"><span class="rl-inner" style="transition-delay:180ms">just demos.</span></span>
     </h2>
-    <p class="lead rv" style="transition-duration:520ms">For twenty years I've backed the version of the future most people couldn't see yet. From a dorm-room prototype to companies serving a hundred million people, the through-line never changed: find the hard problem everyone avoids, assemble the team nobody else could, and out-stubborn the doubt.</p>
+    <p class="lead rv" style="transition-duration:520ms">I'm a full-stack developer in Lahore, Pakistan. ADP Computer Science at Riphah International University (GPA 3.61 / 4.00), now in my 5th semester of BSCS at NCBA&E. I teach Python at a local academy, and I'm building LabFlow — a multi-tenant SaaS for diagnostic labs — as my showcase project to land a developer job.</p>
   </div>
   <div class="story-right">
     <ul class="principles">
-      <li class="rv" style="transition-duration:560ms;transition-delay:0ms"><span class="num">01</span><div><h3>Move before it's obvious</h3><p>The best opportunities look like mistakes right up until they look inevitable. I commit while the room is still hesitating.</p></div></li>
-      <li class="rv" style="transition-duration:560ms;transition-delay:90ms"><span class="num">02</span><div><h3>Hire founders, not employees</h3><p>I build teams of people who would start their own thing — then give them a reason not to. Ownership compounds faster than talent alone.</p></div></li>
-      <li class="rv" style="transition-duration:560ms;transition-delay:180ms"><span class="num">03</span><div><h3>Distribution is the product</h3><p>Genius unshipped is a hobby. Every venture is engineered around how it reaches the people it was built for.</p></div></li>
-      <li class="rv" style="transition-duration:560ms;transition-delay:270ms"><span class="num">04</span><div><h3>Play the long game loudly</h3><p>Patience and ambition are not opposites. I think in decades and act with urgency every single day.</p></div></li>
+      <li class="rv" style="transition-duration:560ms;transition-delay:0ms"><span class="num">01</span><div><h3>Build real software</h3><p>I like building things that actually ship — LabFlow is my showcase project, not just a tutorial build.</p></div></li>
+      <li class="rv" style="transition-duration:560ms;transition-delay:90ms"><span class="num">02</span><div><h3>Use the stack that fits the job</h3><p>Laravel and PHP for live work, Django and React for LabFlow, with PostgreSQL, Redis, Docker and CI for the real infrastructure.</p></div></li>
+      <li class="rv" style="transition-duration:560ms;transition-delay:180ms"><span class="num">03</span><div><h3>Own the whole flow</h3><p>From database and API to UI and deployment, I work end to end and keep CI green.</p></div></li>
+      <li class="rv" style="transition-duration:560ms;transition-delay:270ms"><span class="num">04</span><div><h3>Teach to learn</h3><p>Teaching Python at a local academy keeps my fundamentals sharp and forces me to explain clearly.</p></div></li>
     </ul>
   </div>
 </div></section>
 
 <!-- Ventures -->
-<section class="section" id="ventures">
+<section class="section" id="projects">
   <div class="head-row">
     <div>
-      <div class="eyebrow">Selected Ventures</div>
+      <div class="eyebrow">Selected Projects</div>
       <h2 class="sec-head line-reveal">
-        <span class="rl"><span class="rl-inner" style="transition-delay:0ms">The work that</span></span>
-        <span class="rl"><span class="rl-inner" style="transition-delay:90ms">moved markets.</span></span>
+        <span class="rl"><span class="rl-inner" style="transition-delay:0ms">Real work,</span></span>
+        <span class="rl"><span class="rl-inner" style="transition-delay:90ms">not demos.</span></span>
       </h2>
     </div>
-    <div class="head-label">04 / Companies</div>
+    <div class="head-label">05 / Projects</div>
   </div>
-  <ul class="ventures-grid" id="venturesGrid"></ul>
+  <ul class="ventures-grid" id="projectsGrid"></ul>
 </section>
 
 <!-- Impact -->
 <section class="section" id="impact">
   <div class="eyebrow">By The Numbers</div>
   <h2 class="sec-head impact-head line-reveal">
-    <span class="rl"><span class="rl-inner" style="transition-delay:0ms">Two decades,</span></span>
-    <span class="rl"><span class="rl-inner" style="transition-delay:90ms">measured.</span></span>
+    <span class="rl"><span class="rl-inner" style="transition-delay:0ms">Measured,</span></span>
+    <span class="rl"><span class="rl-inner" style="transition-delay:90ms">not invented.</span></span>
   </h2>
   <dl class="stats">
-    <div class="stat rv" style="transition-duration:560ms;transition-delay:0ms"><dd>4</dd><dt>Companies founded &amp; exited</dt></div>
-    <div class="stat rv" style="transition-duration:560ms;transition-delay:110ms"><dd>$3.2B</dd><dt>Enterprise value created</dt></div>
-    <div class="stat rv" style="transition-duration:560ms;transition-delay:220ms"><dd>120M+</dd><dt>People served by his products</dt></div>
-    <div class="stat rv" style="transition-duration:560ms;transition-delay:330ms"><dd>2,400</dd><dt>Jobs created across ventures</dt></div>
+    <div class="stat rv" style="transition-duration:560ms;transition-delay:0ms"><dd>6</dd><dt>LabFlow LABs merged to main</dt></div>
+    <div class="stat rv" style="transition-duration:560ms;transition-delay:110ms"><dd>5</dd><dt>Real projects shipped / in progress</dt></div>
+    <div class="stat rv" style="transition-duration:560ms;transition-delay:220ms"><dd>2</dd><dt>CodeExcellence 1st places</dt></div>
+    <div class="stat rv" style="transition-duration:560ms;transition-delay:330ms"><dd>3.61</dd><dt>ADP Computer Science GPA / 4.00</dt></div>
   </dl>
 </section>
 
-<!-- Voices -->
-<section class="section" id="voices">
-  <div class="eyebrow">Voices</div>
-  <h2 class="sec-head line-reveal"><span class="rl"><span class="rl-inner">What they say.</span></span></h2>
-  <div class="voices-grid">
-    <ul class="voices-list" id="voicesList"></ul>
-    <div class="voices-panel">
-      <div class="voice-quote-wrap">
-        <blockquote>
-          <p class="voice-quote" id="voiceQuote"></p>
-          <footer class="voice-footer" id="voiceFooter"></footer>
-        </blockquote>
-      </div>
-      <div class="voice-portrait portrait-in" id="voicePortraitWrap">
-        <figure class="liquid" data-liquid="voice" data-scale="22" style="--liq:url(#liquid-voice)">
-          <svg aria-hidden="true"><defs>
-            <filter id="liquid-voice" x="-20%" y="-20%" width="140%" height="140%">
-              <feTurbulence type="fractalNoise" baseFrequency="0.009" numOctaves="2" result="noise"></feTurbulence>
-              <feDisplacementMap in="SourceGraphic" in2="noise" scale="1"></feDisplacementMap>
-            </filter>
-          </defs></svg>
-          <img class="liquid-media" id="voiceImg" src="https://api.getlayers.ai/storage/v1/object/public/public/assets/marcus-vane-6799bd1fb6/voices/voice-01.webp" alt="Portrait of the featured voice">
-          <div class="liquid-veil"></div><div class="liquid-glow"></div><div class="liquid-vignette"></div>
-        </figure>
-      </div>
-    </div>
-  </div>
+<!-- Experience -->
+<section class="section" id="experience">
+  <div class="eyebrow">Experience</div>
+  <h2 class="sec-head line-reveal"><span class="rl"><span class="rl-inner">What I've done.</span></span></h2>
+  <ul class="principles" style="margin-top:4rem">
+    <li class="rv" style="transition-duration:560ms;transition-delay:0ms"><span class="num">01</span><div><h3>Full-Stack Developer (Laravel) — 2024 — Present</h3><p>Live FBR-integrated digital invoicing system.</p></div></li>
+    <li class="rv" style="transition-duration:560ms;transition-delay:90ms"><span class="num">02</span><div><h3>Laravel Developer Intern — 2023 — 2024 · Remote · 1 year</h3><p>Multi-client work across Laravel projects.</p></div></li>
+    <li class="rv" style="transition-duration:560ms;transition-delay:180ms"><span class="num">03</span><div><h3>Backend Developer Intern — 2023 · 3 months</h3><p>Save Entries accounting software.</p></div></li>
+    <li class="rv" style="transition-duration:560ms;transition-delay:270ms"><span class="num">04</span><div><h3>Python Teacher — Ongoing</h3><p>Teaching Python at a local academy in Lahore.</p></div></li>
+  </ul>
+  <p class="lead rv" style="transition-duration:520ms">Strong: Laravel · PHP · MySQL · HTML · CSS · JavaScript · Git &amp; GitHub · WordPress. Building with now: React 18 + TypeScript · Django 5 · DRF · PostgreSQL 16 · Redis · Docker · Celery · Caddy · GitHub Actions. Learning next — honestly: Node.js · Express.js · MongoDB, listed as learning next, not as experience. My React experience is through LabFlow.</p>
 </section>
 
 <!-- Contact Footer -->
 <footer class="contact" id="contact">
-  <div class="eyebrow">Let's Build</div>
+  <div class="eyebrow">Let's Work Together</div>
   <h2 class="sec-head contact-head line-reveal">
-    <span class="rl"><span class="rl-inner" style="transition-delay:0ms">Have something</span></span>
-    <span class="rl"><span class="rl-inner" style="transition-delay:90ms">the world says</span></span>
-    <span class="rl"><span class="rl-inner" style="transition-delay:180ms">can't be done?</span></span>
+    <span class="rl"><span class="rl-inner" style="transition-delay:0ms">Have a paid</span></span>
+    <span class="rl"><span class="rl-inner" style="transition-delay:90ms">remote internship</span></span>
+    <span class="rl"><span class="rl-inner" style="transition-delay:180ms">in mind?</span></span>
   </h2>
-  <p class="lead rv" style="transition-duration:520ms">That's usually where I start. I read every message I'm sent.</p>
-  <div><a class="email-link rv" style="transition-duration:340ms" href="mailto:hello@marcusvane.com">hello@marcusvane.com <span class="arrow">↗</span></a></div>
+  <p class="lead rv" style="transition-duration:520ms">That's what I'm looking for next. Email is best — I read every message I'm sent.</p>
+  <div><a class="email-link rv" style="transition-duration:340ms" href="mailto:kamran.debug@gmail.com">kamran.debug@gmail.com <span class="arrow">↗</span></a></div>
 
   <div class="footer-bar">
     <div class="footer-left">
-      <p class="signature">Marcus Vane</p>
-      <p class="footer-tag">Designed &amp; built with conviction.</p>
+      <p class="signature">Muhammad Kamran</p>
+      <p class="footer-tag">Full-stack developer · Lahore, Pakistan.</p>
     </div>
     <nav class="footer-social" aria-label="Social"><ul class="social-links">
-      <li><a href="https://www.linkedin.com" target="_blank" rel="noreferrer noopener">LinkedIn</a></li>
-      <li><a href="https://x.com" target="_blank" rel="noreferrer noopener">X / Twitter</a></li>
-      <li><a href="https://substack.com" target="_blank" rel="noreferrer noopener">Substack</a></li>
+      <li><a href="https://linkedin.com/in/kamran-debug" target="_blank" rel="noreferrer noopener">LinkedIn</a></li>
+      <li><a href="https://github.com/kamrandebugging" target="_blank" rel="noreferrer noopener">GitHub</a></li>
+      <li><a href="https://github.com/kamrandebugging/LabFlow" target="_blank" rel="noreferrer noopener">LabFlow Repo</a></li>
     </ul></nav>
-    <div class="footer-copy"><p>© 2026 Marcus Vane. All rights reserved.</p></div>
+    <div class="footer-copy"><p>© 2026 Muhammad Kamran. All rights reserved.</p></div>
   </div>
 </footer>
 </main>
@@ -398,18 +381,13 @@ applyAdaptiveGrid();
 addEventListener("resize", applyAdaptiveGrid);
 
 /* Data — verbatim copy, full bucket URLs */
-const BASE = "https://api.getlayers.ai/storage/v1/object/public/public/assets/marcus-vane-6799bd1fb6";
-const MARQUEE_WORDS = ["Build Bold","Scale Relentlessly","Think In Decades","Bet On People","Ship The Future"];
-const VENTURES = [
-  {name:"Helix Robotics",cat:"Industrial Automation",year:"2019",outcome:"Acquired — $1.1B",blurb:"Reinvented warehouse logistics with autonomous fleets now running in 40 countries.",img:BASE+"/ventures/venture-01.webp"},
-  {name:"Northwind Energy",cat:"Climate Infrastructure",year:"2015",outcome:"IPO — NYSE: NWND",blurb:"Brought utility-scale storage to the grid years before the market believed it was viable.",img:BASE+"/ventures/venture-02.webp"},
-  {name:"Cadence Health",cat:"Digital Medicine",year:"2011",outcome:"Acquired — $640M",blurb:"Put a clinician in every pocket and rewired how chronic care gets delivered.",img:BASE+"/ventures/venture-03.webp"},
-  {name:"Vane Capital",cat:"Venture Investing",year:"2008",outcome:"Active — $900M AUM",blurb:"Backing the next generation of contrarian founders building hard, durable companies.",img:BASE+"/ventures/venture-04.webp"}
-];
-const VOICES = [
-  {quote:"Marcus saw the market three years before the rest of us. Betting alongside him changed the trajectory of my entire career.",name:"Elena Cardoso",role:"Managing Partner, Meridian Ventures",img:BASE+"/voices/voice-01.webp"},
-  {quote:"He doesn't just write checks — he gets in the trenches at 6am and refuses to leave until the impossible part is solved.",name:"David Okonkwo",role:"Founder & CEO, Cadence Health",img:BASE+"/voices/voice-02.webp"},
-  {quote:"The most demanding mentor I've ever had, and the only reason our company survived its first winter. Relentless, generous, right.",name:"Priya Nandakumar",role:"CEO, Northwind Energy",img:BASE+"/voices/voice-03.webp"}
+const MARQUEE_WORDS = ["Laravel","React","Django","PostgreSQL","Docker","Python"];
+const PROJECTS = [
+  {name:"LabFlow",cat:"Featured · In Progress",year:"Django · React",outcome:"LAB-1 to LAB-6 merged, CI green",blurb:"Multi-tenant SaaS for diagnostic labs in Pakistan. Patient registration and invoicing, samples with accession IDs, result entry validated against reference ranges, pathologist approval, PDF reports, and partner revenue-share.",stack:"Django 5 · DRF · React 18 + TypeScript · PostgreSQL 16 · Redis · Celery · Docker · Caddy · GitHub Actions",link:"https://github.com/kamrandebugging/LabFlow",initials:"LF"},
+  {name:"FBR-Integrated Invoicing System",cat:"Live Work · Laravel",year:"Live since 2024",outcome:"In production",blurb:"Full-stack development on a live digital invoicing system integrated with FBR, in production use since 2024.",stack:"Laravel · PHP · MySQL",link:"",initials:"FBR"},
+  {name:"NeuroScan AI",cat:"AI · 1st Place",year:"CodeExcellence",outcome:"1st Place",blurb:"Brain-tumour MRI classification, around 94% accuracy. Final-year project, 1st place at CodeExcellence.",stack:"Python · Machine Learning",link:"",initials:"NS"},
+  {name:"EdgeNexus IT",cat:"Web · GSAP / Three.js",year:"Enterprise website",outcome:"Animated front-end",blurb:"Enterprise website with animated, interactive front-end work.",stack:"JavaScript · GSAP · Three.js",link:"",initials:"EN"},
+  {name:"DS Visualizer",cat:"Data Vis · 1st Place",year:"CodeExcellence",outcome:"1st Place",blurb:"Data structures visualizer. 1st place at CodeExcellence.",stack:"JavaScript · Data Structures",link:"",initials:"DS"}
 ];
 
 /* Marquee — list rendered twice for a seamless loop */
@@ -419,20 +397,14 @@ const VOICES = [
   track.innerHTML = one + one;
 })();
 
-/* Ventures */
+/* Projects */
 (function(){
-  const grid = document.getElementById("venturesGrid");
-  grid.innerHTML = VENTURES.map(function(v,i){
-    const id = "liquid-v"+(i+1);
+  const grid = document.getElementById("projectsGrid");
+  grid.innerHTML = PROJECTS.map(function(v,i){
+    const nameHtml = v.link ? '<a href="'+v.link+'" target="_blank" rel="noreferrer noopener">'+v.name+'</a>' : v.name;
     return '<li class="venture rv-big" style="transition-delay:'+(i%2===1?120:0)+'ms"><article class="group">'
-      + '<figure class="liquid" data-liquid="v'+(i+1)+'" data-scale="28" style="--liq:url(#'+id+')">'
-      + '<svg aria-hidden="true"><defs><filter id="'+id+'" x="-20%" y="-20%" width="140%" height="140%">'
-      + '<feTurbulence type="fractalNoise" baseFrequency="0.009" numOctaves="2" result="noise"></feTurbulence>'
-      + '<feDisplacementMap in="SourceGraphic" in2="noise" scale="1"></feDisplacementMap>'
-      + '</filter></defs></svg>'
-      + '<img class="liquid-media" src="'+v.img+'" alt="'+v.name+'" loading="lazy" style="object-position:center center">'
-      + '<div class="liquid-veil"></div><div class="liquid-glow"></div><div class="liquid-vignette"></div></figure>'
-      + '<div class="venture-row"><div><h3>'+v.name+'</h3><p>'+v.blurb+'</p></div>'
+      + '<div class="project-visual"><span>'+v.initials+'</span></div>'
+      + '<div class="venture-row"><div><h3>'+nameHtml+'</h3><p>'+v.blurb+'</p><p style="margin-top:0.75rem;color:var(--foreground)">'+v.stack+'</p></div>'
       + '<div class="venture-meta"><div class="year">'+v.year+'</div><div class="outcome">'+v.outcome+'</div></div></div>'
       + '<div class="venture-cat">'+v.cat+'</div></article></li>';
   }).join("");
@@ -445,8 +417,8 @@ const VOICES = [
       return '<span class="letter" style="transition-delay:'+(baseDelay + i*52)+'ms">'+ch+'</span>';
     }).join("");
   }
-  letters(document.getElementById("nameLine1"), "Marcus", 0);
-  letters(document.getElementById("nameLine2"), "Vane", 240);
+  letters(document.getElementById("nameLine1"), "Muhammad", 0);
+  letters(document.getElementById("nameLine2"), "Kamran", 240);
 })();
 
 /* In-view reveals — IntersectionObserver, threshold 0, once */
@@ -489,34 +461,6 @@ document.querySelectorAll("[data-scroll]").forEach(function(a){
     else target.scrollIntoView({behavior:"smooth"});
   });
 });
-
-/* Voices — selector + word-by-word quote replay */
-const voicesList = document.getElementById("voicesList");
-const quoteEl = document.getElementById("voiceQuote");
-const footerEl = document.getElementById("voiceFooter");
-const voiceImg = document.getElementById("voiceImg");
-voicesList.innerHTML = VOICES.map(function(v,i){
-  return '<li><button class="voice-btn'+(i===0?" active":"")+'" data-index="'+i+'">'
-    + '<span class="v-index">0'+(i+1)+'</span><span><span class="v-name">'+v.name+'</span><span class="v-role" style="display:block">'+v.role+'</span></span>'
-    + '<span class="v-rule"></span></button></li>';
-}).join("");
-function renderVoice(i){
-  const v = VOICES[i];
-  document.querySelectorAll(".voice-btn").forEach(function(b){ b.classList.toggle("active", Number(b.dataset.index)===i); });
-  const words = v.quote.split(" ");
-  quoteEl.innerHTML = words.map(function(w,j){
-    const pre = j===0 ? "“" : "", suf = j===words.length-1 ? "”" : "";
-    return '<span class="wq" style="transition-delay:'+(j*22)+'ms">'+pre+w+suf+'</span>';
-  }).join(" ");
-  quoteEl.classList.remove("go"); void quoteEl.offsetWidth; quoteEl.classList.add("go");
-  footerEl.textContent = v.name + " — " + v.role;
-  voiceImg.src = v.img; voiceImg.alt = "Portrait of " + v.name;
-}
-voicesList.addEventListener("click", function(e){
-  const btn = e.target.closest(".voice-btn");
-  if (btn) renderVoice(Number(btn.dataset.index));
-});
-renderVoice(0);
 
 /* LiquidImage hover distortion — imperative SVG attribute animation, desktop only */
 function easeOutBack(t){ const c=1.70158, u=t-1; return 1 + (c+1)*u*u*u + c*u*u; }
