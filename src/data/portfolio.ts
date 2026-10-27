@@ -135,11 +135,11 @@ export const portfolioData: PortfolioData = {
     copyright: '© 2026 Muhammad Kamran. All rights reserved.',
   },
   flowExplorer: {
-    badge: 'Flagship Architecture Deep-Dive · Clinical SaaS',
-    eyebrow: 'How LabFlow works',
-    title: 'Patient to report, end to end.',
+    badge: 'Interactive System Design Walkthrough',
+    eyebrow: 'System Architecture · LabFlow',
+    title: 'How I architect production SaaS.',
     description:
-      'LabFlow is my flagship multi-tenant clinical laboratory management SaaS. Step through the real-world pipeline below to see how a patient order travels from front-desk accessioning and barcode labeling to pathologist approval and automated signed report dispatch.',
+      'Patient to report, end to end: Step through the 5-stage production pipeline below to see how LabFlow handles accessioning, validation, pathologist approval, and Celery background report dispatch in real life.',
     tagline: 'Multi-tenant SaaS · Schema-per-tenant',
     moneyNote:
       'Money: payment on a partner invoice creates a PENDING revenue-share ledger row. Monthly settlements are drafted on the 1st at 01:00 Asia/Karachi, with statement PDFs emailed to partners. No partner login in v1.',
