@@ -1,5 +1,6 @@
 import React from 'react';
 import { portfolioData } from '../data/portfolio';
+import { ScrollHeading, FadingListItem } from './motion/ScrollReveal';
 
 export const Experience: React.FC = () => {
   const { experience, skills } = portfolioData;
@@ -8,15 +9,17 @@ export const Experience: React.FC = () => {
     <section id="experience" className="relative px-6 sm:px-10 md:px-14 py-20 sm:py-28 border-b border-white/5">
       {/* Experience Header */}
       <span className="eyebrow">{experience.eyebrow}</span>
-      <h2 className="font-display uppercase tracking-tight text-4xl sm:text-6xl text-[#f3f1ea] mt-4 leading-[0.95]">
-        {experience.heading}
-      </h2>
+      <ScrollHeading
+        text={experience.heading}
+        className="font-display uppercase tracking-tight text-4xl sm:text-6xl text-[#f3f1ea] mt-4 leading-[0.95]"
+      />
 
       {/* Experience Timeline */}
       <ul className="mt-12 sm:mt-16 divide-y divide-white/10 border-y border-white/10">
-        {experience.entries.map((item) => (
-          <li
+        {experience.entries.map((item, idx) => (
+          <FadingListItem
             key={item.num}
+            delay={idx * 0.05}
             className="group py-6 sm:py-8 flex gap-6 sm:gap-8 items-start transition-colors duration-300 hover:bg-white/[0.015] px-2"
           >
             <span className="font-mono text-xl sm:text-2xl font-semibold text-[#ff3b1d] tabular-nums">
@@ -30,7 +33,7 @@ export const Experience: React.FC = () => {
                 {item.desc}
               </p>
             </div>
-          </li>
+          </FadingListItem>
         ))}
       </ul>
 

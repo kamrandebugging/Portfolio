@@ -1,6 +1,7 @@
 import React from 'react';
 import { ArrowUpRight } from 'lucide-react';
 import { portfolioData } from '../data/portfolio';
+import { ScrollHeading } from './motion/ScrollReveal';
 
 export const Contact: React.FC = () => {
   const { contact, personal } = portfolioData;
@@ -10,13 +11,10 @@ export const Contact: React.FC = () => {
       {/* Top CTA */}
       <div className="max-w-4xl">
         <span className="eyebrow">{contact.eyebrow}</span>
-        <h2 className="font-display uppercase tracking-tight text-5xl sm:text-7xl lg:text-8xl text-[#f3f1ea] mt-5 leading-[0.9]">
-          {contact.heading.map((line, idx) => (
-            <span key={idx} className="block">
-              {line}
-            </span>
-          ))}
-        </h2>
+        <ScrollHeading
+          text={contact.heading}
+          className="font-display uppercase tracking-tight text-5xl sm:text-7xl lg:text-8xl text-[#f3f1ea] mt-5 leading-[0.9]"
+        />
         <p className="mt-8 text-lg sm:text-2xl text-[#807f78] leading-relaxed max-w-xl">
           {contact.lead}
         </p>

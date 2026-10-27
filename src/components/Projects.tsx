@@ -1,8 +1,10 @@
 import React, { useState, useRef } from 'react';
 import { ExternalLink, BookOpen } from 'lucide-react';
+import { motion } from 'motion/react';
 import { portfolioData, ProjectItem } from '../data/portfolio';
 import { MagicCard } from './magicui/MagicCard';
 import { CaseStudyDialog } from './CaseStudyDialog';
+import { ScrollHeading } from './motion/ScrollReveal';
 
 const FILTER_CHIPS = [
   'All',
@@ -48,10 +50,10 @@ export const Projects: React.FC = () => {
       <div className="flex flex-col sm:flex-row items-start sm:items-end justify-between gap-4 mb-10 sm:mb-12">
         <div>
           <span className="eyebrow">Selected Projects</span>
-          <h2 className="font-display uppercase tracking-tight text-4xl sm:text-6xl text-[#f3f1ea] mt-4 leading-[0.95]">
-            Real work, <br />
-            not demos.
-          </h2>
+          <ScrollHeading
+            text={['Real work,', 'not demos.']}
+            className="font-display uppercase tracking-tight text-4xl sm:text-6xl text-[#f3f1ea] mt-4 leading-[0.95]"
+          />
         </div>
         <div className="text-[0.8125rem] font-mono uppercase tracking-[0.22em] text-[#807f78]">
           07 / Projects
@@ -95,8 +97,12 @@ export const Projects: React.FC = () => {
           const hasCaseStudy = isLabFlow || isFBR;
 
           return (
-            <div
+            <motion.div
               key={project.id}
+              layout
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
               className={`h-full ${
                 isLabFlow
                   ? 'col-span-1 md:col-span-2 lg:col-span-12'
@@ -260,7 +266,7 @@ export const Projects: React.FC = () => {
                   </div>
                 )}
               </MagicCard>
-            </div>
+            </motion.div>
           );
         })}
       </div>

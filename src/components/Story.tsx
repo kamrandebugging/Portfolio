@@ -1,5 +1,6 @@
 import React from 'react';
 import { portfolioData } from '../data/portfolio';
+import { ScrollHeading, FadingListItem } from './motion/ScrollReveal';
 
 export const Story: React.FC = () => {
   const { story } = portfolioData;
@@ -10,24 +11,22 @@ export const Story: React.FC = () => {
         {/* Left Column */}
         <div className="lg:col-span-5 flex flex-col items-start">
           <span className="eyebrow">{story.eyebrow}</span>
-          <h2 className="font-display uppercase tracking-tight text-4xl sm:text-6xl text-[#f3f1ea] mt-5 leading-[0.95]">
-            {story.heading.map((line, idx) => (
-              <span key={idx} className="block">
-                {line}
-              </span>
-            ))}
-          </h2>
+          <ScrollHeading
+            text={story.heading}
+            className="font-display uppercase tracking-tight text-4xl sm:text-6xl text-[#f3f1ea] mt-5 leading-[0.95]"
+          />
           <p className="mt-8 text-lg sm:text-xl text-[#807f78] leading-relaxed max-w-xl">
             {story.lead}
           </p>
         </div>
 
-        {/* Right Column: Principles */}
+        {/* Right Column: Principles (Fading list on scroll) */}
         <div className="lg:col-span-7">
           <ul className="divide-y divide-white/10 border-y border-white/10">
-            {story.principles.map((item) => (
-              <li
+            {story.principles.map((item, idx) => (
+              <FadingListItem
                 key={item.num}
+                delay={idx * 0.05}
                 className="group py-6 sm:py-8 flex gap-6 sm:gap-8 items-start transition-colors duration-300 hover:bg-white/[0.015] px-2"
               >
                 <span className="font-mono text-xl sm:text-2xl font-semibold text-[#ff3b1d] tabular-nums">
@@ -41,7 +40,7 @@ export const Story: React.FC = () => {
                     {item.desc}
                   </p>
                 </div>
-              </li>
+              </FadingListItem>
             ))}
           </ul>
         </div>

@@ -1,7 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { portfolioData } from '../data/portfolio';
+import { scrollToTarget } from '../utils/scroll';
 
-export const Navbar: React.FC = () => {
+interface NavbarProps {
+  isContactVisible?: boolean;
+}
+
+export const Navbar: React.FC<NavbarProps> = ({ isContactVisible = false }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 
@@ -15,10 +20,7 @@ export const Navbar: React.FC = () => {
 
   const handleLinkClick = (href: string) => {
     setIsOpen(false);
-    const target = document.querySelector(href);
-    if (target) {
-      target.scrollIntoView({ behavior: 'smooth' });
-    }
+    scrollToTarget(href);
   };
 
   return (
@@ -45,23 +47,39 @@ export const Navbar: React.FC = () => {
           </span>
         </a>
 
-        {/* Desktop nav links */}
-        <ul className="hidden md:flex items-center gap-8 lg:gap-10">
-          {portfolioData.navLinks.map((link) => (
-            <li key={link.href}>
-              <a
-                href={link.href}
-                onClick={(e) => {
-                  e.preventDefault();
-                  handleLinkClick(link.href);
-                }}
-                className="relative text-[0.8125rem] font-medium uppercase tracking-[0.18em] text-[#807f78] hover:text-[#f3f1ea] transition-colors duration-300 py-1 after:content-[''] after:absolute after:bottom-0 after:left-0 after:h-[1px] after:w-0 hover:after:w-full after:bg-[#ff3b1d] after:transition-all after:duration-300"
-              >
-                {link.label}
-              </a>
-            </li>
-          ))}
-        </ul>
+        {/* Desktop nav links + Adaptive Contact CTA */}
+        <div className="hidden md:flex items-center gap-8 lg:gap-10">
+          <ul className="flex items-center gap-8 lg:gap-10">
+            {portfolioData.navLinks.map((link) => (
+              <li key={link.href}>
+                <a
+                  href={link.href}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    handleLinkClick(link.href);
+                  }}
+                  className="relative text-[0.8125rem] font-medium uppercase tracking-[0.18em] text-[#807f78] hover:text-[#f3f1ea] transition-colors duration-300 py-1 after:content-[''] after:absolute after:bottom-0 after:left-0 after:h-[1px] after:w-0 hover:after:w-full after:bg-[#ff3b1d] after:transition-all after:duration-300"
+                >
+                  {link.label}
+                </a>
+              </li>
+            ))}
+          </ul>
+
+          {/* Adaptive Contact CTA: disappears when Contact section is in view */}
+          <button
+            type="button"
+            onClick={() => handleLinkClick('#contact')}
+            className={`inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-white/20 bg-white/[0.04] text-xs font-mono uppercase tracking-wider text-[#f3f1ea] hover:border-[#ff3b1d] hover:text-[#ff3b1d] hover:bg-[#ff3b1d]/10 transition-all duration-300 ${
+              isContactVisible
+                ? 'opacity-0 pointer-events-none translate-y-1'
+                : 'opacity-100 pointer-events-auto translate-y-0'
+            }`}
+          >
+            <span className="w-1.5 h-1.5 rounded-full bg-[#ff3b1d]" />
+            <span>Get in touch</span>
+          </button>
+        </div>
 
         {/* Mobile menu hamburger button */}
         <button

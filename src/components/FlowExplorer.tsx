@@ -12,6 +12,8 @@ import {
   Layers,
 } from 'lucide-react';
 import { portfolioData } from '../data/portfolio';
+import { scrollToTarget } from '../utils/scroll';
+import { ScrollHeading } from './motion/ScrollReveal';
 
 const STEP_ICONS = [UserCheck, TestTubes, FileSpreadsheet, CheckCircle2, FileText];
 
@@ -39,10 +41,7 @@ export const FlowExplorer: React.FC = () => {
   };
 
   const handleScrollToProjects = () => {
-    const el = document.querySelector('#projects');
-    if (el) {
-      el.scrollIntoView({ behavior: 'smooth' });
-    }
+    scrollToTarget('#projects');
   };
 
   const currentStep = flowExplorer.steps[activeStep];
@@ -67,9 +66,10 @@ export const FlowExplorer: React.FC = () => {
 
         <div>
           <span className="eyebrow">{flowExplorer.eyebrow}</span>
-          <h2 className="font-display uppercase tracking-tight text-4xl sm:text-6xl text-[#f3f1ea] mt-4 leading-[0.95]">
-            {flowExplorer.title}
-          </h2>
+          <ScrollHeading
+            text={flowExplorer.title}
+            className="font-display uppercase tracking-tight text-4xl sm:text-6xl text-[#f3f1ea] mt-4 leading-[0.95]"
+          />
           {flowExplorer.description && (
             <p className="mt-5 text-base sm:text-lg text-[#807f78] leading-relaxed max-w-2xl">
               {flowExplorer.description}

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { portfolioData } from '../data/portfolio';
+import { scrollToTarget } from '../utils/scroll';
 import { DotPattern } from './magicui/DotPattern';
 import { BlurFade } from './magicui/BlurFade';
 import { AuroraText } from './magicui/AuroraText';
@@ -31,10 +32,7 @@ export const Hero: React.FC = () => {
   }, []);
 
   const handleScrollTo = (id: string) => {
-    const el = document.querySelector(id);
-    if (el) {
-      el.scrollIntoView({ behavior: 'smooth' });
-    }
+    scrollToTarget(id);
   };
 
   return (
