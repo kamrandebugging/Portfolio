@@ -166,13 +166,13 @@ export const Projects: React.FC = () => {
 
                     {/* Right image column: eager load for featured card */}
                     <div className="lg:col-span-5 w-full">
-                      <div className="overflow-hidden rounded-lg border border-white/10 bg-[#08080a] aspect-[16/10] w-full">
+                      <div className="overflow-hidden rounded-lg border border-white/10 bg-[#08080a] aspect-[16/9] w-full transition-all duration-300 group-hover:border-[#ff3b1d]/40 group-hover:shadow-[0_0_25px_rgba(255,59,29,0.18)]">
                         {project.image && (
                           <img
                             src={project.image}
                             alt={`${project.name} preview`}
                             loading="eager"
-                            className="w-full h-full object-cover object-top transition-transform duration-500 ease-out group-hover:scale-105"
+                            className="w-full h-full object-contain object-center transition-all duration-300 group-hover:brightness-105"
                           />
                         )}
                       </div>
@@ -216,14 +216,14 @@ export const Projects: React.FC = () => {
                         )}
                       </div>
 
-                      {/* Image Preview with hover zoom */}
+                      {/* Image Preview with glow hover effect (no cropping) */}
                       {project.image && (
-                        <div className="my-5 overflow-hidden rounded-lg border border-white/10 bg-[#08080a] aspect-[16/10] w-full">
+                        <div className="my-5 overflow-hidden rounded-lg border border-white/10 bg-[#08080a] aspect-[16/9] w-full transition-all duration-300 group-hover:border-[#ff3b1d]/40 group-hover:shadow-[0_0_25px_rgba(255,59,29,0.15)]">
                           <img
                             src={project.image}
                             alt={`${project.name} preview`}
                             loading="lazy"
-                            className="w-full h-full object-cover object-top transition-transform duration-500 ease-out group-hover:scale-105"
+                            className="w-full h-full object-contain object-center transition-all duration-300 group-hover:brightness-105"
                           />
                         </div>
                       )}
