@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import { X, ExternalLink, CheckCircle2, Layers } from 'lucide-react';
-import { motion, AnimatePresence } from 'motion/react';
+import { getLenis } from '../engine/scroll';
 
 interface CaseStudyDialogProps {
   projectId: 'labflow' | 'fbr-invoicing' | null;
@@ -8,203 +8,165 @@ interface CaseStudyDialogProps {
   triggerElementRef?: React.RefObject<HTMLElement | null>;
 }
 
+const LABFLOW_FLOWS = [
+  'Patient registration and invoicing',
+  'Samples with accession IDs',
+  'Result entry validated against reference ranges',
+  'Pathologist approval',
+  'PDF reports',
+  'Partner revenue-share',
+];
+
 export const CaseStudyDialog: React.FC<CaseStudyDialogProps> = ({
   projectId,
   onClose,
   triggerElementRef,
 }) => {
-  const dialogRef = useRef<HTMLDivElement>(null);
   const closeBtnRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
     if (!projectId) return;
 
-    // Save previous active element to restore focus on close
-    const previousActiveElement = document.activeElement as HTMLElement | null;
-
-    // Trap focus inside modal
+    const previousActive = document.activeElement as HTMLElement | null;
     closeBtnRef.current?.focus();
 
-    // Prevent background scrolling
+    const lenis = getLenis();
     const originalOverflow = document.body.style.overflow;
-    document.body.style.overflow = 'hidden';
+    if (lenis) lenis.stop();
+    else document.body.style.overflow = 'hidden';
 
-    const handleKeyDown = (e: KeyboardEvent) => {
+    const onKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
         e.preventDefault();
         onClose();
       }
     };
-
-    window.addEventListener('keydown', handleKeyDown);
+    window.addEventListener('keydown', onKeyDown);
 
     return () => {
-      window.removeEventListener('keydown', handleKeyDown);
-      document.body.style.overflow = originalOverflow;
-      if (triggerElementRef?.current) {
-        triggerElementRef.current.focus();
-      } else if (previousActiveElement) {
-        previousActiveElement.focus();
-      }
+      window.removeEventListener('keydown', onKeyDown);
+      if (lenis) lenis.start();
+      else document.body.style.overflow = originalOverflow;
+      (triggerElementRef?.current ?? previousActive)?.focus();
     };
   }, [projectId, onClose, triggerElementRef]);
 
   if (!projectId) return null;
-
   const isLabFlow = projectId === 'labflow';
 
-  const labFlowFlows = [
-    'Patient registration and invoicing',
-    'Samples with accession IDs',
-    'Result entry validated against reference ranges',
-    'Pathologist approval',
-    'PDF reports',
-    'Partner revenue-share',
-  ];
-
   return (
-    <AnimatePresence>
+    <div
+      className="fixed inset-0 z-[85] flex items-center justify-center overflow-y-auto p-4 sm:p-6"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="case-study-title"
+      data-lenis-prevent
+    >
       <div
-        className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 overflow-y-auto"
-        role="dialog"
-        aria-modal="true"
-        aria-labelledby="case-study-title"
-      >
-        {/* Backdrop */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.2 }}
-          onClick={onClose}
-          className="fixed inset-0 bg-[#08080a]/80 backdrop-blur-md"
-          aria-hidden="true"
-        />
+        className="dialog-backdrop fixed inset-0 bg-ink/80 backdrop-blur-md"
+        onClick={onClose}
+        aria-hidden="true"
+      />
 
-        {/* Dialog Content */}
-        <motion.div
-          ref={dialogRef}
-          initial={{ opacity: 0, scale: 0.95, y: 16 }}
-          animate={{ opacity: 1, scale: 1, y: 0 }}
-          exit={{ opacity: 0, scale: 0.95, y: 16 }}
-          transition={{ duration: 0.25, ease: 'easeOut' }}
-          className="relative z-10 w-full max-w-2xl overflow-hidden rounded-2xl border border-white/15 bg-[#111114] p-6 sm:p-8 shadow-[0_25px_60px_-15px_rgba(0,0,0,0.9),0_0_30px_rgba(255,59,29,0.15)] text-[#f3f1ea]"
-        >
-          {/* Top accent glow */}
-          <div
-            className="absolute top-0 inset-x-0 h-1 bg-gradient-to-r from-transparent via-[#ff3b1d] to-transparent"
-            aria-hidden="true"
-          />
-
-          {/* Header */}
-          <div className="flex items-start justify-between gap-4">
-            <div>
-              <span className="text-xs uppercase tracking-[0.22em] text-[#ff3b1d] font-semibold">
-                Case Study
-              </span>
-              <h3
-                id="case-study-title"
-                className="mt-1 text-2xl sm:text-3xl font-semibold tracking-tight text-[#f3f1ea]"
-              >
-                {isLabFlow ? 'LabFlow' : 'FBR-Integrated Invoicing System'}
-              </h3>
-            </div>
-
-            <button
-              ref={closeBtnRef}
-              type="button"
-              onClick={onClose}
-              className="rounded-full p-2 text-[#807f78] hover:text-[#f3f1ea] hover:bg-white/10 transition-colors focus:outline-none focus:ring-2 focus:ring-[#ff3b1d]"
-              aria-label="Close dialog"
-            >
-              <X className="w-5 h-5" />
-            </button>
+      <div className="dialog-panel tone-light relative z-10 w-full max-w-2xl rounded-3xl p-6 shadow-[0_40px_90px_-30px_rgba(0,0,0,0.8)] sm:p-9">
+        <div className="flex items-start justify-between gap-4">
+          <div>
+            <span className="eyebrow">Case study</span>
+            <h3 id="case-study-title" className="display mt-3 text-[clamp(2rem,4vw,3rem)]">
+              {isLabFlow ? 'LabFlow' : 'FBR-Integrated Invoicing System'}
+            </h3>
           </div>
+          <button
+            ref={closeBtnRef}
+            type="button"
+            onClick={onClose}
+            className="rounded-full p-2 transition-colors hover:bg-ink/10"
+            aria-label="Close dialog"
+          >
+            <X className="h-5 w-5" />
+          </button>
+        </div>
 
-          {/* Body */}
-          <div className="mt-6 space-y-6">
-            {isLabFlow ? (
-              <>
-                <p className="text-base sm:text-lg text-[#807f78] leading-relaxed">
-                  Multi-tenant SaaS for diagnostic labs in Pakistan. Built end-to-end covering patient registration, laboratory test validation workflows, and automated reporting.
+        <div className="mt-7 space-y-7">
+          {isLabFlow ? (
+            <>
+              <p className="muted text-lg leading-relaxed">
+                Multi-tenant SaaS for diagnostic labs in Pakistan. Built end-to-end covering patient
+                registration, laboratory test validation workflows, and automated reporting.
+              </p>
+
+              <div>
+                <h4 className="mb-3 flex items-center gap-2 font-mono text-xs uppercase tracking-[0.14em]">
+                  <CheckCircle2 className="h-4 w-4 text-pine" aria-hidden="true" />
+                  Real system flows
+                </h4>
+                <ul className="grid gap-2 sm:grid-cols-2">
+                  {LABFLOW_FLOWS.map((flow) => (
+                    <li
+                      key={flow}
+                      className="flex items-center gap-2.5 rounded-xl border border-ink/10 bg-ink/[0.03] px-3 py-2 text-sm"
+                    >
+                      <span className="h-1.5 w-1.5 rounded-full bg-pine" />
+                      {flow}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              <div className="border-t border-ink/10 pt-6">
+                <h4 className="mb-2 flex items-center gap-2 font-mono text-xs uppercase tracking-[0.14em]">
+                  <Layers className="h-4 w-4 text-pine" aria-hidden="true" />
+                  Technical architecture
+                </h4>
+                <p className="rounded-xl bg-ink p-3.5 font-mono text-xs leading-relaxed text-paper sm:text-sm">
+                  Django 5 · DRF · React 18 + TypeScript · PostgreSQL 16 · Redis · Celery · Docker ·
+                  Caddy · GitHub Actions
                 </p>
+              </div>
 
-                {/* Real flows from live text */}
-                <div>
-                  <h4 className="text-xs uppercase tracking-[0.18em] text-[#f3f1ea] font-medium flex items-center gap-2 mb-3">
-                    <CheckCircle2 className="w-4 h-4 text-[#ff3b1d]" />
-                    Real System Flows:
-                  </h4>
-                  <ul className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-                    {labFlowFlows.map((flow, idx) => (
-                      <li
-                        key={idx}
-                        className="flex items-center gap-2.5 text-sm text-[#807f78] bg-white/[0.03] border border-white/5 rounded-lg px-3 py-2"
-                      >
-                        <span className="w-1.5 h-1.5 rounded-full bg-[#ff3b1d]" />
-                        <span>{flow}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
+              <div className="flex justify-end">
+                <a
+                  href="https://github.com/kamrandebugging/LabFlow"
+                  target="_blank"
+                  rel="noreferrer noopener"
+                  className="inline-flex items-center gap-2 text-sm font-medium underline underline-offset-4"
+                >
+                  View LabFlow repository <ExternalLink className="h-4 w-4" aria-hidden="true" />
+                </a>
+              </div>
+            </>
+          ) : (
+            <>
+              <p className="muted text-lg leading-relaxed">
+                Full-stack development on a live digital invoicing system integrated with FBR, in
+                production use since 2025.
+              </p>
 
-                {/* Stack */}
-                <div className="pt-4 border-t border-white/10">
-                  <h4 className="text-xs uppercase tracking-[0.18em] text-[#f3f1ea] font-medium flex items-center gap-2 mb-2">
-                    <Layers className="w-4 h-4 text-[#ff3b1d]" />
-                    Technical Architecture:
-                  </h4>
-                  <p className="font-mono text-xs sm:text-sm text-[#807f78] bg-[#08080a] p-3 rounded-lg border border-white/10 leading-relaxed">
-                    Django 5 · DRF · React 18 + TypeScript · PostgreSQL 16 · Redis · Celery · Docker · Caddy · GitHub Actions
-                  </p>
-                </div>
-
-                <div className="flex justify-end pt-2">
-                  <a
-                    href="https://github.com/kamrandebugging/LabFlow"
-                    target="_blank"
-                    rel="noreferrer noopener"
-                    className="inline-flex items-center gap-2 text-sm font-medium text-[#ff3b1d] hover:underline"
-                  >
-                    View LabFlow Repository <ExternalLink className="w-4 h-4" />
-                  </a>
-                </div>
-              </>
-            ) : (
-              <>
-                <p className="text-base sm:text-lg text-[#807f78] leading-relaxed">
-                  Full-stack development on a live digital invoicing system integrated with FBR, in production use since 2025.
+              <div>
+                <h4 className="mb-3 flex items-center gap-2 font-mono text-xs uppercase tracking-[0.14em]">
+                  <CheckCircle2 className="h-4 w-4 text-pine" aria-hidden="true" />
+                  Scope of work
+                </h4>
+                <p className="rounded-xl border border-ink/10 bg-ink/[0.03] p-4 text-sm leading-relaxed">
+                  Integrated digital invoicing workflows compliant with regulatory standards,
+                  ensuring reliable real-time transaction processing and invoice validation.
                 </p>
+              </div>
 
-                {/* Real scope from live text */}
-                <div>
-                  <h4 className="text-xs uppercase tracking-[0.18em] text-[#f3f1ea] font-medium flex items-center gap-2 mb-3">
-                    <CheckCircle2 className="w-4 h-4 text-[#ff3b1d]" />
-                    Scope of Work:
-                  </h4>
-                  <div className="bg-white/[0.03] border border-white/5 rounded-lg p-4 space-y-2">
-                    <p className="text-sm text-[#807f78] leading-relaxed">
-                      Integrated digital invoicing workflows compliant with regulatory standards, ensuring reliable real-time transaction processing and invoice validation.
-                    </p>
-                  </div>
-                </div>
-
-                {/* Stack */}
-                <div className="pt-4 border-t border-white/10">
-                  <h4 className="text-xs uppercase tracking-[0.18em] text-[#f3f1ea] font-medium flex items-center gap-2 mb-2">
-                    <Layers className="w-4 h-4 text-[#ff3b1d]" />
-                    Technical Architecture:
-                  </h4>
-                  <p className="font-mono text-xs sm:text-sm text-[#807f78] bg-[#08080a] p-3 rounded-lg border border-white/10 leading-relaxed">
-                    Laravel · PHP · MySQL
-                  </p>
-                </div>
-              </>
-            )}
-          </div>
-        </motion.div>
+              <div className="border-t border-ink/10 pt-6">
+                <h4 className="mb-2 flex items-center gap-2 font-mono text-xs uppercase tracking-[0.14em]">
+                  <Layers className="h-4 w-4 text-pine" aria-hidden="true" />
+                  Technical architecture
+                </h4>
+                <p className="rounded-xl bg-ink p-3.5 font-mono text-xs text-paper sm:text-sm">
+                  Laravel · PHP · MySQL
+                </p>
+              </div>
+            </>
+          )}
+        </div>
       </div>
-    </AnimatePresence>
+    </div>
   );
 };
 

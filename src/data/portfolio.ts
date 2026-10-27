@@ -1,12 +1,12 @@
-import heroImg from '../assets/hero.png';
-import labflowImg from '../assets/labflow.jpeg';
-import fbrImg from '../assets/fbr-integrated-invoicing-system.jpeg';
-import fundoraImg from '../assets/fundoraglobal.jpg';
-import examcraftImg from '../assets/examcraft-pro.jpeg';
-import neuroscanImg from '../assets/neuroscan-ai.jpeg';
-import edgenexusImg from '../assets/edgenexus-it.jpeg';
-import dsImg from '../assets/ds-visualizer.jpeg';
-import achievementImg from '../assets/achievement-codexcellence.jpeg';
+import heroImg from '../assets/hero.webp';
+import labflowImg from '../assets/labflow.webp';
+import fbrImg from '../assets/fbr-integrated-invoicing-system.webp';
+import fundoraImg from '../assets/fundoraglobal.webp';
+import examcraftImg from '../assets/examcraft-pro.webp';
+import neuroscanImg from '../assets/neuroscan-ai.webp';
+import edgenexusImg from '../assets/edgenexus-it.webp';
+import dsImg from '../assets/ds-visualizer.webp';
+import achievementImg from '../assets/achievement-codexcellence.webp';
 
 export interface ProjectItem {
   id: string;
@@ -50,7 +50,12 @@ export interface PortfolioData {
     lastName: string;
     initials: string;
     role: string;
+    /** Hero headline lines; <em> is allowed for the italic accent. */
+    headline: string[];
     heroDesc: string;
+    /** Drop a PDF into /public and set e.g. `${import.meta.env.BASE_URL}resume.pdf`. Empty hides the button. */
+    resumeUrl: string;
+    timezone: string;
     heroImage: string;
     heroImageAlt: string;
     email: string;
@@ -101,7 +106,7 @@ export interface PortfolioData {
   skills: {
     eyebrow: string;
     sectionHeading: string;
-    skillsList: string[];
+    groups: { title: string; items: string[] }[];
     learningHeading: string;
     learningList: string[];
   };
@@ -115,6 +120,7 @@ export interface PortfolioData {
   navLinks: {
     label: string;
     href: string;
+    blurb: string;
   }[];
 }
 
@@ -125,8 +131,11 @@ export const portfolioData: PortfolioData = {
     lastName: 'Kamran',
     initials: 'MK',
     role: 'Web & Software Developer',
+    headline: ['Real software,', 'not <em>demos.</em>'],
     heroDesc:
-      'I build real software, not demos — FBR-integrated invoicing (Laravel), LabFlow multi-tenant SaaS (Django + React). Open to paid remote internships.',
+      'Live FBR-integrated invoicing in Laravel since 2025, and LabFlow, a multi-tenant SaaS for diagnostic labs in Django and React. Open to paid remote internships.',
+    resumeUrl: '',
+    timezone: 'Asia/Karachi',
     heroImage: heroImg,
     heroImageAlt: 'Muhammad Kamran, hero portrait',
     email: 'kamran.debug@gmail.com',
@@ -179,7 +188,7 @@ export const portfolioData: PortfolioData = {
   },
   story: {
     eyebrow: 'About Me',
-    heading: ['Building real', 'software, not', 'just demos.'],
+    heading: ['How I', 'work.'],
     lead:
       "I'm a full-stack developer in Lahore, Pakistan. ADP Computer Science at Riphah International University (GPA 3.61 / 4.00), currently a BSCS 5th Semester Student at NCBA&E University. I'm building LabFlow — a multi-tenant SaaS for diagnostic labs — as my showcase project.",
     principles: [
@@ -340,41 +349,37 @@ export const portfolioData: PortfolioData = {
   skills: {
     eyebrow: 'Capabilities',
     sectionHeading: 'Technical Skills and Tools',
-    skillsList: [
-      'Laravel',
-      'PHP',
-      'MySQL',
-      'HTML',
-      'CSS',
-      'JavaScript',
-      'Git & GitHub',
-      'WordPress',
-      'Claude Code',
-      'Antigravity',
-      'Tailwind CSS',
-      'React',
-      'TypeScript',
-      'Django',
-      'DRF',
-      'PostgreSQL',
-      'Redis',
-      'Celery',
-      'Docker',
-      'Caddy',
-      'GitHub Actions',
-      'Vue 3',
-      'Pinia',
-      'Vite',
-      'Bootstrap',
-      'Python',
-      'Machine Learning',
-      'Data Structures',
-      'GSAP',
-      'Three.js',
-      'Node.js',
-      'NestJS',
-      'Next.js',
-      'Socket.IO',
+    groups: [
+      {
+        title: 'Backend',
+        items: ['Laravel', 'PHP', 'Django', 'DRF', 'Python', 'Celery', 'Node.js', 'NestJS', 'Socket.IO'],
+      },
+      {
+        title: 'Frontend',
+        items: [
+          'React',
+          'TypeScript',
+          'Next.js',
+          'Vue 3',
+          'Pinia',
+          'JavaScript',
+          'HTML',
+          'CSS',
+          'Tailwind CSS',
+          'Bootstrap',
+          'GSAP',
+          'Three.js',
+          'Vite',
+        ],
+      },
+      {
+        title: 'Data & infrastructure',
+        items: ['PostgreSQL', 'MySQL', 'Redis', 'Docker', 'Caddy', 'GitHub Actions', 'Git & GitHub'],
+      },
+      {
+        title: 'Also',
+        items: ['Machine Learning', 'Data Structures', 'WordPress', 'Claude Code', 'Antigravity'],
+      },
     ],
     learningHeading: 'Learning next',
     learningList: ['Express.js', 'MongoDB'],
@@ -391,11 +396,11 @@ export const portfolioData: PortfolioData = {
     ],
   },
   navLinks: [
-    { label: 'Story', href: '#story' },
-    { label: 'Projects', href: '#projects' },
-    { label: 'Achievements', href: '#achievements' },
-    { label: 'Impact', href: '#impact' },
-    { label: 'Experience', href: '#experience' },
-    { label: 'Contact', href: '#contact' },
+    { label: 'About', href: '#about', blurb: 'Who I am and how I work' },
+    { label: 'LabFlow', href: '#pipeline', blurb: 'Patient to report, end to end' },
+    { label: 'Projects', href: '#projects', blurb: 'Seven projects, three in depth' },
+    { label: 'Proof', href: '#proof', blurb: 'Numbers and recognition' },
+    { label: 'Experience', href: '#experience', blurb: 'Roles and the stack' },
+    { label: 'Contact', href: '#contact', blurb: 'Email is best' },
   ],
 };

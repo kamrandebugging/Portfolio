@@ -1,64 +1,48 @@
-import React, { useState, useEffect } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { portfolioData } from '../data/portfolio';
-import { scrollToTarget } from '../utils/scroll';
+import { scrollToTarget } from '../engine/scroll';
+import { EditorialMenu } from './EditorialMenu';
+import { LocalTime } from './ui/LocalTime';
 
-interface NavbarProps {
-  isContactVisible?: boolean;
-}
+export const Navbar: React.FC = () => {
+  const [open, setOpen] = useState(false);
+  const trigger = useRef<HTMLButtonElement>(null);
+  const wasOpen = useRef(false);
+  const close = useCallback(() => setOpen(false), []);
 
-export const Navbar: React.FC<NavbarProps> = ({ isContactVisible = false }) => {
-  const [isOpen, setIsOpen] = useState(false);
-  const [scrolled, setScrolled] = useState(false);
-
+  // Return focus to the Index button after the menu closes.
   useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 40);
-    };
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-
-  const handleLinkClick = (href: string) => {
-    setIsOpen(false);
-    scrollToTarget(href);
-  };
+    if (wasOpen.current && !open) trigger.current?.focus();
+    wasOpen.current = open;
+  }, [open]);
 
   return (
-    <header className="fixed top-0 inset-x-0 z-50 pointer-events-none transition-all duration-300">
-      <nav
-        className={`pointer-events-auto flex items-center justify-between px-6 sm:px-10 md:px-14 py-4 md:py-6 transition-all duration-300 ${
-          scrolled ? 'bg-[#08080a]/85 backdrop-blur-md border-b border-white/5 py-4' : 'bg-transparent'
-        }`}
-      >
+    <>
+      <header className="nav">
         <a
           href="#top"
           onClick={(e) => {
             e.preventDefault();
-            handleLinkClick('#top');
+            scrollToTarget('#top');
           }}
-          className="group flex items-center gap-3 text-[#f3f1ea]"
-          aria-label="Muhammad Kamran - Back to top"
+          className="flex items-center gap-3"
+          aria-label={`${portfolioData.personal.name}, back to top`}
         >
-          <span className="grid place-items-center w-10 h-10 rounded-full border border-white/20 font-semibold tracking-tight text-sm group-hover:border-[#ff3b1d] group-hover:text-[#ff3b1d] transition-colors duration-300">
-            {portfolioData.personal.initials}
-          </span>
-          <span className="hidden sm:inline-block text-[0.8125rem] font-medium uppercase tracking-[0.22em] text-[#807f78] group-hover:text-[#f3f1ea] transition-colors duration-300">
-            {portfolioData.personal.name}
-          </span>
+          <span className="nav-mark">{portfolioData.personal.initials}</span>
+          <span className="nav-name hidden sm:inline">{portfolioData.personal.name}</span>
         </a>
 
-        {/* Desktop nav links + Adaptive Contact CTA */}
-        <div className="hidden md:flex items-center gap-8 lg:gap-10">
-          <ul className="flex items-center gap-8 lg:gap-10">
+        <div className="flex items-center gap-6 lg:gap-9">
+          <ul className="hidden items-center gap-7 xl:flex">
             {portfolioData.navLinks.map((link) => (
               <li key={link.href}>
                 <a
                   href={link.href}
+                  className="nav-link"
                   onClick={(e) => {
                     e.preventDefault();
-                    handleLinkClick(link.href);
+                    scrollToTarget(link.href);
                   }}
-                  className="relative text-[0.8125rem] font-medium uppercase tracking-[0.18em] text-[#807f78] hover:text-[#f3f1ea] transition-colors duration-300 py-1 after:content-[''] after:absolute after:bottom-0 after:left-0 after:h-[1px] after:w-0 hover:after:w-full after:bg-[#ff3b1d] after:transition-all after:duration-300"
                 >
                   {link.label}
                 </a>
@@ -66,72 +50,24 @@ export const Navbar: React.FC<NavbarProps> = ({ isContactVisible = false }) => {
             ))}
           </ul>
 
-          {/* Adaptive Contact CTA: disappears when Contact section is in view */}
+          <LocalTime className="hidden text-[var(--ui-fg-muted)] md:inline" />
+
           <button
+            ref={trigger}
             type="button"
-            onClick={() => handleLinkClick('#contact')}
-            className={`inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-white/20 bg-white/[0.04] text-xs font-mono uppercase tracking-wider text-[#f3f1ea] hover:border-[#ff3b1d] hover:text-[#ff3b1d] hover:bg-[#ff3b1d]/10 transition-all duration-300 ${
-              isContactVisible
-                ? 'opacity-0 pointer-events-none translate-y-1'
-                : 'opacity-100 pointer-events-auto translate-y-0'
-            }`}
+            onClick={() => setOpen(true)}
+            className="nav-index"
+            aria-haspopup="dialog"
+            aria-expanded={open}
+            data-cursor="Open"
           >
-            <span className="w-1.5 h-1.5 rounded-full bg-[#ff3b1d]" />
-            <span>Get in touch</span>
+            <span>Index</span>
+            <span className="nav-burger" aria-hidden="true" />
           </button>
         </div>
+      </header>
 
-        {/* Mobile menu hamburger button */}
-        <button
-          type="button"
-          onClick={() => setIsOpen(!isOpen)}
-          className="md:hidden flex flex-col justify-center items-center w-10 h-10 gap-1.5 focus:outline-none"
-          aria-label={isOpen ? 'Close menu' : 'Open menu'}
-          aria-expanded={isOpen}
-        >
-          <span
-            className={`block h-0.5 w-6 bg-[#f3f1ea] transition-transform duration-300 ${
-              isOpen ? 'translate-y-2 rotate-45' : ''
-            }`}
-          />
-          <span
-            className={`block h-0.5 w-6 bg-[#f3f1ea] transition-opacity duration-300 ${
-              isOpen ? 'opacity-0' : 'opacity-100'
-            }`}
-          />
-          <span
-            className={`block h-0.5 w-6 bg-[#f3f1ea] transition-transform duration-300 ${
-              isOpen ? '-translate-y-2 -rotate-45' : ''
-            }`}
-          />
-        </button>
-      </nav>
-
-      {/* Mobile Drawer */}
-      <div
-        className={`md:hidden fixed inset-0 z-40 bg-[#08080a] flex flex-col justify-center px-8 transition-opacity duration-300 ${
-          isOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
-        }`}
-      >
-        <div className="flex flex-col gap-6">
-          {portfolioData.navLinks.map((link, idx) => (
-            <a
-              key={link.href}
-              href={link.href}
-              onClick={(e) => {
-                e.preventDefault();
-                handleLinkClick(link.href);
-              }}
-              style={{ transitionDelay: `${idx * 60}ms` }}
-              className={`font-display text-4xl sm:text-5xl uppercase tracking-tight text-[#807f78] hover:text-[#ff3b1d] transition-all duration-300 ${
-                isOpen ? 'translate-y-0 opacity-100' : 'translate-y-6 opacity-0'
-              }`}
-            >
-              {link.label}
-            </a>
-          ))}
-        </div>
-      </div>
-    </header>
+      <EditorialMenu open={open} onClose={close} />
+    </>
   );
 };

@@ -1,281 +1,274 @@
-import React, { useState, useRef } from 'react';
-import { ExternalLink, BookOpen } from 'lucide-react';
-import { motion } from 'motion/react';
-import { portfolioData, ProjectItem } from '../data/portfolio';
-import { MagicCard } from './magicui/MagicCard';
+import React, { useCallback, useRef, useState } from 'react';
+import {
+  gsap,
+  ScrollTrigger,
+  useGSAP,
+  SCENES_ON,
+  MOBILE_SCENES,
+  MOTION_OK,
+  motionMatchMedia,
+} from '../engine/gsap';
+import { portfolioData } from '../data/portfolio';
+import { useReveals } from '../hooks/useReveals';
 import { CaseStudyDialog } from './CaseStudyDialog';
-import { ScrollHeading } from './motion/ScrollReveal';
+import { ProjectCard } from './ProjectCard';
+import { ProjectDialog } from './ProjectDialog';
 
-const FILTER_CHIPS = [
-  'All',
-  'Laravel',
-  'Django / React',
-  'Next.js / NestJS',
-  'Vue',
-  'GSAP / Three.js',
-  'Python / ML',
-] as const;
+type CSSVars = React.CSSProperties & Record<`--${string}`, string | number>;
 
-type FilterChip = (typeof FILTER_CHIPS)[number];
+const FEATURED = ['labflow', 'fbr-invoicing', 'fundora-global'];
+type CaseStudyId = 'labflow' | 'fbr-invoicing';
 
 export const Projects: React.FC = () => {
+  const root = useRef<HTMLElement>(null);
+  const preview = useRef<HTMLDivElement>(null);
+  const previewImg = useRef<HTMLImageElement>(null);
+  const labFlowBtn = useRef<HTMLButtonElement>(null);
+  const fbrBtn = useRef<HTMLButtonElement>(null);
+  const [caseStudy, setCaseStudy] = useState<CaseStudyId | null>(null);
+  const [openMore, setOpenMore] = useState<number | null>(null);
+
   const { projects } = portfolioData;
-  const [activeFilter, setActiveFilter] = useState<FilterChip>('All');
-  const [selectedCaseStudy, setSelectedCaseStudy] = useState<'labflow' | 'fbr-invoicing' | null>(null);
+  const featured = projects.filter((p) => FEATURED.includes(p.id));
+  const more = projects.filter((p) => !FEATURED.includes(p.id));
 
-  // References for keyboard focus restoration
-  const labFlowBtnRef = useRef<HTMLButtonElement>(null);
-  const fbrBtnRef = useRef<HTMLButtonElement>(null);
+  const closeMore = useCallback(() => setOpenMore(null), []);
+  const prevMore = useCallback(
+    () => setOpenMore((i) => (i === null ? i : (i - 1 + more.length) % more.length)),
+    [more.length]
+  );
+  const nextMore = useCallback(
+    () => setOpenMore((i) => (i === null ? i : (i + 1) % more.length)),
+    [more.length]
+  );
 
-  const matchesFilter = (project: ProjectItem, filter: FilterChip): boolean => {
-    if (filter === 'All') return true;
-    if (filter === 'Laravel') return project.id === 'fbr-invoicing' || project.id === 'examcraft-pro';
-    if (filter === 'Django / React') return project.id === 'labflow';
-    if (filter === 'Next.js / NestJS') return project.id === 'fundora-global';
-    if (filter === 'Vue') return project.id === 'examcraft-pro';
-    if (filter === 'GSAP / Three.js') return project.id === 'edgenexus-it';
-    if (filter === 'Python / ML') return project.id === 'neuroscan-ai';
-    return false;
-  };
+  useReveals(root);
 
-  const filteredProjects = projects.filter((p) => matchesFilter(p, activeFilter));
+  // Phones: no pinning (cards are taller than the screen), so each card is
+  // scrubbed instead: it rises and settles as it enters, and its image drifts.
+  useGSAP(
+    () => {
+      const mm = motionMatchMedia();
+      mm.add(MOBILE_SCENES, () => {
+        const sheets = gsap.utils.toArray<HTMLElement>('.psheet:not(.psheet--dialog)', root.current);
+        sheets.forEach((sheet) => {
+          gsap.fromTo(
+            sheet,
+            { y: 64, scale: 0.94, autoAlpha: 0.35 },
+            {
+              y: 0,
+              scale: 1,
+              autoAlpha: 1,
+              ease: 'none',
+              scrollTrigger: { trigger: sheet, start: 'top 97%', end: 'top 55%', scrub: true },
+            }
+          );
+          const frame = sheet.querySelector<HTMLElement>('.pframe');
+          const img = frame?.querySelector('img');
+          if (frame && img) {
+            gsap.fromTo(
+              img,
+              { yPercent: -5 },
+              {
+                yPercent: 5,
+                ease: 'none',
+                scrollTrigger: { trigger: frame, start: 'top bottom', end: 'bottom top', scrub: true },
+              }
+            );
+          }
+        });
+      });
+    },
+    { scope: root }
+  );
 
-  const getFilterCount = (filter: FilterChip): number => {
-    return projects.filter((p) => matchesFilter(p, filter)).length;
+  // The compact list rises in as a group, on every screen size.
+  useGSAP(
+    () => {
+      const mm = motionMatchMedia();
+      mm.add(MOTION_OK, () => {
+        ScrollTrigger.batch('.mrow', {
+          start: 'top 94%',
+          once: true,
+          onEnter: (rows) =>
+            gsap.from(rows, { y: 26, autoAlpha: 0, duration: 0.9, ease: 'expo.out', stagger: 0.09 }),
+        });
+      });
+    },
+    { scope: root }
+  );
+
+  // Each stacked sheet recedes as the next one rises over it.
+  useGSAP(
+    () => {
+      const mm = motionMatchMedia();
+      mm.add(SCENES_ON, () => {
+        const sheets = gsap.utils.toArray<HTMLElement>('.psheet');
+        const triggers = sheets.slice(0, -1).map((sheet, i) =>
+          ScrollTrigger.create({
+            trigger: sheets[i + 1],
+            start: 'top 85%',
+            end: 'top 18%',
+            onUpdate: (self) => sheet.style.setProperty('--cover', self.progress.toFixed(4)),
+          })
+        );
+        return () => {
+          triggers.forEach((t) => t.kill());
+          sheets.forEach((s) => s.style.removeProperty('--cover'));
+        };
+      });
+    },
+    { scope: root }
+  );
+
+  // Cursor-following preview for the compact list (pointer devices only).
+  useGSAP(
+    () => {
+      const mm = motionMatchMedia();
+      mm.add('(hover: hover) and (pointer: fine)', () => {
+        const box = preview.current;
+        const img = previewImg.current;
+        if (!box || !img) return;
+
+        const xTo = gsap.quickTo(box, 'x', { duration: 0.55, ease: 'power3' });
+        const yTo = gsap.quickTo(box, 'y', { duration: 0.55, ease: 'power3' });
+        const rows = gsap.utils.toArray<HTMLElement>('.mrow');
+
+        const onMove = (e: PointerEvent) => {
+          xTo(e.clientX + 28);
+          yTo(e.clientY - 90);
+        };
+        const onEnter = (e: PointerEvent) => {
+          const src = (e.currentTarget as HTMLElement).dataset.image;
+          if (!src) return;
+          img.src = src;
+          box.dataset.on = 'true';
+        };
+        const onLeave = () => {
+          box.dataset.on = 'false';
+        };
+
+        rows.forEach((row) => {
+          row.addEventListener('pointermove', onMove);
+          row.addEventListener('pointerenter', onEnter);
+          row.addEventListener('pointerleave', onLeave);
+        });
+        return () => {
+          rows.forEach((row) => {
+            row.removeEventListener('pointermove', onMove);
+            row.removeEventListener('pointerenter', onEnter);
+            row.removeEventListener('pointerleave', onLeave);
+          });
+          box.dataset.on = 'false';
+        };
+      });
+    },
+    { scope: root }
+  );
+
+  const openRow = (index: number) => {
+    if (preview.current) preview.current.dataset.on = 'false';
+    setOpenMore(index);
   };
 
   return (
-    <section id="projects" className="relative px-6 sm:px-10 md:px-14 py-20 sm:py-28 border-b border-white/5">
-      {/* Header */}
-      <div className="flex flex-col sm:flex-row items-start sm:items-end justify-between gap-4 mb-10 sm:mb-12">
+    <section
+      id="projects"
+      ref={root}
+      data-chapter="04"
+      data-chapter-title="Projects"
+      data-tone="dark"
+      className="tone-forest px-[var(--pad-x)] pb-24 pt-28 md:pt-36"
+    >
+      <div className="mx-auto max-w-[88rem]">
+        <div className="mb-16 flex flex-wrap items-end justify-between gap-6">
+          <div>
+            <span data-fade className="eyebrow">
+              Selected projects
+            </span>
+            <h2 data-split className="display mt-6 text-[clamp(3.25rem,8vw,8rem)]">
+              Selected <em>work.</em>
+            </h2>
+          </div>
+          <span data-fade className="font-mono text-xs uppercase tracking-[0.16em] muted">
+            {String(projects.length).padStart(2, '0')} projects · 03 in depth
+          </span>
+        </div>
+
         <div>
-          <span className="eyebrow">Selected Projects</span>
-          <ScrollHeading
-            text={['Real work,', 'not demos.']}
-            className="font-display uppercase tracking-tight text-4xl sm:text-6xl text-[#f3f1ea] mt-4 leading-[0.95]"
-          />
-        </div>
-        <div className="text-[0.8125rem] font-mono uppercase tracking-[0.22em] text-[#807f78]">
-          07 / Projects
-        </div>
-      </div>
-
-      {/* Filter Chips Bar */}
-      <div className="mb-10 sm:mb-14 flex flex-wrap items-center gap-2 sm:gap-2.5" role="toolbar" aria-label="Project filter categories">
-        {FILTER_CHIPS.map((chip) => {
-          const isActive = activeFilter === chip;
-          const count = getFilterCount(chip);
-          return (
-            <button
-              key={chip}
-              type="button"
-              onClick={() => setActiveFilter(chip)}
-              className={`rounded-full px-4 py-1.5 text-xs sm:text-sm font-medium transition-all duration-300 flex items-center gap-2 ${
-                isActive
-                  ? 'bg-[#ff3b1d] text-white shadow-[0_0_15px_rgba(255,59,29,0.45)]'
-                  : 'bg-white/[0.03] text-[#807f78] border border-white/10 hover:border-white/25 hover:text-[#f3f1ea]'
-              }`}
-            >
-              <span>{chip}</span>
-              <span
-                className={`text-[0.7rem] px-1.5 py-0.2 rounded-full font-mono ${
-                  isActive ? 'bg-black/25 text-white' : 'bg-white/5 text-[#807f78]'
-                }`}
+          {featured.map((project, index) => {
+            const caseStudyId =
+              project.id === 'labflow' || project.id === 'fbr-invoicing' ? project.id : null;
+            return (
+              <article
+                key={project.id}
+                className={`psheet psheet-${index + 1}`}
+                style={{ '--n': index } as CSSVars}
               >
-                {count}
-              </span>
-            </button>
-          );
-        })}
+                <ProjectCard
+                  project={project}
+                  eager={index === 0}
+                  onCaseStudy={caseStudyId ? () => setCaseStudy(caseStudyId) : undefined}
+                  caseStudyRef={
+                    project.id === 'labflow' ? labFlowBtn : project.id === 'fbr-invoicing' ? fbrBtn : undefined
+                  }
+                />
+              </article>
+            );
+          })}
+        </div>
+
+        <div className="mt-24">
+          <div className="mb-6 flex items-center justify-between" data-fade>
+            <span className="eyebrow">More work</span>
+            <span className="font-mono text-xs uppercase tracking-[0.16em] muted">
+              Hover to preview · click to open
+            </span>
+          </div>
+          <ul>
+            {more.map((project, i) => (
+              <li key={project.id}>
+                <button
+                  type="button"
+                  className="mrow"
+                  data-image={project.image ?? ''}
+                  data-cursor="Open"
+                  aria-haspopup="dialog"
+                  onClick={() => openRow(i)}
+                >
+                  <span className="font-mono text-xs tabular-nums muted">
+                    {String(featured.length + i + 1).padStart(2, '0')}
+                  </span>
+                  <span className="display text-[clamp(1.6rem,3vw,2.6rem)]">{project.name}</span>
+                  <span className="text-sm muted">{project.cat}</span>
+                  <span className="font-mono text-xs uppercase tracking-[0.1em] muted">
+                    {project.outcome}
+                  </span>
+                </button>
+              </li>
+            ))}
+            <li className="border-t border-[var(--line)]" aria-hidden="true" />
+          </ul>
+        </div>
       </div>
 
-      {/* Bento Grid: LabFlow is FIRST and LARGEST (spanning grid), other 6 in exact order */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-6 items-stretch">
-        {filteredProjects.map((project: ProjectItem) => {
-          const isLabFlow = project.id === 'labflow';
-          const isFBR = project.id === 'fbr-invoicing';
-          const hasCaseStudy = isLabFlow || isFBR;
-
-          return (
-            <motion.div
-              key={project.id}
-              layout
-              initial={{ opacity: 0, y: 12 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
-              className={`h-full ${
-                isLabFlow
-                  ? 'col-span-1 md:col-span-2 lg:col-span-12'
-                  : 'col-span-1 md:col-span-1 lg:col-span-6'
-              }`}
-            >
-              <MagicCard className="h-full p-6 sm:p-8 flex flex-col justify-between">
-                {isLabFlow ? (
-                  /* Featured LabFlow Layout (spanning grid) */
-                  <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center h-full">
-                    {/* Left text column */}
-                    <div className="lg:col-span-7 flex flex-col justify-between h-full">
-                      <div>
-                        <div className="flex flex-wrap items-center justify-between gap-3 text-xs uppercase tracking-[0.18em] text-[#807f78] mb-3">
-                          <span className="px-2.5 py-0.5 rounded bg-[#ff3b1d]/15 text-[#ff3b1d] font-semibold border border-[#ff3b1d]/30">
-                            {project.cat}
-                          </span>
-                          <div className="flex items-center gap-2 font-mono">
-                            {project.year && <span>{project.year}</span>}
-                            {project.year && <span className="text-white/20">·</span>}
-                            <span className="text-[#ff3b1d]">{project.outcome}</span>
-                          </div>
-                        </div>
-
-                        <h3 className="text-3xl sm:text-4xl lg:text-5xl font-semibold tracking-tight text-[#f3f1ea] group-hover:text-[#ff3b1d] transition-colors duration-300">
-                          {project.link ? (
-                            <a
-                              href={project.link}
-                              target="_blank"
-                              rel="noreferrer noopener"
-                              className="inline-flex items-center gap-2.5 hover:underline"
-                            >
-                              {project.name}
-                              <ExternalLink className="w-5 h-5 text-[#ff3b1d] inline-block opacity-80 group-hover:opacity-100" />
-                            </a>
-                          ) : (
-                            project.name
-                          )}
-                        </h3>
-
-                        <p className="mt-4 text-base sm:text-lg text-[#807f78] leading-relaxed max-w-2xl">
-                          {project.blurb}
-                        </p>
-                      </div>
-
-                      <div className="mt-8 pt-6 border-t border-white/10 space-y-4">
-                        <p className="text-xs sm:text-sm font-mono text-[#f3f1ea]/90 leading-relaxed">
-                          <span className="text-[#807f78] uppercase text-xs tracking-wider mr-2 font-sans font-semibold">
-                            Stack:
-                          </span>
-                          {project.stack}
-                        </p>
-
-                        <div className="flex items-center gap-4 pt-1">
-                          <button
-                            ref={labFlowBtnRef}
-                            type="button"
-                            onClick={() => setSelectedCaseStudy('labflow')}
-                            className="inline-flex items-center gap-2 rounded-lg bg-[#ff3b1d]/15 hover:bg-[#ff3b1d]/25 border border-[#ff3b1d]/40 px-4 py-2 text-xs sm:text-sm font-medium text-[#ff3b1d] transition-all duration-300"
-                          >
-                            <BookOpen className="w-4 h-4" />
-                            <span>View case study</span>
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Right image column: eager load for featured card */}
-                    <div className="lg:col-span-5 w-full">
-                      <div className="overflow-hidden rounded-lg border border-white/10 bg-[#08080a] aspect-[16/9] w-full transition-all duration-300 group-hover:border-[#ff3b1d]/40 group-hover:shadow-[0_0_25px_rgba(255,59,29,0.18)]">
-                        {project.image && (
-                          <img
-                            src={project.image}
-                            alt={`${project.name} preview`}
-                            loading="eager"
-                            className="w-full h-full object-contain object-center transition-all duration-300 group-hover:brightness-105"
-                          />
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                ) : (
-                  /* Standard Bento Card Layout (other 6 projects in exact order) */
-                  <div className="flex flex-col justify-between h-full">
-                    <div>
-                      {/* Category & Status */}
-                      <div className="flex flex-wrap items-center justify-between gap-3 text-xs uppercase tracking-[0.18em] text-[#807f78] mb-3">
-                        <span>{project.cat}</span>
-                        <div className="flex items-center gap-2 font-mono">
-                          {project.year && <span>{project.year}</span>}
-                          {project.year && <span className="text-white/20">·</span>}
-                          <span className="text-[#ff3b1d]">{project.outcome}</span>
-                        </div>
-                      </div>
-
-                      {/* Title & Initials Badge if FG */}
-                      <div className="flex items-center gap-2.5 flex-wrap">
-                        <h3 className="text-2xl sm:text-3xl font-semibold tracking-tight text-[#f3f1ea] group-hover:text-[#ff3b1d] transition-colors duration-300">
-                          {project.link ? (
-                            <a
-                              href={project.link}
-                              target="_blank"
-                              rel="noreferrer noopener"
-                              className="inline-flex items-center gap-2 hover:underline"
-                            >
-                              {project.name}
-                              <ExternalLink className="w-4 h-4 text-[#ff3b1d] opacity-80 group-hover:opacity-100" />
-                            </a>
-                          ) : (
-                            project.name
-                          )}
-                        </h3>
-                        {project.initials === 'FG' && (
-                          <span className="inline-flex items-center justify-center px-2 py-0.5 rounded text-xs font-semibold bg-[#ff3b1d]/15 text-[#ff3b1d] border border-[#ff3b1d]/30 font-mono tracking-wider">
-                            FG
-                          </span>
-                        )}
-                      </div>
-
-                      {/* Image Preview with glow hover effect (no cropping) */}
-                      {project.image && (
-                        <div className="my-5 overflow-hidden rounded-lg border border-white/10 bg-[#08080a] aspect-[16/9] w-full transition-all duration-300 group-hover:border-[#ff3b1d]/40 group-hover:shadow-[0_0_25px_rgba(255,59,29,0.15)]">
-                          <img
-                            src={project.image}
-                            alt={`${project.name} preview`}
-                            loading="lazy"
-                            className="w-full h-full object-contain object-center transition-all duration-300 group-hover:brightness-105"
-                          />
-                        </div>
-                      )}
-
-                      {/* Blurb */}
-                      <p className="mt-3 text-sm sm:text-base text-[#807f78] leading-relaxed">
-                        {project.blurb}
-                      </p>
-                    </div>
-
-                    {/* Stack & Optional Case Study Button */}
-                    <div className="mt-6 pt-5 border-t border-white/10 space-y-4">
-                      <p className="text-xs sm:text-sm font-mono text-[#f3f1ea]/90 leading-relaxed">
-                        <span className="text-[#807f78] uppercase text-xs tracking-wider mr-2 font-sans font-semibold">
-                          Stack:
-                        </span>
-                        {project.stack}
-                      </p>
-
-                      {hasCaseStudy && (
-                        <div className="pt-1">
-                          <button
-                            ref={fbrBtnRef}
-                            type="button"
-                            onClick={() => setSelectedCaseStudy('fbr-invoicing')}
-                            className="inline-flex items-center gap-2 rounded-lg bg-[#ff3b1d]/15 hover:bg-[#ff3b1d]/25 border border-[#ff3b1d]/40 px-3.5 py-1.5 text-xs sm:text-sm font-medium text-[#ff3b1d] transition-all duration-300"
-                          >
-                            <BookOpen className="w-4 h-4" />
-                            <span>View case study</span>
-                          </button>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                )}
-              </MagicCard>
-            </motion.div>
-          );
-        })}
+      <div ref={preview} className="mpreview" data-on="false" aria-hidden="true">
+        <img ref={previewImg} alt="" />
       </div>
 
-      {/* Case Study Dialog Modal */}
+      <ProjectDialog
+        project={openMore === null ? null : more[openMore]}
+        position={(openMore ?? 0) + 1}
+        total={more.length}
+        onClose={closeMore}
+        onPrev={prevMore}
+        onNext={nextMore}
+      />
+
       <CaseStudyDialog
-        projectId={selectedCaseStudy}
-        onClose={() => setSelectedCaseStudy(null)}
-        triggerElementRef={selectedCaseStudy === 'labflow' ? labFlowBtnRef : fbrBtnRef}
+        projectId={caseStudy}
+        onClose={() => setCaseStudy(null)}
+        triggerElementRef={caseStudy === 'labflow' ? labFlowBtn : fbrBtn}
       />
     </section>
   );

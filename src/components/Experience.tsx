@@ -1,78 +1,86 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { portfolioData } from '../data/portfolio';
-import { ScrollHeading, FadingListItem } from './motion/ScrollReveal';
+import { useReveals } from '../hooks/useReveals';
 
 export const Experience: React.FC = () => {
+  const root = useRef<HTMLElement>(null);
   const { experience, skills } = portfolioData;
+  useReveals(root);
 
   return (
-    <section id="experience" className="relative px-6 sm:px-10 md:px-14 py-20 sm:py-28 border-b border-white/5">
-      {/* Experience Header */}
-      <span className="eyebrow">{experience.eyebrow}</span>
-      <ScrollHeading
-        text={experience.heading}
-        className="font-display uppercase tracking-tight text-4xl sm:text-6xl text-[#f3f1ea] mt-4 leading-[0.95]"
-      />
+    <section
+      id="experience"
+      ref={root}
+      data-chapter="06"
+      data-chapter-title="Experience"
+      data-tone="dark"
+      className="tone-dark px-[var(--pad-x)] py-28 md:py-36"
+    >
+      <div className="mx-auto max-w-[88rem]">
+        <span data-fade className="eyebrow">
+          {experience.eyebrow}
+        </span>
+        <h2 data-split className="display mt-6 text-[clamp(3.25rem,8vw,8rem)]">
+          What I&rsquo;ve <em>done.</em>
+        </h2>
 
-      {/* Experience Timeline */}
-      <ul className="mt-12 sm:mt-16 divide-y divide-white/10 border-y border-white/10">
-        {experience.entries.map((item, idx) => (
-          <FadingListItem
-            key={item.num}
-            delay={idx * 0.05}
-            className="group py-6 sm:py-8 flex gap-6 sm:gap-8 items-start transition-colors duration-300 hover:bg-white/[0.015] px-2"
-          >
-            <span className="font-mono text-xl sm:text-2xl font-semibold text-[#ff3b1d] tabular-nums">
-              {item.num}
-            </span>
-            <div className="space-y-2">
-              <h3 className="text-xl sm:text-2xl font-semibold tracking-tight text-[#f3f1ea] group-hover:text-[#ff3b1d] transition-colors duration-300">
+        <ol className="mt-16">
+          {experience.entries.map((item) => (
+            <li key={item.num} className="relative grid gap-3 py-9 md:grid-cols-[4rem_1.3fr_1fr] md:gap-8">
+              <span
+                data-line
+                className="absolute inset-x-0 top-0 h-px"
+                style={{ background: 'var(--line)' }}
+              />
+              <span className="font-mono text-sm tabular-nums text-[var(--accent)]">{item.num}</span>
+              <h3 data-fade className="display text-[clamp(1.5rem,2.6vw,2.4rem)]">
                 {item.title}
               </h3>
-              <p className="text-base sm:text-lg text-[#807f78] leading-relaxed max-w-3xl">
+              <p data-fade className="muted leading-relaxed">
                 {item.desc}
               </p>
-            </div>
-          </FadingListItem>
-        ))}
-      </ul>
+            </li>
+          ))}
+        </ol>
 
-      {/* Skills Section - Exactly "Technical Skills and Tools" (NO "Strong" anywhere) */}
-      <div className="mt-16 sm:mt-20 pt-12 border-t border-white/10">
-        <div className="flex flex-col gap-8">
-          <div>
-            <h3 className="text-xs uppercase tracking-[0.22em] text-[#ff3b1d] font-semibold">
-              {skills.sectionHeading}
-            </h3>
-            <ul className="mt-6 flex flex-wrap gap-2.5 sm:gap-3">
-              {skills.skillsList.map((skill) => (
-                <li
-                  key={skill}
-                  className="rounded-full border border-white/15 bg-white/[0.02] px-4 sm:px-5 py-2 text-sm sm:text-base font-medium text-[#f3f1ea] transition-all duration-300 hover:border-[#ff3b1d]/60 hover:text-[#ff3b1d] hover:bg-[#ff3b1d]/5"
-                >
-                  {skill}
-                </li>
-              ))}
-            </ul>
+        <div className="mt-28">
+          <span data-fade className="eyebrow">
+            {skills.sectionHeading}
+          </span>
+          <div className="mt-10 grid gap-x-10 gap-y-14 sm:grid-cols-2 lg:grid-cols-4">
+            {skills.groups.map((group) => (
+              <div key={group.title}>
+                <h3 className="font-mono text-xs uppercase tracking-[0.16em] text-[var(--accent)]">
+                  {group.title}
+                </h3>
+                <ul className="mt-5">
+                  {group.items.map((skill) => (
+                    <li
+                      key={skill}
+                      className="border-t border-[var(--line)] py-2.5 text-lg transition-[padding,color] duration-500 hover:pl-3 hover:text-[var(--accent)]"
+                    >
+                      {skill}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
           </div>
 
-          <div className="pt-4">
-            <h4 className="text-xs uppercase tracking-[0.22em] text-[#807f78] font-semibold">
+          <div data-fade className="mt-14 flex flex-wrap items-center gap-3">
+            <span className="font-mono text-xs uppercase tracking-[0.16em] muted">
               {skills.learningHeading}
-            </h4>
-            <ul className="mt-4 flex flex-wrap gap-2.5 sm:gap-3">
-              {skills.learningList.map((skill) => (
-                <li
-                  key={skill}
-                  className="rounded-full border border-dashed border-white/20 bg-transparent px-4 sm:px-5 py-2 text-sm sm:text-base font-medium text-[#807f78] transition-all duration-300 hover:border-[#ff3b1d]/50 hover:text-[#f3f1ea]"
-                >
-                  {skill}
-                </li>
-              ))}
-            </ul>
+            </span>
+            {skills.learningList.map((skill) => (
+              <span key={skill} className="chip border-dashed">
+                {skill}
+              </span>
+            ))}
           </div>
         </div>
       </div>
     </section>
   );
 };
+
+export default Experience;

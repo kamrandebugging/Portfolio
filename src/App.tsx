@@ -1,56 +1,58 @@
-import React, { useEffect } from 'react';
-import { initLenis } from './utils/scroll';
-import { useScrollChapter } from './hooks/useScrollChapter';
+import React, { useEffect, useState } from 'react';
+import { ScrollTrigger } from './engine/gsap';
+import { initScroll } from './engine/scroll';
+import { Loader } from './components/Loader';
 import { Navbar } from './components/Navbar';
-import { ChapterIndicator } from './components/ChapterIndicator';
-import { FloatingCTA } from './components/FloatingCTA';
-import { SheetLift } from './components/motion/SheetLift';
+import { ProgressPill } from './components/ProgressPill';
+import { Cursor } from './components/ui/Cursor';
 import { Hero } from './components/Hero';
-import { FlowExplorer } from './components/FlowExplorer';
-import { Story } from './components/Story';
+import { About } from './components/About';
+import { Pipeline } from './components/Pipeline';
 import { Projects } from './components/Projects';
-import { Achievements } from './components/Achievements';
-import { Impact } from './components/Impact';
+import { Proof } from './components/Proof';
 import { Experience } from './components/Experience';
 import { Contact } from './components/Contact';
 
 export const App: React.FC = () => {
-  const { activeChapter, scrollProgress, isContactVisible } = useScrollChapter();
+  const [ready, setReady] = useState(false);
 
+  useEffect(() => initScroll(), []);
+
+  // Layout shifts (web fonts, images) move every trigger; re-measure once they settle.
   useEffect(() => {
-    const cleanup = initLenis();
-    return () => {
-      cleanup();
-    };
+    const refresh = () => ScrollTrigger.refresh();
+    document.fonts?.ready.then(refresh);
+    window.addEventListener('load', refresh);
+    return () => window.removeEventListener('load', refresh);
+  }, []);
+
+  // Never leave the hero hidden if the loader somehow stalls.
+  useEffect(() => {
+    const id = window.setTimeout(() => setReady(true), 7000);
+    return () => window.clearTimeout(id);
   }, []);
 
   return (
-    <div className="min-h-screen bg-[#08080a] text-[#f3f1ea] font-sans antialiased selection:bg-[#ff3b1d] selection:text-[#08080a]">
-      <Navbar isContactVisible={isContactVisible} />
-      <ChapterIndicator
-        activeChapter={activeChapter}
-        scrollProgress={scrollProgress}
-        isContactVisible={isContactVisible}
-      />
-      <FloatingCTA isContactVisible={isContactVisible} />
+    <>
+      <Loader onDone={() => setReady(true)} />
+      <Cursor />
+      <Navbar />
+      <ProgressPill />
 
-      <main>
-        <Hero />
-        <SheetLift>
-          <Story />
-        </SheetLift>
-        <SheetLift>
-          <FlowExplorer />
-        </SheetLift>
-        <SheetLift>
-          <Projects />
-        </SheetLift>
-        <Achievements />
-        <Impact />
+      <main className="relative z-[1]">
+        <div className="stack">
+          <Hero ready={ready} />
+          <About />
+        </div>
+        <Pipeline />
+        <Projects />
+        <Proof />
         <Experience />
-        <Contact />
       </main>
-    </div>
+
+      <div id="contact-sentinel" className="footer-sentinel" aria-hidden="true" />
+      <Contact />
+    </>
   );
 };
 
