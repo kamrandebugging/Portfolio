@@ -45,21 +45,28 @@ export const Projects: React.FC = () => {
                     </div>
 
                     {/* Title */}
-                    <h3 className="text-2xl sm:text-3xl lg:text-4xl font-semibold tracking-tight text-[#f3f1ea] group-hover:text-[#ff3b1d] transition-colors duration-300">
-                      {project.link ? (
-                        <a
-                          href={project.link}
-                          target="_blank"
-                          rel="noreferrer noopener"
-                          className="inline-flex items-center gap-2 hover:underline"
-                        >
-                          {project.name}
-                          <ExternalLink className="w-5 h-5 text-[#ff3b1d] inline-block opacity-80 group-hover:opacity-100 transition-opacity" />
-                        </a>
-                      ) : (
-                        project.name
+                    <div className="flex items-center gap-3 flex-wrap">
+                      <h3 className="text-2xl sm:text-3xl lg:text-4xl font-semibold tracking-tight text-[#f3f1ea] group-hover:text-[#ff3b1d] transition-colors duration-300">
+                        {project.link ? (
+                          <a
+                            href={project.link}
+                            target="_blank"
+                            rel="noreferrer noopener"
+                            className="inline-flex items-center gap-2 hover:underline"
+                          >
+                            {project.name}
+                            <ExternalLink className="w-5 h-5 text-[#ff3b1d] inline-block opacity-80 group-hover:opacity-100 transition-opacity" />
+                          </a>
+                        ) : (
+                          project.name
+                        )}
+                      </h3>
+                      {project.initials === 'FG' && (
+                        <span className="inline-flex items-center justify-center px-2.5 py-0.5 rounded text-xs font-semibold bg-[#ff3b1d]/15 text-[#ff3b1d] border border-[#ff3b1d]/30 font-mono tracking-wider">
+                          FG
+                        </span>
                       )}
-                    </h3>
+                    </div>
 
                     {/* Blurb */}
                     <p className="mt-4 text-base sm:text-lg text-[#807f78] leading-relaxed">

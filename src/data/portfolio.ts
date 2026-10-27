@@ -1,6 +1,7 @@
 import heroImg from '../assets/hero.png';
 import labflowImg from '../assets/labflow.jpeg';
 import fbrImg from '../assets/fbr-integrated-invoicing-system.jpeg';
+import fundoraImg from '../assets/fundoraglobal.jpg';
 import examcraftImg from '../assets/examcraft-pro.jpeg';
 import neuroscanImg from '../assets/neuroscan-ai.jpeg';
 import edgenexusImg from '../assets/edgenexus-it.jpeg';
@@ -186,7 +187,7 @@ export const portfolioData: PortfolioData = {
         'A trading platform covering onboarding, trading adapter, payments and admin dashboard.',
       stack: 'Next.js · NestJS · TypeScript · PostgreSQL · Redis · Socket.IO',
       link: '',
-      image: null,
+      image: fundoraImg,
       initials: 'FG',
     },
     {
