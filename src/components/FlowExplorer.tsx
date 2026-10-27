@@ -57,10 +57,25 @@ export const FlowExplorer: React.FC = () => {
     >
       {/* Header */}
       <div className="max-w-4xl">
-        <span className="eyebrow">{flowExplorer.eyebrow}</span>
-        <h2 className="font-display uppercase tracking-tight text-4xl sm:text-6xl text-[#f3f1ea] mt-4 leading-[0.95]">
-          {flowExplorer.title}
-        </h2>
+        {/* Context badge above heading so visitors immediately understand what LabFlow is */}
+        {flowExplorer.badge && (
+          <div className="inline-flex items-center gap-2.5 px-3.5 py-1.5 rounded-full bg-white/[0.04] border border-white/10 text-xs font-mono uppercase tracking-wider text-[#807f78] mb-5">
+            <span className="w-2 h-2 rounded-full bg-[#ff3b1d] animate-pulse" />
+            <span>{flowExplorer.badge}</span>
+          </div>
+        )}
+
+        <div>
+          <span className="eyebrow">{flowExplorer.eyebrow}</span>
+          <h2 className="font-display uppercase tracking-tight text-4xl sm:text-6xl text-[#f3f1ea] mt-4 leading-[0.95]">
+            {flowExplorer.title}
+          </h2>
+          {flowExplorer.description && (
+            <p className="mt-5 text-base sm:text-lg text-[#807f78] leading-relaxed max-w-2xl">
+              {flowExplorer.description}
+            </p>
+          )}
+        </div>
       </div>
 
       {/* Desktop Stepper (Horizontal) */}
