@@ -112,7 +112,7 @@ export const portfolioData: PortfolioData = {
     initials: 'MK',
     role: 'Web & Software Developer',
     heroDesc:
-      'I build real, working software — not just demos. From a live FBR-integrated invoicing system in Laravel to LabFlow, a multi-tenant SaaS for diagnostic labs in Django and React. Open to paid remote internships.',
+      'I build real software, not demos — FBR-integrated invoicing (Laravel), LabFlow multi-tenant SaaS (Django + React). Open to paid remote internships.',
     heroImage: heroImg,
     heroImageAlt: 'Muhammad Kamran, hero portrait',
     email: 'kamran.debug@gmail.com',
@@ -155,7 +155,7 @@ export const portfolioData: PortfolioData = {
       name: 'LabFlow',
       cat: 'Featured · Showcase Project · Concept visual',
       year: 'Django · React',
-      outcome: 'Completed · Showcase Project',
+      outcome: 'Showcase Project',
       blurb:
         'Multi-tenant SaaS for diagnostic labs in Pakistan. Patient registration and invoicing, samples with accession IDs, result entry validated against reference ranges, pathologist approval, PDF reports, and partner revenue-share.',
       stack:
@@ -180,9 +180,9 @@ export const portfolioData: PortfolioData = {
     {
       id: 'fundora-global',
       name: 'FundoraGlobal',
-      cat: 'Completed · Project',
-      year: '',
-      outcome: 'Completed',
+      cat: 'Web · Next.js / NestJS',
+      year: 'Trading platform',
+      outcome: 'Trading Platform',
       blurb:
         'A trading platform covering onboarding, trading adapter, payments and admin dashboard.',
       stack: 'Next.js · NestJS · TypeScript · PostgreSQL · Redis · Socket.IO',
