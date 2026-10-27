@@ -84,22 +84,7 @@
   box-shadow: 0 0 10px rgba(255, 59, 29, 0.6);
 }
 
-/* Smooth marquee animation */
-@keyframes marquee {
-  0% { transform: translateX(0%); }
-  100% { transform: translateX(-50%); }
-}
 
-.animate-marquee {
-  display: flex;
-  width: max-content;
-  flex-wrap: nowrap;
-  animation: marquee 26s linear infinite;
-}
-
-.animate-marquee:hover {
-  animation-play-state: paused;
-}
 
 /* Liquid/Glow image effects */
 .image-glow-container {
@@ -171,8 +156,5 @@
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
-  }
-  .animate-marquee {
-    animation: none;
   }
 }

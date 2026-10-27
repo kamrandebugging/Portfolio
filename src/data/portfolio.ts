@@ -58,7 +58,19 @@ export interface PortfolioData {
     tagline: string;
     copyright: string;
   };
-  marqueeWords: string[];
+  flowExplorer: {
+    eyebrow: string;
+    title: string;
+    tagline: string;
+    moneyNote: string;
+    ctaText: string;
+    steps: {
+      step: number;
+      title: string;
+      desc: string;
+      stack: string[];
+    }[];
+  };
   story: {
     eyebrow: string;
     heading: string[];
@@ -120,7 +132,46 @@ export const portfolioData: PortfolioData = {
     tagline: 'Full-stack developer · Lahore, Pakistan.',
     copyright: '© 2026 Muhammad Kamran. All rights reserved.',
   },
-  marqueeWords: ['Laravel', 'React', 'Django', 'PostgreSQL', 'Docker', 'Python'],
+  flowExplorer: {
+    eyebrow: 'How LabFlow works',
+    title: 'Patient to report, end to end.',
+    tagline: 'Multi-tenant SaaS · Schema-per-tenant',
+    moneyNote:
+      'Money: payment on a partner invoice creates a PENDING revenue-share ledger row. Monthly settlements are drafted on the 1st at 01:00 Asia/Karachi, with statement PDFs emailed to partners. No partner login in v1.',
+    ctaText: 'See LabFlow in Projects',
+    steps: [
+      {
+        step: 1,
+        title: 'Patient Registration',
+        desc: 'Patient registration, invoice and payment.',
+        stack: ['Django', 'DRF', 'React + TypeScript', 'PostgreSQL'],
+      },
+      {
+        step: 2,
+        title: 'Sample Collection',
+        desc: 'Samples with accession IDs and client-side Code128 barcode labels.',
+        stack: ['React + TypeScript', 'PostgreSQL'],
+      },
+      {
+        step: 3,
+        title: 'Result Entry',
+        desc: 'Technician enters results validated against reference ranges.',
+        stack: ['Django', 'DRF', 'React', 'PostgreSQL'],
+      },
+      {
+        step: 4,
+        title: 'Pathologist Approval',
+        desc: 'Pathologist approves the result before it can be reported.',
+        stack: ['Django', 'DRF', 'React'],
+      },
+      {
+        step: 5,
+        title: 'PDF Report',
+        desc: 'Celery renders a WeasyPrint PDF into object storage. Patient gets a signed report link valid for 7 days, plus a WhatsApp click-to-send URL for staff.',
+        stack: ['Celery', 'WeasyPrint', 'Redis'],
+      },
+    ],
+  },
   story: {
     eyebrow: 'About Me',
     heading: ['Building real', 'software, not', 'just demos.'],
@@ -254,7 +305,7 @@ export const portfolioData: PortfolioData = {
     eyebrow: 'By The Numbers',
     heading: ['Measured,', 'not invented.'],
     stats: [
-      { value: '7', label: 'LabFlow LABs merged to main' },
+      { value: '1+', label: 'Years production backend experience' },
       { value: '7', label: 'Real projects shipped' },
       { value: '2', label: 'CodeExcellence 1st places' },
       { value: '3.61', label: 'ADP Computer Science GPA / 4.00' },

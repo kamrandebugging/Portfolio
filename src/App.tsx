@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import Lenis from 'lenis';
 import { Navbar } from './components/Navbar';
 import { Hero } from './components/Hero';
-import { Marquee } from './components/Marquee';
+import { FlowExplorer } from './components/FlowExplorer';
 import { Story } from './components/Story';
 import { Projects } from './components/Projects';
 import { Achievements } from './components/Achievements';
@@ -42,8 +42,8 @@ export const App: React.FC = () => {
       <Navbar />
       <main>
         <Hero />
-        <Marquee />
         <Story />
+        <FlowExplorer />
         <Projects />
         <Achievements />
         <Impact />
