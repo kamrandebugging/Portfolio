@@ -229,235 +229,7 @@
   border-radius: clamp(1.5rem, 3.5vw, 3rem) clamp(1.5rem, 3.5vw, 3rem) 0 0;
 }
 
-/* ---------- Pipeline (LabFlow) ---------- */
-.pipe {
-  position: relative;
-  height: 560svh;
-}
-.pipe-stage {
-  position: sticky;
-  top: 0;
-  height: 100svh;
-  min-height: 38rem;
-  overflow: hidden;
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr);
-  align-items: center;
-  gap: clamp(2rem, 5vw, 5rem);
-  padding: 6.5rem var(--pad-x) 4.5rem;
-}
-.pipe-copy {
-  position: relative;
-  display: grid;
-  min-height: 24rem;
-}
-.pipe-item {
-  grid-area: 1 / 1;
-  align-self: center;
-  --d: calc(var(--stage, 1) - var(--i));
-  opacity: clamp(0, calc(1 - var(--d) * var(--d)), 1);
-  transform: translateY(calc((var(--i) - var(--stage, 1)) * 2.2rem));
-  transition: opacity 0.7s var(--ease-out), transform 0.9s var(--ease-out);
-  pointer-events: none;
-}
-.pipe-item[data-active='true'] {
-  pointer-events: auto;
-}
-.pipe-num {
-  font-family: var(--font-display);
-  font-size: clamp(5rem, 13vw, 12rem);
-  line-height: 0.8;
-  letter-spacing: -0.06em;
-  color: var(--color-leaf);
-}
-.pipe-rail {
-  display: flex;
-  gap: 0.5rem;
-  align-items: center;
-}
-.pipe-dot {
-  height: 3px;
-  flex: 1;
-  border-radius: 9999px;
-  background: var(--line);
-  overflow: hidden;
-  position: relative;
-}
-.pipe-dot::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: var(--accent);
-  transform-origin: left;
-  transform: scaleX(clamp(0, calc(var(--stage, 1) - var(--i) + 1), 1));
-  transition: transform 0.8s var(--ease-out);
-}
-
-.report {
-  position: relative;
-  background: var(--color-paper);
-  color: var(--color-ink);
-  border-radius: 1.4rem;
-  padding: clamp(1.25rem, 2.4vw, 2.1rem);
-  box-shadow: 0 50px 90px -35px rgb(0 0 0 / 0.65);
-  transform: perspective(1500px) rotateY(calc(-9deg + var(--p, 0) * 9deg))
-    rotateX(calc(4deg - var(--p, 0) * 4deg));
-  transform-style: preserve-3d;
-  --muted: rgb(8 28 21 / 0.66);
-  --rule: rgb(8 28 21 / 0.14);
-}
-.rep {
-  --i: 1;
-  --on: clamp(0, calc(var(--stage, 5) - var(--i) + 1), 1);
-  opacity: var(--on);
-  transform: translateY(calc((1 - var(--on)) * 1.1rem));
-  transition: opacity 0.7s var(--ease-out), transform 0.8s var(--ease-out);
-}
-.rep + .rep {
-  margin-top: 1.1rem;
-  padding-top: 1.1rem;
-  border-top: 1px solid var(--rule);
-}
-.rep-label {
-  font-family: var(--font-mono);
-  font-size: 0.68rem;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--muted);
-}
-.barcode {
-  height: 2.6rem;
-  border-radius: 2px;
-  background: repeating-linear-gradient(
-    90deg,
-    var(--color-ink) 0 2px,
-    transparent 2px 4px,
-    var(--color-ink) 4px 5px,
-    transparent 5px 8px,
-    var(--color-ink) 8px 11px,
-    transparent 11px 13px,
-    var(--color-ink) 13px 14px,
-    transparent 14px 17px
-  );
-}
-.stamp {
-  display: inline-grid;
-  place-items: center;
-  padding: 0.55rem 1rem;
-  border: 2px solid var(--color-pine);
-  border-radius: 0.5rem;
-  color: var(--color-pine);
-  font-family: var(--font-mono);
-  font-size: 0.8rem;
-  font-weight: 600;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  transform: rotate(-6deg) scale(calc(1.5 - var(--on) * 0.5));
-  transition: transform 0.7s var(--ease-out);
-}
-
-.pipe-list {
-  display: none;
-}
-.report-wrap {
-  display: contents;
-}
-.report-head + .rep {
-  margin-top: 1.5rem;
-}
-.pipe-step {
-  border-top: 1px solid var(--line);
-  padding: 1.5rem 0;
-}
-.pipe-step-num {
-  font-family: var(--font-mono);
-  font-size: 0.85rem;
-  color: var(--color-leaf);
-}
-
-/* Phones: the report stays pinned under the nav while the five steps scroll
-   beneath it. Whichever step crosses the reading line sets --stage. Finished
-   steps collapse to a one-line label so the whole report fits the screen. */
 @media (max-width: 767px) {
-  .pipe {
-    height: auto;
-  }
-  .pipe-stage {
-    position: relative;
-    height: auto;
-    min-height: 0;
-    overflow: visible;
-    display: flex;
-    flex-direction: column;
-    gap: 0;
-    padding: 5rem var(--pad-x) 3rem;
-  }
-  .pipe-left {
-    display: contents;
-  }
-  .pipe-head {
-    order: 1;
-    margin-bottom: 1.5rem;
-  }
-  .report-wrap {
-    order: 2;
-    display: block;
-    position: sticky;
-    top: 0;
-    z-index: 3;
-    padding: 4.75rem 0 1.4rem;
-    background: linear-gradient(to bottom, var(--color-ink) calc(100% - 1.5rem), transparent);
-  }
-  .pipe-list {
-    order: 3;
-    display: block;
-  }
-  .pipe-copy,
-  .pipe-rail {
-    display: none;
-  }
-  .report {
-    transform: none;
-    padding: 1rem 1.1rem;
-    border-radius: 1.1rem;
-    max-height: min(46svh, 25rem);
-    overflow: hidden;
-    box-shadow: 0 24px 50px -28px rgb(0 0 0 / 0.7);
-  }
-  .report-title {
-    font-size: 1.5rem;
-  }
-  .report-head + .rep {
-    margin-top: 0.9rem;
-  }
-  .rep {
-    max-height: calc(var(--on) * 24rem);
-    overflow: hidden;
-    transition: opacity 0.7s var(--ease-out), transform 0.8s var(--ease-out),
-      max-height 0.7s var(--ease-out), margin 0.6s var(--ease-out), padding 0.6s var(--ease-out);
-  }
-  .rep + .rep {
-    margin-top: calc(var(--on) * 0.55rem);
-    padding-top: calc(var(--on) * 0.55rem);
-  }
-  .rep-body {
-    --cur: clamp(
-      0,
-      calc(1 - (var(--stage, 5) - var(--i)) * (var(--stage, 5) - var(--i))),
-      1
-    );
-    max-height: calc(var(--cur) * 10.5rem);
-    opacity: var(--cur);
-    overflow: hidden;
-    transition: max-height 0.6s var(--ease-out), opacity 0.5s var(--ease-out);
-  }
-  .pipe-step {
-    min-height: 62svh;
-  }
-  .pipe-step:last-child {
-    min-height: 34svh;
-  }
-
   /* Hero: portrait on top, copy below; both drift as the hero scrolls away. */
   .hero-grid {
     grid-template-columns: 1fr;
@@ -481,46 +253,6 @@
 }
 
 /* Reduced motion (device setting or the menu toggle): one static layout. */
-html[data-motion='reduced'] .pipe {
-  height: auto;
-}
-html[data-motion='reduced'] .pipe-stage {
-  position: relative;
-  height: auto;
-  min-height: 0;
-  display: block;
-  padding: 5rem var(--pad-x) 4rem;
-  overflow: visible;
-}
-html[data-motion='reduced'] .pipe-copy,
-html[data-motion='reduced'] .pipe-rail {
-  display: none;
-}
-html[data-motion='reduced'] .pipe-list {
-  display: block;
-}
-html[data-motion='reduced'] .pipe-step {
-  min-height: 0;
-}
-html[data-motion='reduced'] .report-wrap {
-  display: block;
-  position: relative;
-  padding: 0;
-  margin-top: 2.5rem;
-  background: none;
-}
-html[data-motion='reduced'] .report {
-  transform: none;
-  max-height: none;
-  overflow: visible;
-}
-html[data-motion='reduced'] .rep {
-  max-height: none;
-}
-html[data-motion='reduced'] .rep-body {
-  max-height: none;
-  opacity: 1;
-}
 html[data-motion='reduced'] .hero-copy,
 html[data-motion='reduced'] .hero-portrait img {
   transform: none;
@@ -1005,5 +737,425 @@ html.is-loading body {
   }
   .sheet-top {
     margin-top: 0;
+  }
+}
+
+/* ---------- Case-study page hero: full-bleed, text over image ---------- */
+.hero-cs {
+  position: relative;
+  min-height: 100svh;
+  display: flex;
+  align-items: flex-end;
+  overflow: hidden;
+}
+.hero-cs-media {
+  position: absolute;
+  inset: 0;
+}
+.hero-cs-bg {
+  position: absolute;
+  inset: -6% 0;
+  width: 100%;
+  height: 112%;
+  object-fit: cover;
+}
+.hero-cs-scrim {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to top,
+    rgb(8 28 21 / 0.96) 0%,
+    rgb(8 28 21 / 0.82) 34%,
+    rgb(8 28 21 / 0.4) 68%,
+    rgb(8 28 21 / 0.22) 100%
+  );
+}
+.hero-cs-content {
+  position: relative;
+  width: 100%;
+  padding-top: 7rem;
+  padding-bottom: clamp(3rem, 7vw, 5.5rem);
+}
+@media (max-width: 767px) {
+  .hero-cs {
+    min-height: 86svh;
+    align-items: flex-end;
+  }
+  .hero-cs-content {
+    padding-top: 5.5rem;
+  }
+}
+
+/* ============================================================
+   LabFlow case-study scenes (tablet/desktop only — see the
+   (max-width: 767px) fallback below). JS writes --p (manifesto)
+   and --stage (flow); CSS does the choreography, same contract
+   as every other scene in this file.
+   ============================================================ */
+
+/* ---------- Manifesto: a pinned line that swaps under the reader ---------- */
+.manifesto {
+  position: relative;
+  height: 300svh;
+}
+.manifesto-stage {
+  position: sticky;
+  top: 0;
+  height: 100svh;
+  min-height: 34rem;
+  overflow: hidden;
+  border-radius: clamp(1.25rem, 3vw, 2rem);
+}
+.manifesto-media {
+  position: absolute;
+  inset: 0;
+}
+.manifesto-bg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform: scale(calc(1.1 + var(--p, 0) * 0.08));
+  transition: transform 0.2s linear;
+}
+.manifesto-scrim {
+  position: absolute;
+  inset: 0;
+  background: rgb(8 28 21 / 0.6);
+}
+.manifesto-text {
+  position: relative;
+  display: grid;
+  place-items: center;
+  height: 100%;
+  padding: 0 var(--pad-x);
+}
+.manifesto-line {
+  grid-area: 1 / 1;
+  justify-self: start;
+  max-width: 19ch;
+  font-size: clamp(2.5rem, 6.4vw, 5.5rem);
+}
+.manifesto-line--1 {
+  --on: clamp(0, calc(1.5 - var(--p, 0) * 2), 1);
+  opacity: var(--on);
+  transform: translateY(calc((1 - var(--on)) * -2.2rem)) scale(calc(1.05 - var(--on) * 0.05))
+    rotate(calc((1 - var(--on)) * -2deg));
+  transition: opacity 0.4s var(--ease-out), transform 0.5s var(--ease-out);
+}
+.manifesto-strike {
+  position: relative;
+  white-space: nowrap;
+}
+.manifesto-strike::after {
+  content: '';
+  position: absolute;
+  left: -0.05em;
+  right: -0.05em;
+  top: 52%;
+  height: 0.075em;
+  background: var(--color-leaf);
+  transform-origin: left;
+  transform: scaleX(clamp(0, calc(var(--p, 0) * 3 - 1), 1));
+}
+.manifesto-line--2 {
+  --on: clamp(0, calc(var(--p, 0) * 3 - 1.5), 1);
+  opacity: var(--on);
+  transform: translateY(calc((1 - var(--on)) * 2.6rem)) scale(calc(0.9 + var(--on) * 0.1));
+  color: var(--color-leaf);
+  transition: opacity 0.35s var(--ease-out), transform 0.45s var(--ease-out);
+}
+
+/* ---------- Flow: pinned two-column panel through the real steps ----------
+   Left: a square-ish image that swaps small-centred -> full size. Right: a
+   plain counter, a crossfading heading+paragraph, one constant CTA. A
+   blurred fill of the same stage sits behind the whole panel, and a thin
+   progress line tracks position along the foot — the reference's device,
+   built from this project's own five stages. */
+.flowstage {
+  position: relative;
+  height: calc(var(--steps, 5) * 68svh);
+}
+.flow-inner {
+  position: sticky;
+  top: 0;
+  height: 100svh;
+  min-height: 38rem;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+}
+.flow-blur {
+  position: absolute;
+  inset: 0;
+  filter: blur(28px);
+  transform: scale(1.15);
+}
+.flow-blur-item {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  --d: calc(var(--stage, 1) - var(--i));
+  opacity: clamp(0, calc(1 - var(--d) * var(--d)), 1);
+  transition: opacity 0.6s var(--ease-out);
+}
+.flow-scrim {
+  position: absolute;
+  inset: 0;
+  background: rgb(8 28 21 / 0.72);
+}
+.flow-grid {
+  position: relative;
+  width: 100%;
+  display: grid;
+  grid-template-columns: minmax(0, 0.92fr) minmax(0, 1fr);
+  align-items: center;
+  gap: clamp(2.5rem, 6vw, 5rem);
+  padding: 0 var(--pad-x);
+  color: var(--color-paper);
+}
+.flow-panel {
+  position: relative;
+  aspect-ratio: 4 / 3.4;
+  border-radius: 1.25rem;
+  overflow: hidden;
+}
+.flow-panel-item {
+  grid-area: 1 / 1;
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  --d: calc(var(--stage, 1) - var(--i));
+  --on: clamp(0, calc(1 - var(--d) * var(--d)), 1);
+  opacity: var(--on);
+  transform: scale(calc(0.45 + var(--on) * 0.55));
+  transition: opacity 0.6s var(--ease-out), transform 0.7s var(--ease-out);
+}
+.flow-col {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+.flow-counter {
+  font-size: 1.05rem;
+  color: rgb(216 243 220 / 0.7);
+}
+.flow-counter strong {
+  color: var(--color-paper);
+}
+.flow-items {
+  position: relative;
+  display: grid;
+  margin-top: 1.25rem;
+  min-height: 12rem;
+}
+.flow-item {
+  grid-area: 1 / 1;
+  align-self: start;
+  --d: calc(var(--stage, 1) - var(--i));
+  --on: clamp(0, calc(1 - var(--d) * var(--d)), 1);
+  opacity: var(--on);
+  transform: translateY(calc(var(--d) * 2.2rem));
+  color: color-mix(in srgb, var(--color-leaf) calc((1 - var(--on)) * 100%), var(--color-paper));
+  transition: opacity 0.45s var(--ease-out), transform 0.55s var(--ease-out), color 0.7s var(--ease-out);
+  pointer-events: none;
+}
+.flow-item[data-active='true'] {
+  pointer-events: auto;
+}
+.flow-item-img {
+  display: none;
+}
+.flow-title {
+  font-size: clamp(2.25rem, 4.2vw, 3.5rem);
+}
+.flow-desc {
+  margin-top: 0.9rem;
+  max-width: 38ch;
+  font-size: 1.05rem;
+  line-height: 1.6;
+  color: rgb(216 243 220 / 0.78);
+}
+.flow-cta {
+  margin-top: 2rem;
+  border-color: rgb(216 243 220 / 0.35);
+  color: var(--color-paper);
+}
+.flow-progress {
+  position: absolute;
+  left: var(--pad-x);
+  right: var(--pad-x);
+  bottom: clamp(1.5rem, 4vw, 2.5rem);
+  height: 2px;
+  background: rgb(216 243 220 / 0.18);
+}
+.flow-progress span {
+  display: block;
+  height: 100%;
+  background: var(--color-leaf);
+  transform-origin: left;
+  transform: scaleX(calc(var(--stage, 1) / var(--steps, 5)));
+  transition: transform 0.5s var(--ease-out);
+}
+
+/* Reduced motion: both scenes become plain, fully visible stacked content. */
+html[data-motion='reduced'] .manifesto,
+html[data-motion='reduced'] .flowstage {
+  height: auto;
+}
+html[data-motion='reduced'] .manifesto-stage {
+  position: relative;
+  height: auto;
+  min-height: 0;
+  overflow: visible;
+}
+html[data-motion='reduced'] .manifesto-media {
+  display: none;
+}
+html[data-motion='reduced'] .manifesto-text {
+  position: relative;
+  height: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  padding: 5rem var(--pad-x);
+}
+html[data-motion='reduced'] .manifesto-line {
+  grid-area: auto;
+  justify-self: auto;
+}
+html[data-motion='reduced'] .manifesto-line--1,
+html[data-motion='reduced'] .manifesto-line--2 {
+  opacity: 1;
+  transform: none;
+}
+html[data-motion='reduced'] .manifesto-strike::after {
+  transform: scaleX(1);
+}
+html[data-motion='reduced'] .flow-inner {
+  position: relative;
+  height: auto;
+  min-height: 0;
+  display: block;
+}
+html[data-motion='reduced'] .flow-blur,
+html[data-motion='reduced'] .flow-scrim,
+html[data-motion='reduced'] .flow-progress,
+html[data-motion='reduced'] .flow-counter,
+html[data-motion='reduced'] .flow-panel {
+  display: none;
+}
+html[data-motion='reduced'] .flow-grid {
+  position: relative;
+  display: block;
+  padding: clamp(1.5rem, 4vw, 2.5rem) var(--pad-x);
+}
+html[data-motion='reduced'] .flow-items {
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
+  min-height: 0;
+}
+html[data-motion='reduced'] .flow-item {
+  position: relative;
+  opacity: 1;
+  transform: none;
+  color: var(--color-paper);
+  pointer-events: auto;
+}
+html[data-motion='reduced'] .flow-item-img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  border-radius: 1.25rem;
+  margin-bottom: 1.5rem;
+}
+
+/* Phones: both scenes drop the pin entirely and read as a normal, stacked
+   scroll — a pinned stage this tall has nowhere good to put a thumb. */
+@media (max-width: 767px) {
+  .manifesto {
+    height: auto;
+  }
+  .manifesto-stage {
+    position: relative;
+    height: auto;
+    min-height: 0;
+  }
+  .manifesto-media {
+    display: none;
+  }
+  .manifesto-text {
+    position: relative;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    padding: 4.5rem var(--pad-x);
+    gap: 1.25rem;
+  }
+  .manifesto-line {
+    grid-area: auto;
+    justify-self: auto;
+    max-width: none;
+    font-size: clamp(2rem, 8vw, 2.75rem);
+  }
+  .manifesto-line--1,
+  .manifesto-line--2 {
+    opacity: 1;
+    transform: none;
+  }
+  .manifesto-strike::after {
+    transform: scaleX(1);
+  }
+
+  .flowstage {
+    height: auto;
+  }
+  .flow-inner {
+    position: relative;
+    height: auto;
+    min-height: 0;
+  }
+  .flow-blur,
+  .flow-scrim,
+  .flow-progress,
+  .flow-counter,
+  .flow-panel {
+    display: none;
+  }
+  .flow-grid {
+    position: relative;
+    display: block;
+    padding: 0 var(--pad-x);
+  }
+  .flow-items {
+    display: flex;
+    flex-direction: column;
+    gap: 3rem;
+    min-height: 0;
+  }
+  .flow-item {
+    position: relative;
+    opacity: 1;
+    transform: none;
+    color: var(--color-paper);
+    pointer-events: auto;
+  }
+  .flow-item-img {
+    display: block;
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+    border-radius: 1.25rem;
+    margin-bottom: 1.5rem;
+  }
+  .flow-cta {
+    margin-top: 2.5rem;
   }
 }

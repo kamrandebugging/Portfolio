@@ -11,6 +11,20 @@
   <link rel="preconnect" href="https://cdn.fontshare.com" crossorigin />
   <link href="https://api.fontshare.com/v2/css?f[]=erode@1,2,3&display=swap" rel="stylesheet" />
   <link href="https://api.fontshare.com/v2/css?f[]=switzer@400,500,600&display=swap" rel="stylesheet" />
+  <script>
+    // Pairs with public/404.html: restores the real path (and any hash) that
+    // GitHub Pages' 404 redirect encoded into ?redirect=... before React Router mounts.
+    (function () {
+      var params = new URLSearchParams(location.search);
+      var redirect = params.get('redirect');
+      if (redirect === null) return;
+      params.delete('redirect');
+      var rest = params.toString();
+      var basePath = '/Portfolio/';
+      var newUrl = basePath + redirect + (rest ? '?' + rest : '') + location.hash;
+      history.replaceState(null, '', newUrl);
+    })();
+  </script>
 </head>
 <body>
   <div id="root"></div>

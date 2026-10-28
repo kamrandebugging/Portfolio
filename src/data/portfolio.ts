@@ -103,13 +103,6 @@ export interface PortfolioData {
     heading: string;
     entries: ExperienceItem[];
   };
-  skills: {
-    eyebrow: string;
-    sectionHeading: string;
-    groups: { title: string; items: string[] }[];
-    learningHeading: string;
-    learningList: string[];
-  };
   contact: {
     eyebrow: string;
     heading: string[];
@@ -346,44 +339,6 @@ export const portfolioData: PortfolioData = {
       },
     ],
   },
-  skills: {
-    eyebrow: 'Capabilities',
-    sectionHeading: 'Technical Skills and Tools',
-    groups: [
-      {
-        title: 'Backend',
-        items: ['Laravel', 'PHP', 'Django', 'DRF', 'Python', 'Celery', 'Node.js', 'NestJS', 'Socket.IO'],
-      },
-      {
-        title: 'Frontend',
-        items: [
-          'React',
-          'TypeScript',
-          'Next.js',
-          'Vue 3',
-          'Pinia',
-          'JavaScript',
-          'HTML',
-          'CSS',
-          'Tailwind CSS',
-          'Bootstrap',
-          'GSAP',
-          'Three.js',
-          'Vite',
-        ],
-      },
-      {
-        title: 'Data & infrastructure',
-        items: ['PostgreSQL', 'MySQL', 'Redis', 'Docker', 'Caddy', 'GitHub Actions', 'Git & GitHub'],
-      },
-      {
-        title: 'Also',
-        items: ['Machine Learning', 'Data Structures', 'WordPress', 'Claude Code', 'Antigravity'],
-      },
-    ],
-    learningHeading: 'Learning next',
-    learningList: ['Express.js', 'MongoDB'],
-  },
   contact: {
     eyebrow: "Let's Work Together",
     heading: ['Have a paid', 'remote internship', 'in mind?'],
@@ -397,7 +352,7 @@ export const portfolioData: PortfolioData = {
   },
   navLinks: [
     { label: 'About', href: '#about', blurb: 'Who I am and how I work' },
-    { label: 'LabFlow', href: '#pipeline', blurb: 'Patient to report, end to end' },
+    { label: 'LabFlow', href: '/projects/labflow', blurb: 'Patient to report, end to end' },
     { label: 'Projects', href: '#projects', blurb: 'Seven projects, three in depth' },
     { label: 'Proof', href: '#proof', blurb: 'Numbers and recognition' },
     { label: 'Experience', href: '#experience', blurb: 'Roles and the stack' },

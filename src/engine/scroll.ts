@@ -34,6 +34,26 @@ export const initScroll = (): (() => void) => {
   };
 };
 
+/**
+ * Nav/menu links are either a page route ("/projects/labflow") or a home
+ * section hash ("#about"). A hash only resolves on the home page's DOM, so
+ * from any other route it navigates home first and lets Home's hash effect
+ * (src/pages/Home.tsx) finish the scroll once the sections exist.
+ */
+export const goToSection = (
+  navigate: (to: string) => void,
+  onHome: boolean,
+  href: string
+): void => {
+  if (!href.startsWith('#')) {
+    navigate(href);
+  } else if (onHome) {
+    scrollToTarget(href);
+  } else {
+    navigate(`/${href}`);
+  }
+};
+
 export const scrollToTarget = (target: string | HTMLElement, offset = 0): void => {
   let element =
     typeof target === 'string' ? document.querySelector<HTMLElement>(target) : target;

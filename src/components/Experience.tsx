@@ -4,7 +4,7 @@ import { useReveals } from '../hooks/useReveals';
 
 export const Experience: React.FC = () => {
   const root = useRef<HTMLElement>(null);
-  const { experience, skills } = portfolioData;
+  const { experience } = portfolioData;
   useReveals(root);
 
   return (
@@ -42,42 +42,6 @@ export const Experience: React.FC = () => {
             </li>
           ))}
         </ol>
-
-        <div className="mt-28">
-          <span data-fade className="eyebrow">
-            {skills.sectionHeading}
-          </span>
-          <div className="mt-10 grid gap-x-10 gap-y-14 sm:grid-cols-2 lg:grid-cols-4">
-            {skills.groups.map((group) => (
-              <div key={group.title}>
-                <h3 className="font-mono text-xs uppercase tracking-[0.16em] text-[var(--accent)]">
-                  {group.title}
-                </h3>
-                <ul className="mt-5">
-                  {group.items.map((skill) => (
-                    <li
-                      key={skill}
-                      className="border-t border-[var(--line)] py-2.5 text-lg transition-[padding,color] duration-500 hover:pl-3 hover:text-[var(--accent)]"
-                    >
-                      {skill}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            ))}
-          </div>
-
-          <div data-fade className="mt-14 flex flex-wrap items-center gap-3">
-            <span className="font-mono text-xs uppercase tracking-[0.16em] muted">
-              {skills.learningHeading}
-            </span>
-            {skills.learningList.map((skill) => (
-              <span key={skill} className="chip border-dashed">
-                {skill}
-              </span>
-            ))}
-          </div>
-        </div>
       </div>
     </section>
   );

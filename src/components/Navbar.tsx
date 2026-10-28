@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { portfolioData } from '../data/portfolio';
-import { scrollToTarget } from '../engine/scroll';
+import { goToSection } from '../engine/scroll';
 import { EditorialMenu } from './EditorialMenu';
 import { LocalTime } from './ui/LocalTime';
 
@@ -9,6 +10,9 @@ export const Navbar: React.FC = () => {
   const trigger = useRef<HTMLButtonElement>(null);
   const wasOpen = useRef(false);
   const close = useCallback(() => setOpen(false), []);
+  const navigate = useNavigate();
+  const onHome = useLocation().pathname === '/';
+  const go = useCallback((href: string) => goToSection(navigate, onHome, href), [navigate, onHome]);
 
   // Return focus to the Index button after the menu closes.
   useEffect(() => {
@@ -23,7 +27,7 @@ export const Navbar: React.FC = () => {
           href="#top"
           onClick={(e) => {
             e.preventDefault();
-            scrollToTarget('#top');
+            go('#top');
           }}
           className="flex items-center gap-3"
           aria-label={`${portfolioData.personal.name}, back to top`}
@@ -41,7 +45,7 @@ export const Navbar: React.FC = () => {
                   className="nav-link"
                   onClick={(e) => {
                     e.preventDefault();
-                    scrollToTarget(link.href);
+                    go(link.href);
                   }}
                 >
                   {link.label}
@@ -67,7 +71,7 @@ export const Navbar: React.FC = () => {
         </div>
       </header>
 
-      <EditorialMenu open={open} onClose={close} />
+      <EditorialMenu open={open} onClose={close} go={go} />
     </>
   );
 };

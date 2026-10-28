@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import { ArrowUpRight, X } from 'lucide-react';
 import { gsap, useGSAP } from '../engine/gsap';
-import { getLenis, scrollToTarget } from '../engine/scroll';
+import { getLenis } from '../engine/scroll';
 import { isReduced, setMotionPref, systemReducesMotion } from '../engine/motion';
 import { portfolioData } from '../data/portfolio';
 import { LocalTime } from './ui/LocalTime';
@@ -9,6 +9,8 @@ import { LocalTime } from './ui/LocalTime';
 interface EditorialMenuProps {
   open: boolean;
   onClose: () => void;
+  /** Route-aware section navigation (home page sections only exist on "/"). */
+  go: (href: string) => void;
 }
 
 /** Each panel is one palette step, so the open menu reads as the swatch itself. */
@@ -25,7 +27,7 @@ const PANEL_TONES = [
  * Full-screen index in the "magazine covers side by side" pattern: six
  * panels unfold in a stagger. Desktop columns, phone rows.
  */
-export const EditorialMenu: React.FC<EditorialMenuProps> = ({ open, onClose }) => {
+export const EditorialMenu: React.FC<EditorialMenuProps> = ({ open, onClose, go: goToSection }) => {
   const root = useRef<HTMLDivElement>(null);
   const closeBtn = useRef<HTMLButtonElement>(null);
 
@@ -88,7 +90,7 @@ export const EditorialMenu: React.FC<EditorialMenuProps> = ({ open, onClose }) =
 
   const go = (href: string) => {
     onClose();
-    window.setTimeout(() => scrollToTarget(href), 350);
+    window.setTimeout(() => goToSection(href), 350);
   };
 
   return (
