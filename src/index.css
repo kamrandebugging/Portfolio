@@ -13,9 +13,9 @@
   --color-mist: #b7e4c7;
   --color-paper: #d8f3dc;
 
-  --font-display: 'Erode', 'Iowan Old Style', Georgia, serif;
-  --font-sans: 'Switzer', ui-sans-serif, system-ui, sans-serif;
-  --font-mono: ui-monospace, 'SF Mono', 'Cascadia Code', Consolas, monospace;
+  --font-display: 'Rajdhani', sans-serif;
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'Share Tech Mono', ui-monospace, monospace;
 }
 
 :root {
@@ -55,11 +55,17 @@
 
   body {
     font-family: var(--font-sans);
+    font-weight: 400;
     background: var(--color-ink);
     color: var(--color-paper);
     -webkit-font-smoothing: antialiased;
     text-rendering: optimizeLegibility;
     overflow-x: clip;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-display);
+    font-weight: 600;
   }
 
   /* Lenis housekeeping */
@@ -136,14 +142,18 @@ body::after {
 /* ---------- Type ---------- */
 .display {
   font-family: var(--font-display);
-  font-weight: 400;
-  letter-spacing: -0.035em;
-  line-height: 0.92;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  line-height: 0.98;
 }
 .display em {
-  font-style: italic;
-  font-weight: 300;
-  letter-spacing: -0.02em;
+  font-style: normal;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+.hero-title,
+.hero-rise.display {
+  font-weight: 700;
 }
 .muted {
   color: var(--fg-muted);

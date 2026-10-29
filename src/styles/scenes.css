@@ -15,9 +15,10 @@
 }
 .loader-count {
   font-family: var(--font-display);
+  font-weight: 700;
   font-size: clamp(5rem, 20vw, 15rem);
   line-height: 0.85;
-  letter-spacing: -0.05em;
+  letter-spacing: -0.01em;
   font-variant-numeric: tabular-nums;
 }
 
@@ -138,7 +139,8 @@
   padding: 7rem var(--pad-x) 6.5rem;
 }
 .hero-title {
-  font-size: clamp(3.4rem, 10vw, 10rem);
+  font-size: clamp(2.5rem, 5.8vw, 5.75rem);
+  line-height: 0.98;
 }
 .hero-portrait {
   position: relative;
@@ -470,9 +472,10 @@ html[data-motion='reduced'] .psheet {
 }
 .stat-num {
   font-family: var(--font-display);
+  font-weight: 600;
   font-size: clamp(3.5rem, 8vw, 7.5rem);
   line-height: 0.9;
-  letter-spacing: -0.04em;
+  letter-spacing: -0.01em;
   font-variant-numeric: tabular-nums;
 }
 
@@ -517,8 +520,9 @@ html.is-loading body {
   border: 1px solid var(--ui-line);
   border-radius: 9999px;
   font-family: var(--font-display);
+  font-weight: 600;
   font-size: 1rem;
-  letter-spacing: -0.02em;
+  letter-spacing: 0;
   transition: border-color 0.3s;
 }
 .nav-name {
