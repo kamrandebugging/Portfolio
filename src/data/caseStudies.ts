@@ -26,7 +26,7 @@ export interface CaseStudy {
   image: string;
   imageAlt: string;
   problem: string;
-  built: string[];
+  built?: string[];
   architecture: CaseStudyFlowStep[];
   stack: string[];
   features: CaseStudyFeature[];
@@ -46,13 +46,6 @@ export const caseStudies: Record<CaseStudy['slug'], CaseStudy> = {
     imageAlt: 'LabFlow — multi-tenant diagnostic lab platform',
     problem:
       "Diagnostic labs in Pakistan run patient registration, sample handling, results and partner billing on paper or spreadsheets, often across more than one branch with no real separation between them. Before any of that can be a product, the flow has to be modelled correctly and the data has to be provably isolated per lab — that's the part LabFlow set out to get right first.",
-    built: [
-      'Django 5 + django-tenants on PostgreSQL, with schema-per-tenant isolation — every clinical table lives inside its own lab’s database schema, not behind an application-level filter.',
-      'Ten Django apps modelling the real flow: accounts and roles (owner, manager, reception, technician, pathologist), branches, patients, catalog (tests and panels), samples, results, reports, billing, partner revenue-share, webhook automation, and bilingual notifications.',
-      'An append-only audit log, enforced at the database level, on both tenant and platform tables — rows are written once and never updated or deleted.',
-      'A large pytest suite: per-app model tests, dedicated cross-tenant isolation tests, and a "definition of done" verification script for each build stage.',
-      'CI on every push — ruff and mypy for the backend, ESLint and Prettier for the frontend scaffold.',
-    ],
     architecture: [
       {
         title: 'Patient & invoice',

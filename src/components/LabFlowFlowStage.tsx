@@ -1,10 +1,10 @@
 import React, { useRef } from 'react';
 import { ArrowUpRight } from 'lucide-react';
-import patientImg from '../assets/labflow/stage-patient-registration.jpg';
-import sampleImg from '../assets/labflow/stage-sample-collection.jpg';
-import resultImg from '../assets/labflow/stage-result-entry.jpg';
-import approvalImg from '../assets/labflow/stage-pathologist-approval.jpg';
-import reportImg from '../assets/labflow/stage-pdf-report.jpg';
+import patientImg from '../assets/labflow/labflow-step1-registration.webp';
+import sampleImg from '../assets/labflow/labflow-step2-sample.webp';
+import resultImg from '../assets/labflow/labflow-step3-result.webp';
+import approvalImg from '../assets/labflow/labflow-step4-approval.webp';
+import reportImg from '../assets/labflow/labflow-step5-report.webp';
 import { portfolioData } from '../data/portfolio';
 import { gsap, useGSAP, motionMatchMedia } from '../engine/gsap';
 

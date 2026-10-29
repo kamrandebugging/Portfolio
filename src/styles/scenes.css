@@ -787,84 +787,98 @@ html.is-loading body {
 }
 
 /* ============================================================
-   LabFlow case-study scenes (tablet/desktop only — see the
-   (max-width: 767px) fallback below). JS writes --p (manifesto)
-   and --stage (flow); CSS does the choreography, same contract
-   as every other scene in this file.
+   LabFlow case-study scenes (Why LabFlow exists & Flow Stage).
    ============================================================ */
 
-/* ---------- Manifesto: a pinned line that swaps under the reader ---------- */
-.manifesto {
+/* ---------- Why LabFlow exists: 2-card pinned stack ----------
+   Reference video motion:
+     - Framing heading ("Why LabFlow exists.") fixed and centered in background.
+     - Card 1 ("The problem.") rises from below the viewport and settles centered (scale 0.94 -> 1.0),
+       partially covering the background heading. Holds for reading.
+     - Card 2 ("The solution.") rises from below and fully covers Card 1 in a stacked deck. Holds.
+     - Clean unpin release into the next section.
+     - Scrubbed to scroll, fully reversible.
+     - Calibrated height: 280svh (~1.8 viewports of pinned travel).
+     - Mobile & tablet (< 1024px): no pinning, vertical stack.
+*/
+.why-labflow {
   position: relative;
-  height: 300svh;
+  height: 350svh;
 }
-.manifesto-stage {
+.why-labflow-inner {
   position: sticky;
   top: 0;
   height: 100svh;
-  min-height: 34rem;
+  min-height: 38rem;
   overflow: hidden;
-  border-radius: clamp(1.25rem, 3vw, 2rem);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 0 var(--pad-x);
 }
-.manifesto-media {
+.why-heading-wrap {
   position: absolute;
   inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1;
+  pointer-events: none;
+  padding: 0 var(--pad-x);
 }
-.manifesto-bg {
+.why-heading {
+  color: var(--color-paper);
+  text-align: center;
+}
+.why-cards-deck {
+  position: relative;
+  width: 100%;
+  max-width: 34rem;
+  height: clamp(34rem, 68svh, 42rem);
+  z-index: 2;
+  margin: 0 auto;
+}
+.why-card {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
-  object-fit: cover;
-  transform: scale(calc(1.1 + var(--p, 0) * 0.08));
-  transition: transform 0.2s linear;
+  border-radius: 1.5rem;
+  background: #081c15;
+  border: 1px solid rgb(216 243 220 / 0.18);
+  box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.75);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  will-change: transform;
 }
-.manifesto-scrim {
-  position: absolute;
-  inset: 0;
-  background: rgb(8 28 21 / 0.6);
+.why-card--problem {
+  z-index: 2;
 }
-.manifesto-text {
+.why-card--solution {
+  z-index: 3;
+}
+.why-card-img-wrap {
   position: relative;
-  display: grid;
-  place-items: center;
+  height: 52%;
+  width: 100%;
+  overflow: hidden;
+}
+.why-card-img {
+  width: 100%;
   height: 100%;
-  padding: 0 var(--pad-x);
+  object-fit: cover;
+  object-position: center;
+  display: block;
 }
-.manifesto-line {
-  grid-area: 1 / 1;
-  justify-self: start;
-  max-width: 19ch;
-  font-size: clamp(2.5rem, 6.4vw, 5.5rem);
-}
-.manifesto-line--1 {
-  --on: clamp(0, calc(1.5 - var(--p, 0) * 2), 1);
-  opacity: var(--on);
-  transform: translateY(calc((1 - var(--on)) * -2.2rem)) scale(calc(1.05 - var(--on) * 0.05))
-    rotate(calc((1 - var(--on)) * -2deg));
-  transition: opacity 0.4s var(--ease-out), transform 0.5s var(--ease-out);
-}
-.manifesto-strike {
-  position: relative;
-  white-space: nowrap;
-}
-.manifesto-strike::after {
-  content: '';
-  position: absolute;
-  left: -0.05em;
-  right: -0.05em;
-  top: 52%;
-  height: 0.075em;
-  background: var(--color-leaf);
-  transform-origin: left;
-  transform: scaleX(clamp(0, calc(var(--p, 0) * 3 - 1), 1));
-}
-.manifesto-line--2 {
-  --on: clamp(0, calc(var(--p, 0) * 3 - 1.5), 1);
-  opacity: var(--on);
-  transform: translateY(calc((1 - var(--on)) * 2.6rem)) scale(calc(0.9 + var(--on) * 0.1));
-  color: var(--color-leaf);
-  transition: opacity 0.35s var(--ease-out), transform 0.45s var(--ease-out);
+.why-card-text {
+  height: 48%;
+  padding: clamp(1.25rem, 2.5vw, 1.85rem);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0.65rem;
 }
 
 /* ---------- Flow: pinned two-column panel through the real steps ----------
@@ -1016,41 +1030,45 @@ html.is-loading body {
 }
 
 /* Reduced motion: both scenes become plain, fully visible stacked content. */
-html[data-motion='reduced'] .manifesto,
-html[data-motion='reduced'] .flowstage {
-  height: auto;
-}
-html[data-motion='reduced'] .manifesto-stage {
-  position: relative;
-  height: auto;
-  min-height: 0;
-  overflow: visible;
-}
-html[data-motion='reduced'] .manifesto-media {
-  display: none;
-}
-html[data-motion='reduced'] .manifesto-text {
-  position: relative;
-  height: auto;
-  display: flex;
-  flex-direction: column;
-  gap: 1.25rem;
-  padding: 5rem var(--pad-x);
-}
-html[data-motion='reduced'] .manifesto-line {
-  grid-area: auto;
-  justify-self: auto;
-}
-html[data-motion='reduced'] .manifesto-line--1,
-html[data-motion='reduced'] .manifesto-line--2 {
-  opacity: 1;
-  transform: none;
-}
-html[data-motion='reduced'] .manifesto-strike::after {
-  transform: scaleX(1);
-}
+html[data-motion='reduced'] .why-labflow,
 html[data-motion='reduced'] .flowstage {
   height: auto !important;
+}
+html[data-motion='reduced'] .why-labflow-inner {
+  position: relative !important;
+  top: auto !important;
+  height: auto !important;
+  min-height: 0 !important;
+  display: block !important;
+  padding: 5rem var(--pad-x) !important;
+}
+html[data-motion='reduced'] .why-heading-wrap {
+  position: relative !important;
+  top: auto !important;
+  margin-bottom: 3rem !important;
+  padding: 0 !important;
+}
+html[data-motion='reduced'] .why-cards-deck {
+  position: relative !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 2.5rem !important;
+  max-width: 100% !important;
+  height: auto !important;
+  margin: 0 !important;
+}
+html[data-motion='reduced'] .why-card {
+  position: relative !important;
+  inset: auto !important;
+  height: auto !important;
+  transform: none !important;
+}
+html[data-motion='reduced'] .why-card-img-wrap {
+  height: clamp(14rem, 30svh, 20rem) !important;
+}
+html[data-motion='reduced'] .why-card-text {
+  height: auto !important;
+  padding: 1.5rem !important;
 }
 html[data-motion='reduced'] .flow-inner {
   position: relative !important;
@@ -1096,8 +1114,50 @@ html[data-motion='reduced'] .flow-item-img {
 }
 
 /* Tablet & Mobile (< 1024px): NO PINNING.
-   Steps stack vertically in normal scroll: number on top, full-width image, heading, paragraph, button. */
+   Cards and flow steps stack vertically in normal scroll. */
 @media (max-width: 1023px) {
+  .why-labflow {
+    height: auto !important;
+  }
+  .why-labflow-inner {
+    position: relative !important;
+    top: auto !important;
+    height: auto !important;
+    min-height: 0 !important;
+    display: block !important;
+    padding: 4.5rem var(--pad-x) !important;
+  }
+  .why-heading-wrap {
+    position: relative !important;
+    top: auto !important;
+    inset: auto !important;
+    display: block !important;
+    margin-bottom: 2.5rem !important;
+    padding: 0 !important;
+  }
+  .why-cards-deck {
+    position: relative !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 2.25rem !important;
+    max-width: 100% !important;
+    height: auto !important;
+    margin: 0 !important;
+  }
+  .why-card {
+    position: relative !important;
+    inset: auto !important;
+    height: auto !important;
+    transform: none !important;
+  }
+  .why-card-img-wrap {
+    height: clamp(14rem, 30svh, 20rem) !important;
+  }
+  .why-card-text {
+    height: auto !important;
+    padding: 1.5rem !important;
+  }
+
   .flowstage {
     height: auto !important;
   }
@@ -1151,40 +1211,4 @@ html[data-motion='reduced'] .flow-item-img {
   }
 }
 
-/* Phones: manifesto scene drops pin */
-@media (max-width: 767px) {
-  .manifesto {
-    height: auto;
-  }
-  .manifesto-stage {
-    position: relative;
-    height: auto;
-    min-height: 0;
-  }
-  .manifesto-media {
-    display: none;
-  }
-  .manifesto-text {
-    position: relative;
-    height: auto;
-    display: flex;
-    flex-direction: column;
-    padding: 4.5rem var(--pad-x);
-    gap: 1.25rem;
-  }
-  .manifesto-line {
-    grid-area: auto;
-    justify-self: auto;
-    max-width: none;
-    font-size: clamp(2rem, 8vw, 2.75rem);
-  }
-  .manifesto-line--1,
-  .manifesto-line--2 {
-    opacity: 1;
-    transform: none;
-  }
-  .manifesto-strike::after {
-    transform: scaleX(1);
-  }
-}
 

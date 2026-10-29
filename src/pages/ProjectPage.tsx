@@ -5,7 +5,7 @@ import { caseStudies, type CaseStudy } from '../data/caseStudies';
 import { portfolioData } from '../data/portfolio';
 import { useReveals } from '../hooks/useReveals';
 import { gsap, ScrollTrigger, useGSAP, MOTION_OK, motionMatchMedia } from '../engine/gsap';
-import { LabFlowManifesto } from '../components/LabFlowManifesto';
+import { LabFlowProblemCards } from '../components/LabFlowProblemCards';
 import { LabFlowFlowStage } from '../components/LabFlowFlowStage';
 import { TiltCard } from '../components/ui/TiltCard';
 
@@ -143,35 +143,39 @@ export const ProjectPage: React.FC = () => {
         </div>
       </section>
 
-      {slug === 'labflow' && <LabFlowManifesto />}
+      {/* ---------- The problem / Why LabFlow exists ---------- */}
+      {slug === 'labflow' ? (
+        <LabFlowProblemCards />
+      ) : (
+        <section className="tone-light px-[var(--pad-x)] py-24 md:py-32" data-tone="light">
+          <div className="mx-auto grid max-w-[72rem] gap-10 md:grid-cols-[1fr_1.4fr]">
+            <h2 data-split className="display text-[clamp(2rem,4vw,3.25rem)]">
+              The problem.
+            </h2>
+            <p data-fade className="text-lg leading-relaxed md:text-xl">
+              {study.problem}
+            </p>
+          </div>
+        </section>
+      )}
 
-      {/* ---------- The problem ---------- */}
-      <section className="tone-light px-[var(--pad-x)] py-24 md:py-32" data-tone="light">
-        <div className="mx-auto grid max-w-[72rem] gap-10 md:grid-cols-[1fr_1.4fr]">
-          <h2 data-split className="display text-[clamp(2rem,4vw,3.25rem)]">
-            The problem.
-          </h2>
-          <p data-fade className="text-lg leading-relaxed md:text-xl">
-            {study.problem}
-          </p>
-        </div>
-      </section>
-
-      {/* ---------- What was built ---------- */}
-      <section className="tone-forest px-[var(--pad-x)] py-24 md:py-32" data-tone="dark">
-        <div className="mx-auto max-w-[72rem]">
-          <h2 data-split className="display max-w-[20ch] text-[clamp(2.25rem,5vw,4rem)]">
-            What was built.
-          </h2>
-          <ul className="mt-14 grid gap-10 md:grid-cols-2 md:gap-x-14 md:gap-y-12">
-            {study.built.map((item) => (
-              <li key={item} data-fade className="text-lg leading-relaxed">
-                {item}
-              </li>
-            ))}
-          </ul>
-        </div>
-      </section>
+      {/* ---------- What was built (other case studies) ---------- */}
+      {slug !== 'labflow' && study.built && (
+        <section className="tone-forest px-[var(--pad-x)] py-24 md:py-32" data-tone="dark">
+          <div className="mx-auto max-w-[72rem]">
+            <h2 data-split className="display max-w-[20ch] text-[clamp(2.25rem,5vw,4rem)]">
+              What was built.
+            </h2>
+            <ul className="mt-14 grid gap-10 md:grid-cols-2 md:gap-x-14 md:gap-y-12">
+              {study.built.map((item) => (
+                <li key={item} data-fade className="text-lg leading-relaxed">
+                  {item}
+                </li>
+              ))}
+            </ul>
+          </div>
+        </section>
+      )}
 
       {/* ---------- Architecture / flow ---------- */}
       {slug === 'labflow' ? (
