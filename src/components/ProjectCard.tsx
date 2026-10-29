@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { ArrowUpRight, BookOpen } from 'lucide-react';
 import type { ProjectItem } from '../data/portfolio';
 import { Magnetic } from './ui/Magnetic';
+import SkelImage from './ui/SkelImage';
 
 interface ProjectCardProps {
   project: ProjectItem;
@@ -102,10 +103,11 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
 
     {project.image && (
       <div className="pframe">
-        <img
+        <SkelImage
           src={project.image}
           alt={`${project.name} preview`}
           loading={eager ? 'eager' : 'lazy'}
+          wrapperClassName="h-full w-full"
         />
       </div>
     )}

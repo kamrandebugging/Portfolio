@@ -4,6 +4,7 @@ import { ArrowUpRight } from 'lucide-react';
 import { portfolioData, type ProjectItem } from '../data/portfolio';
 import { useReveals } from '../hooks/useReveals';
 import { ScrollTrigger, useGSAP } from '../engine/gsap';
+import SkelImage from './ui/SkelImage';
 
 /** Maps a homepage project id to its dedicated case-study route. */
 const ROUTES: Partial<Record<ProjectItem['id'], string>> = {
@@ -89,11 +90,12 @@ export const FeaturedProjects: React.FC = () => {
                   <div
                     className={`overflow-hidden rounded-[1.25rem] ${reverse ? 'md:order-2' : ''}`}
                   >
-                    <img
+                    <SkelImage
                       src={project.image}
                       alt={`${project.name} preview`}
                       loading={i === 0 ? 'eager' : 'lazy'}
-                      className="aspect-[4/3] w-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+                      wrapperClassName="aspect-[4/3] w-full"
+                      imgClassName="transition-transform duration-700 ease-out group-hover:scale-105"
                     />
                   </div>
                 )}

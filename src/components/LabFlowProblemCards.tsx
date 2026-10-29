@@ -2,6 +2,7 @@ import React, { useRef } from 'react';
 import problemImg from '../assets/labflow/problem.jpg';
 import solutionImg from '../assets/labflow/solution.jpg';
 import { gsap, useGSAP, motionMatchMedia } from '../engine/gsap';
+import SkelImage from './ui/SkelImage';
 
 export const LabFlowProblemCards: React.FC = () => {
   const root = useRef<HTMLElement>(null);
@@ -148,11 +149,12 @@ export const LabFlowProblemCards: React.FC = () => {
           {/* Card 1: The problem. */}
           <article className="why-card why-card--problem">
             <div className="why-card-img-wrap">
-              <img
+              <SkelImage
                 src={problemImg}
                 alt="Diagnostic lab paperwork and manual registration records"
-                className="why-card-img"
                 loading="eager"
+                wrapperClassName="h-full w-full"
+                imgClassName="why-card-img"
               />
             </div>
             <div className="why-card-text">
@@ -169,11 +171,12 @@ export const LabFlowProblemCards: React.FC = () => {
           {/* Card 2: The solution. */}
           <article className="why-card why-card--solution">
             <div className="why-card-img-wrap">
-              <img
+              <SkelImage
                 src={solutionImg}
                 alt="LabFlow modern digital workflow with technician at computer"
-                className="why-card-img"
                 loading="eager"
+                wrapperClassName="h-full w-full"
+                imgClassName="why-card-img"
               />
             </div>
             <div className="why-card-text">
