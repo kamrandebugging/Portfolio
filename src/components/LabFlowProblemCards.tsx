@@ -160,11 +160,8 @@ export const LabFlowProblemCards: React.FC = () => {
                 The problem.
               </h3>
               <p className="text-[0.95rem] md:text-base leading-relaxed text-[rgb(216_243_220_/_0.85)]">
-                Diagnostic labs in Pakistan run patient registration, sample handling, results and
-                partner billing on paper or spreadsheets, often across more than one branch with no
-                real separation between them. Before any of that can be a product, the flow has to be
-                modelled correctly and the data has to be provably isolated per lab &mdash; that&rsquo;s
-                the part LabFlow set out to get right first.
+                Pakistan&apos;s diagnostic labs run on paper registers and scattered spreadsheets. No
+                modelled flow, no real separation between branches.
               </p>
             </div>
           </article>
@@ -184,9 +181,8 @@ export const LabFlowProblemCards: React.FC = () => {
                 The solution.
               </h3>
               <p className="text-[0.95rem] md:text-base leading-relaxed text-[rgb(216_243_220_/_0.85)]">
-                LabFlow models the real lab flow - registration, samples, results, approval,
-                reports, partner billing - with every lab&apos;s data isolated in its own database
-                schema, not behind an application-level filter.
+                LabFlow models the entire lab flow as software &mdash; with every lab&apos;s data provably
+                isolated in its own database schema.
               </p>
             </div>
           </article>
