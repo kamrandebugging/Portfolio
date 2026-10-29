@@ -29,7 +29,7 @@ export interface CaseStudy {
   built?: string[];
   architecture: CaseStudyFlowStep[];
   stack: string[];
-  features: CaseStudyFeature[];
+  features?: CaseStudyFeature[];
   links: CaseStudyLink[];
 }
 
@@ -81,32 +81,6 @@ export const caseStudies: Record<CaseStudy['slug'], CaseStudy> = {
       'pytest · factory_boy',
       'ruff · mypy',
       'React 18 + TypeScript (frontend — scaffolded, not yet built)',
-    ],
-    features: [
-      {
-        title: 'Schema-per-tenant isolation',
-        desc: 'Each lab’s data lives in its own PostgreSQL schema, checked by dedicated cross-tenant isolation tests, not just an application-level WHERE clause.',
-      },
-      {
-        title: 'Accession and rejection workflow',
-        desc: 'Every sample gets a Code128 accession ID and one of nine structured rejection reasons — unlabelled, hemolyzed, clotted, and so on — instead of a free-text note.',
-      },
-      {
-        title: 'Reference-range flagging',
-        desc: 'Results are stored as the value entered, with a separate low/normal/high/critical flag computed against that test’s reference range — never guessed when it can’t be determined.',
-      },
-      {
-        title: 'Revenue-share ledger',
-        desc: 'Referral partners carry effective-dated share rules per test category and branch, feeding a ledger and settlement model rather than a flat percentage.',
-      },
-      {
-        title: 'Bilingual notification templates',
-        desc: 'Templates are keyed by locale (English/Urdu) and channel (email/WhatsApp), so messaging isn’t hardcoded per notification.',
-      },
-      {
-        title: 'Append-only audit log',
-        desc: 'Every tenant and platform mutation is recorded in a log that permits inserts only — enforced by the schema, not just application discipline.',
-      },
     ],
     links: [{ label: 'Repository', url: 'https://github.com/kamrandebugging/LabFlow' }],
   },

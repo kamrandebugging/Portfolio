@@ -231,30 +231,32 @@ export const ProjectPage: React.FC = () => {
       </section>
 
       {/* ---------- Key features ---------- */}
-      <section className="tone-forest px-[var(--pad-x)] py-24 md:py-32" data-tone="dark">
-        <div className="mx-auto max-w-[72rem]">
-          <h2 data-split className="display max-w-[20ch] text-[clamp(2.25rem,5vw,4rem)]">
-            Key features.
-          </h2>
-          <div className="mt-14 flex flex-col gap-3">
-            {study.features.map((feature, i) => (
-              <div
-                key={feature.title}
-                data-fade
-                className="grid gap-3 rounded-[1.25rem] px-7 py-9 md:grid-cols-[1fr_1.6fr] md:gap-10"
-                style={
-                  i % 2 === 1
-                    ? { background: 'color-mix(in srgb, var(--color-paper) 6%, transparent)' }
-                    : undefined
-                }
-              >
-                <h3 className="display text-[clamp(1.4rem,2.4vw,2rem)]">{feature.title}</h3>
-                <p className="leading-relaxed muted">{feature.desc}</p>
-              </div>
-            ))}
+      {study.features && study.features.length > 0 && (
+        <section className="tone-forest px-[var(--pad-x)] py-24 md:py-32" data-tone="dark">
+          <div className="mx-auto max-w-[72rem]">
+            <h2 data-split className="display max-w-[20ch] text-[clamp(2.25rem,5vw,4rem)]">
+              Key features.
+            </h2>
+            <div className="mt-14 flex flex-col gap-3">
+              {study.features.map((feature, i) => (
+                <div
+                  key={feature.title}
+                  data-fade
+                  className="grid gap-3 rounded-[1.25rem] px-7 py-9 md:grid-cols-[1fr_1.6fr] md:gap-10"
+                  style={
+                    i % 2 === 1
+                      ? { background: 'color-mix(in srgb, var(--color-paper) 6%, transparent)' }
+                      : undefined
+                  }
+                >
+                  <h3 className="display text-[clamp(1.4rem,2.4vw,2rem)]">{feature.title}</h3>
+                  <p className="leading-relaxed muted">{feature.desc}</p>
+                </div>
+              ))}
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
 
       {/* ---------- Close ---------- */}
       <section id="contact-cta" className="tone-dark px-[var(--pad-x)] py-28 md:py-36" data-tone="dark">
