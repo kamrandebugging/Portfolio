@@ -184,21 +184,27 @@ export const Projects: React.FC = () => {
         <div className="mb-16 flex flex-wrap items-end justify-between gap-6">
           <div>
             <span data-fade className="eyebrow">
-              Selected projects
+              Featured work
             </span>
             <h2 data-split className="display mt-6 text-[clamp(3.25rem,8vw,8rem)]">
-              Selected <em>work.</em>
+              Featured <em>Projects.</em>
             </h2>
           </div>
           <span data-fade className="font-mono text-xs uppercase tracking-[0.16em] muted">
-            {String(projects.length).padStart(2, '0')} projects · 03 in depth
+            {String(projects.length).padStart(2, '0')} projects · 03 featured
           </span>
         </div>
 
         <div>
           {featured.map((project, index) => {
-            const caseStudyId =
-              project.id === 'labflow' || project.id === 'fbr-invoicing' ? project.id : null;
+            const caseStudyUrl =
+              project.id === 'labflow'
+                ? '/projects/labflow'
+                : project.id === 'fbr-invoicing'
+                ? '/projects/fbr'
+                : project.id === 'fundora-global'
+                ? '/projects/fundoraglobal'
+                : null;
             return (
               <article
                 key={project.id}
@@ -208,7 +214,12 @@ export const Projects: React.FC = () => {
                 <ProjectCard
                   project={project}
                   eager={index === 0}
-                  onCaseStudy={caseStudyId ? () => setCaseStudy(caseStudyId) : undefined}
+                  caseStudyUrl={caseStudyUrl}
+                  onCaseStudy={
+                    project.id === 'labflow' || project.id === 'fbr-invoicing'
+                      ? () => setCaseStudy(project.id as CaseStudyId)
+                      : undefined
+                  }
                   caseStudyRef={
                     project.id === 'labflow' ? labFlowBtn : project.id === 'fbr-invoicing' ? fbrBtn : undefined
                   }
