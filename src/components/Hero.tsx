@@ -15,12 +15,7 @@ import { portfolioData } from '../data/portfolio';
 import { Magnetic } from './ui/Magnetic';
 import { LocalTime } from './ui/LocalTime';
 
-interface HeroProps {
-  /** True once the preloader has handed over (fonts are loaded by then). */
-  ready: boolean;
-}
-
-export const Hero: React.FC<HeroProps> = ({ ready }) => {
+export const Hero: React.FC = () => {
   const root = useRef<HTMLElement>(null);
   const { personal } = portfolioData;
 
@@ -64,7 +59,7 @@ export const Hero: React.FC<HeroProps> = ({ ready }) => {
     { scope: root }
   );
 
-  // Intro choreography once the loader lifts.
+  // Immediate hero choreography on load
   useGSAP(
     () => {
       const mm = motionMatchMedia();
@@ -74,34 +69,29 @@ export const Hero: React.FC<HeroProps> = ({ ready }) => {
         const parts = q('[data-intro]');
         const portrait = q('[data-portrait]');
 
-        if (!ready) {
-          gsap.set([title, ...parts, ...portrait], { autoAlpha: 0 });
-          return;
-        }
-
         gsap.set(title, { autoAlpha: 1 });
         const split = SplitText.create(title, {
           type: 'lines',
           mask: 'lines',
           autoSplit: true,
           onSplit: (self) =>
-            gsap.from(self.lines, { yPercent: 115, duration: 1.3, ease: 'expo.out', stagger: 0.12 }),
+            gsap.from(self.lines, { yPercent: 115, duration: 1.1, ease: 'expo.out', stagger: 0.1 }),
         });
         gsap.fromTo(
           parts,
-          { y: 24, autoAlpha: 0 },
-          { y: 0, autoAlpha: 1, duration: 1, ease: 'expo.out', stagger: 0.08, delay: 0.45 }
+          { y: 20, autoAlpha: 0 },
+          { y: 0, autoAlpha: 1, duration: 0.8, ease: 'expo.out', stagger: 0.06, delay: 0.2 }
         );
         gsap.fromTo(
           portrait,
-          { scale: 1.07, autoAlpha: 0 },
-          { scale: 1, autoAlpha: 1, duration: 1.7, ease: 'expo.out', delay: 0.15 }
+          { scale: 1.05, autoAlpha: 0 },
+          { scale: 1, autoAlpha: 1, duration: 1.2, ease: 'expo.out', delay: 0.1 }
         );
 
         return () => split.revert();
       });
     },
-    { scope: root, dependencies: [ready] }
+    { scope: root }
   );
 
   return (

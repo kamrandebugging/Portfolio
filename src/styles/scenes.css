@@ -3,25 +3,6 @@
    --stage); everything visual is derived from them here.
    ============================================================ */
 
-/* ---------- Loader ---------- */
-.loader {
-  position: fixed;
-  inset: 0;
-  z-index: 200;
-  display: grid;
-  place-items: center;
-  background: var(--color-ink);
-  color: var(--color-paper);
-}
-.loader-count {
-  font-family: var(--font-display);
-  font-weight: 700;
-  font-size: clamp(5rem, 20vw, 15rem);
-  line-height: 0.85;
-  letter-spacing: -0.01em;
-  font-variant-numeric: tabular-nums;
-}
-
 /* ---------- Fixed UI ---------- */
 .nav {
   position: fixed;
@@ -505,11 +486,7 @@ html[data-motion='reduced'] .psheet {
   animation: dialog-in 0.4s var(--ease-out);
 }
 
-/* ---------- Loading lock ---------- */
-html.is-loading,
-html.is-loading body {
-  overflow: hidden;
-}
+
 
 /* ---------- Nav pieces ---------- */
 .nav-mark {
