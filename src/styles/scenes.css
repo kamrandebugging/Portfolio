@@ -868,14 +868,22 @@ html.is-loading body {
 }
 
 /* ---------- Flow: pinned two-column panel through the real steps ----------
-   Left: a square-ish image that swaps small-centred -> full size. Right: a
-   plain counter, a crossfading heading+paragraph, one constant CTA. A
-   blurred fill of the same stage sits behind the whole panel, and a thin
-   progress line tracks position along the foot — the reference's device,
-   built from this project's own five stages. */
+   Forge scroll pattern (verified frame-by-frame):
+     - .flow-strip is ONE vertical strip containing all 5 steps stacked in order;
+       it translates upward as a single block off scrubbed scroll. The outgoing
+       step exits top first (counter + title, desc, cta last), and the incoming
+       step enters from below into the exact same slot.
+     - .flow-panel-item never slides or instant-swaps: each new image grows
+       outward from a centered tile with softened/feathered edges until it fills
+       the frame over the previous image.
+     - .flow-blur-item switches to the incoming step's photo mid-growth before
+       the main image finishes scaling.
+     - Desktop pinned length calibrated to 480svh (~3.8 viewports of travel).
+     - Mobile & tablet (< 1024px): no pinning, natural vertical stack.
+*/
 .flowstage {
   position: relative;
-  height: calc(var(--steps, 5) * 68svh);
+  height: 480svh;
 }
 .flow-inner {
   position: sticky;
@@ -891,6 +899,7 @@ html.is-loading body {
   inset: 0;
   filter: blur(28px);
   transform: scale(1.15);
+  pointer-events: none;
 }
 .flow-blur-item {
   position: absolute;
@@ -898,14 +907,14 @@ html.is-loading body {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  --d: calc(var(--stage, 1) - var(--i));
-  opacity: clamp(0, calc(1 - var(--d) * var(--d)), 1);
-  transition: opacity 0.6s var(--ease-out);
+  opacity: 0;
+  will-change: opacity;
 }
 .flow-scrim {
   position: absolute;
   inset: 0;
   background: rgb(8 28 21 / 0.72);
+  pointer-events: none;
 }
 .flow-grid {
   position: relative;
@@ -922,24 +931,49 @@ html.is-loading body {
   aspect-ratio: 4 / 3.4;
   border-radius: 1.25rem;
   overflow: hidden;
+  background: rgb(8 28 21);
 }
 .flow-panel-item {
-  grid-area: 1 / 1;
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
-  --d: calc(var(--stage, 1) - var(--i));
-  --on: clamp(0, calc(1 - var(--d) * var(--d)), 1);
-  opacity: var(--on);
-  transform: scale(calc(0.45 + var(--on) * 0.55));
-  transition: opacity 0.6s var(--ease-out), transform 0.7s var(--ease-out);
+  border-radius: 1.25rem;
+  box-shadow: 0 0 35px 10px rgba(8, 28, 21, 0.95);
+  transform-origin: center center;
+  will-change: transform, opacity;
+  opacity: 0;
 }
 .flow-col {
+  position: relative;
+  overflow: hidden;
+  height: clamp(20rem, 42svh, 28rem);
+  width: 100%;
+}
+.flow-strip {
+  position: relative;
   display: flex;
   flex-direction: column;
+  width: 100%;
+  will-change: transform;
+}
+.flow-step-block {
+  height: clamp(20rem, 42svh, 28rem);
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
   align-items: flex-start;
+}
+.flow-step-block[data-active='true'] {
+  pointer-events: auto;
+}
+.flow-step-block:not([data-active='true']) {
+  pointer-events: none;
+}
+.flow-item-img {
+  display: none;
 }
 .flow-counter {
   font-size: 1.05rem;
@@ -948,30 +982,8 @@ html.is-loading body {
 .flow-counter strong {
   color: var(--color-paper);
 }
-.flow-items {
-  position: relative;
-  display: grid;
-  margin-top: 1.25rem;
-  min-height: 12rem;
-}
-.flow-item {
-  grid-area: 1 / 1;
-  align-self: start;
-  --d: calc(var(--stage, 1) - var(--i));
-  --on: clamp(0, calc(1 - var(--d) * var(--d)), 1);
-  opacity: var(--on);
-  transform: translateY(calc(var(--d) * 2.2rem));
-  color: color-mix(in srgb, var(--color-leaf) calc((1 - var(--on)) * 100%), var(--color-paper));
-  transition: opacity 0.45s var(--ease-out), transform 0.55s var(--ease-out), color 0.7s var(--ease-out);
-  pointer-events: none;
-}
-.flow-item[data-active='true'] {
-  pointer-events: auto;
-}
-.flow-item-img {
-  display: none;
-}
 .flow-title {
+  margin-top: 0.75rem;
   font-size: clamp(2.25rem, 4.2vw, 3.5rem);
 }
 .flow-desc {
@@ -993,14 +1005,14 @@ html.is-loading body {
   bottom: clamp(1.5rem, 4vw, 2.5rem);
   height: 2px;
   background: rgb(216 243 220 / 0.18);
+  pointer-events: none;
 }
 .flow-progress span {
   display: block;
   height: 100%;
   background: var(--color-leaf);
   transform-origin: left;
-  transform: scaleX(calc(var(--stage, 1) / var(--steps, 5)));
-  transition: transform 0.5s var(--ease-out);
+  transform: scaleX(0.2);
 }
 
 /* Reduced motion: both scenes become plain, fully visible stacked content. */
@@ -1037,48 +1049,109 @@ html[data-motion='reduced'] .manifesto-line--2 {
 html[data-motion='reduced'] .manifesto-strike::after {
   transform: scaleX(1);
 }
+html[data-motion='reduced'] .flowstage {
+  height: auto !important;
+}
 html[data-motion='reduced'] .flow-inner {
-  position: relative;
-  height: auto;
-  min-height: 0;
-  display: block;
+  position: relative !important;
+  top: auto !important;
+  height: auto !important;
+  min-height: 0 !important;
+  display: block !important;
 }
 html[data-motion='reduced'] .flow-blur,
 html[data-motion='reduced'] .flow-scrim,
 html[data-motion='reduced'] .flow-progress,
-html[data-motion='reduced'] .flow-counter,
 html[data-motion='reduced'] .flow-panel {
-  display: none;
+  display: none !important;
 }
 html[data-motion='reduced'] .flow-grid {
-  position: relative;
-  display: block;
-  padding: clamp(1.5rem, 4vw, 2.5rem) var(--pad-x);
+  position: relative !important;
+  display: block !important;
+  padding: clamp(1.5rem, 4vw, 2.5rem) var(--pad-x) !important;
 }
-html[data-motion='reduced'] .flow-items {
-  display: flex;
-  flex-direction: column;
-  gap: 3rem;
-  min-height: 0;
+html[data-motion='reduced'] .flow-col {
+  height: auto !important;
+  overflow: visible !important;
 }
-html[data-motion='reduced'] .flow-item {
-  position: relative;
-  opacity: 1;
-  transform: none;
-  color: var(--color-paper);
-  pointer-events: auto;
+html[data-motion='reduced'] .flow-strip {
+  position: relative !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 3.5rem !important;
+  transform: none !important;
+}
+html[data-motion='reduced'] .flow-step-block {
+  height: auto !important;
+  color: var(--color-paper) !important;
+  pointer-events: auto !important;
 }
 html[data-motion='reduced'] .flow-item-img {
-  display: block;
-  width: 100%;
-  aspect-ratio: 16 / 9;
-  object-fit: cover;
-  border-radius: 1.25rem;
-  margin-bottom: 1.5rem;
+  display: block !important;
+  width: 100% !important;
+  aspect-ratio: 16 / 10 !important;
+  object-fit: cover !important;
+  border-radius: 1.25rem !important;
+  margin: 1rem 0 !important;
 }
 
-/* Phones: both scenes drop the pin entirely and read as a normal, stacked
-   scroll — a pinned stage this tall has nowhere good to put a thumb. */
+/* Tablet & Mobile (< 1024px): NO PINNING.
+   Steps stack vertically in normal scroll: number on top, full-width image, heading, paragraph, button. */
+@media (max-width: 1023px) {
+  .flowstage {
+    height: auto !important;
+  }
+  .flow-inner {
+    position: relative !important;
+    top: auto !important;
+    height: auto !important;
+    min-height: 0 !important;
+    display: block !important;
+  }
+  .flow-blur,
+  .flow-scrim,
+  .flow-progress,
+  .flow-panel {
+    display: none !important;
+  }
+  .flow-grid {
+    position: relative !important;
+    display: block !important;
+    padding: 0 var(--pad-x) !important;
+  }
+  .flow-col {
+    height: auto !important;
+    overflow: visible !important;
+  }
+  .flow-strip {
+    position: relative !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 3.5rem !important;
+    transform: none !important;
+  }
+  .flow-step-block {
+    height: auto !important;
+    color: var(--color-paper) !important;
+    pointer-events: auto !important;
+  }
+  .flow-item-img {
+    display: block !important;
+    width: 100% !important;
+    aspect-ratio: 16 / 10 !important;
+    object-fit: cover !important;
+    border-radius: 1.25rem !important;
+    margin: 1rem 0 !important;
+  }
+  .flow-title {
+    margin-top: 0 !important;
+  }
+  .flow-cta {
+    margin-top: 1.75rem !important;
+  }
+}
+
+/* Phones: manifesto scene drops pin */
 @media (max-width: 767px) {
   .manifesto {
     height: auto;
@@ -1113,49 +1186,5 @@ html[data-motion='reduced'] .flow-item-img {
   .manifesto-strike::after {
     transform: scaleX(1);
   }
-
-  .flowstage {
-    height: auto;
-  }
-  .flow-inner {
-    position: relative;
-    height: auto;
-    min-height: 0;
-  }
-  .flow-blur,
-  .flow-scrim,
-  .flow-progress,
-  .flow-counter,
-  .flow-panel {
-    display: none;
-  }
-  .flow-grid {
-    position: relative;
-    display: block;
-    padding: 0 var(--pad-x);
-  }
-  .flow-items {
-    display: flex;
-    flex-direction: column;
-    gap: 3rem;
-    min-height: 0;
-  }
-  .flow-item {
-    position: relative;
-    opacity: 1;
-    transform: none;
-    color: var(--color-paper);
-    pointer-events: auto;
-  }
-  .flow-item-img {
-    display: block;
-    width: 100%;
-    aspect-ratio: 4 / 3;
-    object-fit: cover;
-    border-radius: 1.25rem;
-    margin-bottom: 1.5rem;
-  }
-  .flow-cta {
-    margin-top: 2.5rem;
-  }
 }
+
