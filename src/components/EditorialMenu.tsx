@@ -103,7 +103,7 @@ export const EditorialMenu: React.FC<EditorialMenuProps> = ({ open, onClose, go:
       style={{ visibility: 'hidden' }}
     >
       <div className="menu-top">
-        <span className="font-mono text-xs uppercase tracking-[0.16em] text-paper/70">
+        <span className="font-sans text-xs uppercase tracking-wider text-paper/70">
           Index · {portfolioData.personal.name}
         </span>
         <button

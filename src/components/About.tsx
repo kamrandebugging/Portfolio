@@ -30,7 +30,7 @@ export const About: React.FC = () => {
             <div className="jira-title font-medium text-sm text-[var(--color-ink)]">
               KAN-53 · Tenant provisioning
             </div>
-            <div className="jira-meta mt-3 flex items-center justify-between text-[11px] text-[var(--fg-muted)] font-mono">
+            <div className="jira-meta mt-3 flex items-center justify-between text-xs text-[var(--fg-muted)] font-sans">
               <span>Assignee: MK</span>
               <span>Priority: High</span>
             </div>
@@ -153,7 +153,7 @@ export const About: React.FC = () => {
                 merged into main · deployed
               </div>
             </div>
-            <span className="font-mono text-[11px] text-[var(--fg-muted)]">
+            <span className="font-sans text-xs text-[var(--fg-muted)]">
               Production v1.4.2
             </span>
           </div>
@@ -186,7 +186,7 @@ export const About: React.FC = () => {
         <div className="pipeline-container lg:col-span-7 lg:pt-4">
           <div className="pipeline-header flex items-center justify-end pb-4 border-b border-[var(--line)]">
             
-            <span className="pipeline-scroll-hint font-mono text-xs text-[var(--fg-muted)] tracking-wider">scroll to run ↓</span>
+            <span className="pipeline-scroll-hint font-sans text-xs text-[var(--fg-muted)] tracking-wider">scroll to run ↓</span>
           </div>
 
           <div className="pipeline-track relative w-full h-1 bg-[var(--line)] rounded-full overflow-hidden my-4" aria-hidden="true">
@@ -220,7 +220,7 @@ export const About: React.FC = () => {
                       <polyline points="20 6 9 17 4 12" />
                     </svg>
                   </span>
-                  <span className="pipeline-node-label font-mono text-xs font-bold uppercase tracking-wider text-[var(--color-ink)]">
+                  <span className="pipeline-node-label font-sans text-xs font-bold uppercase tracking-wider text-[var(--color-ink)]">
                     {stage.label}
                   </span>
                 </div>
@@ -229,7 +229,7 @@ export const About: React.FC = () => {
                   {renderStageVisual(stage.id)}
                 </div>
 
-                <div className="pipeline-caption pl-10 font-mono text-xs text-[var(--fg-muted)] leading-relaxed">
+                <div className="pipeline-caption pl-10 font-sans text-sm text-[var(--fg-muted)] leading-relaxed">
                   {stage.caption}
                 </div>
               </div>

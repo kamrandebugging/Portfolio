@@ -187,7 +187,7 @@ export const Projects: React.FC = () => {
               Featured <em>Projects.</em>
             </h2>
           </div>
-          <span data-fade className="font-mono text-xs uppercase tracking-[0.16em] muted">
+          <span data-fade className="font-sans text-xs tracking-wider muted">
             {String(projects.length).padStart(2, '0')} projects · 03 featured
           </span>
         </div>
@@ -229,7 +229,7 @@ export const Projects: React.FC = () => {
         <div className="mt-24">
           <div className="mb-6 flex items-center justify-between" data-fade>
             <h3 className="display text-2xl">More work</h3>
-            <span className="font-mono text-xs uppercase tracking-[0.16em] muted">
+            <span className="font-sans text-xs tracking-wider muted">
               Hover to preview · click to open
             </span>
           </div>
@@ -246,7 +246,7 @@ export const Projects: React.FC = () => {
                 >
                                     <span className="display text-[clamp(1.6rem,3vw,2.6rem)]">{project.name}</span>
                   <span className="text-sm muted">{project.cat}</span>
-                  <span className="font-mono text-xs uppercase tracking-[0.1em] muted">
+                  <span className="font-sans text-sm muted">
                     {project.outcome}
                   </span>
                 </button>

@@ -231,7 +231,7 @@ export const Contact: React.FC = () => {
             </ul>
           </nav>
 
-          <p className="muted font-mono text-xs uppercase tracking-[0.12em] md:col-span-3 md:text-right">
+          <p className="muted font-sans text-xs md:col-span-3 md:text-right">
             {personal.copyright}
           </p>
         </div>
