@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { ArrowDown } from 'lucide-react';
 import {
   gsap,
@@ -14,6 +14,161 @@ import { scrollToTarget } from '../engine/scroll';
 import { portfolioData } from '../data/portfolio';
 import { Magnetic } from './ui/Magnetic';
 import { LocalTime } from './ui/LocalTime';
+
+interface TerminalStep {
+  cmd: string;
+  output: string;
+}
+
+const TERMINAL_STEPS: TerminalStep[] = [
+  {
+    cmd: 'whoami',
+    output: 'Muhammad Kamran — Full-Stack Developer',
+  },
+  {
+    cmd: 'kamran --now',
+    output: 'LabFlow (Django + React) · FBR invoicing (Laravel, live since 2025)',
+  },
+  {
+    cmd: 'kamran --open-to',
+    output: 'paid remote internships',
+  },
+];
+
+const Cursor: React.FC = () => (
+  <span
+    aria-hidden="true"
+    className="ml-1 inline-block h-[1.05em] w-2 translate-y-[2px] bg-[#52b788] animate-pulse"
+    style={{ animationDuration: '0.8s' }}
+  />
+);
+
+const HeroTerminal: React.FC = () => {
+  const [isReducedMotion] = useState(() => {
+    if (typeof window === 'undefined') return false;
+    return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  });
+
+  const [stepIndex, setStepIndex] = useState(isReducedMotion ? TERMINAL_STEPS.length : 0);
+  const [phase, setPhase] = useState<'cmd' | 'output'>(isReducedMotion ? 'output' : 'cmd');
+  const [charCount, setCharCount] = useState(isReducedMotion ? 999 : 0);
+
+  useEffect(() => {
+    if (isReducedMotion) return;
+    if (stepIndex >= TERMINAL_STEPS.length) return;
+
+    const currentItem = TERMINAL_STEPS[stepIndex];
+    let timer: ReturnType<typeof setTimeout>;
+
+    if (phase === 'cmd') {
+      if (charCount < currentItem.cmd.length) {
+        timer = setTimeout(() => {
+          setCharCount((prev) => prev + 1);
+        }, 38);
+      } else {
+        timer = setTimeout(() => {
+          setPhase('output');
+          setCharCount(0);
+        }, 220);
+      }
+    } else {
+      if (charCount < currentItem.output.length) {
+        timer = setTimeout(() => {
+          setCharCount((prev) => prev + 1);
+        }, 18);
+      } else {
+        timer = setTimeout(() => {
+          setStepIndex((prev) => prev + 1);
+          setPhase('cmd');
+          setCharCount(0);
+        }, 320);
+      }
+    }
+
+    return () => clearTimeout(timer);
+  }, [stepIndex, phase, charCount, isReducedMotion]);
+
+  const handleFastForward = () => {
+    setStepIndex(TERMINAL_STEPS.length);
+    setPhase('output');
+    setCharCount(999);
+  };
+
+  const isCompleted = stepIndex >= TERMINAL_STEPS.length;
+
+  return (
+    <div
+      data-intro
+      onClick={handleFastForward}
+      title={isCompleted ? undefined : 'Click to complete'}
+      className="w-full max-w-[34rem] overflow-hidden rounded-lg border border-[rgb(216_243_220/0.14)] bg-[#081c15]/95 text-[#d8f3dc] shadow-2xl backdrop-blur-sm cursor-default"
+      role="region"
+      aria-label="Interactive Terminal Profile"
+    >
+      {/* Terminal Titlebar Chrome */}
+      <div className="flex items-center justify-between border-b border-[rgb(216_243_220/0.12)] bg-[#1b4332]/40 px-3.5 py-2 select-none">
+        <div className="flex items-center gap-1.5" aria-hidden="true">
+          <span className="h-2.5 w-2.5 rounded-full bg-[#2d6a4f]" />
+          <span className="h-2.5 w-2.5 rounded-full bg-[#40916c]" />
+          <span className="h-2.5 w-2.5 rounded-full bg-[#52b788]" />
+        </div>
+        <span className="font-mono text-xs text-[#95d5b2]/80">bash ~ kamran</span>
+        <span className="w-10 text-right font-mono text-[10px] text-[#74c69d]/60">80×24</span>
+      </div>
+
+      {/* Terminal Output */}
+      <div className="p-4 font-mono text-xs sm:text-sm leading-relaxed space-y-2.5 min-h-[10.5rem]">
+        {TERMINAL_STEPS.map((step, idx) => {
+          const isPastStep = idx < stepIndex;
+          const isCurrentStep = idx === stepIndex;
+
+          if (!isPastStep && !isCurrentStep) return null;
+
+          const displayCmd = isPastStep
+            ? step.cmd
+            : isCurrentStep && phase === 'cmd'
+            ? step.cmd.slice(0, charCount)
+            : step.cmd;
+
+          const showOutput = isPastStep || (isCurrentStep && phase === 'output');
+          const displayOutput = isPastStep
+            ? step.output
+            : isCurrentStep && phase === 'output'
+            ? step.output.slice(0, charCount)
+            : '';
+
+          return (
+            <div key={step.cmd} className="space-y-1">
+              {/* Command row */}
+              <div className="flex items-center gap-2">
+                <span className="text-[#52b788] select-none font-bold">$</span>
+                <span className="text-[#d8f3dc]">{displayCmd}</span>
+                {isCurrentStep && phase === 'cmd' && <Cursor />}
+              </div>
+
+              {/* Output row */}
+              {showOutput && (
+                <div className="flex items-start gap-2 pl-2 text-[#95d5b2]">
+                  <span className="text-[#74c69d] select-none">→</span>
+                  <span className="text-[#b7e4c7]">{displayOutput}</span>
+                  {isCurrentStep && phase === 'output' && <Cursor />}
+                </div>
+              )}
+            </div>
+          );
+        })}
+
+        {/* Final Prompt with active cursor once typing finishes */}
+        {isCompleted && (
+          <div className="flex items-center gap-2 pt-0.5">
+            <span className="text-[#52b788] select-none font-bold">$</span>
+            <Cursor />
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
 
 export const Hero: React.FC = () => {
   const root = useRef<HTMLElement>(null);
@@ -119,9 +274,7 @@ export const Hero: React.FC = () => {
             dangerouslySetInnerHTML={{ __html: personal.headline.join('<br />') }}
           />
 
-          <p data-intro className="muted max-w-[34rem] text-lg leading-relaxed">
-            <span className="text-paper">{personal.role}.</span> {personal.heroDesc}
-          </p>
+          <HeroTerminal />
 
           <div data-intro className="flex flex-wrap items-center gap-3">
             <Magnetic>
