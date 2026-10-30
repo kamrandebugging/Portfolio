@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { ArrowDown } from 'lucide-react';
+import { HeroParticles } from './ui/HeroParticles';
 import {
   gsap,
   ScrollTrigger,
@@ -256,6 +257,7 @@ export const Hero: React.FC = () => {
       data-tone="dark"
       className="hero tone-dark"
     >
+      <HeroParticles />
       <div className="hero-veil" aria-hidden="true" />
 
       <div className="hero-grid">
