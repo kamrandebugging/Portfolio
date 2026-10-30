@@ -302,6 +302,20 @@ export const Hero: React.FC = () => {
               aria-label={personal.headline.join(' ').replace(/<[^>]+>/g, '')}
               dangerouslySetInnerHTML={{ __html: personal.headline.join('<br />') }}
             />
+
+            <div
+              data-intro
+              className="font-mono text-sm sm:text-base text-[#95d5b2] tracking-wide flex items-center gap-1.5 select-none"
+            >
+              <span className="text-[#52b788]">&gt;</span>
+              <span>I build</span>
+              <span
+                data-rotword
+                className="text-[#d8f3dc] font-bold transition-opacity duration-200 inline-block min-w-[5.5rem]"
+              >
+                software
+              </span>
+            </div>
           </div>
 
           <div className="hero-terminal-wrap w-full">

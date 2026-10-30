@@ -124,7 +124,7 @@ export const portfolioData: PortfolioData = {
     lastName: 'Kamran',
     initials: 'MK',
     role: 'Web & Software Developer',
-    headline: ['Real <span data-rotword>software</span>,', 'not <em>demos.</em>'],
+    headline: ['Real software,', 'not <em>demos.</em>'],
     heroDesc:
       'Live FBR-integrated invoicing in Laravel since 2025, and LabFlow, a multi-tenant SaaS for diagnostic labs in Django and React. Open to paid remote internships.',
     resumeUrl: '',
