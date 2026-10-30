@@ -1249,3 +1249,326 @@ html[data-motion='reduced'] .flow-item-img {
 }
 
 
+
+/* ============================================================
+   Ticket-to-Ship Pipeline (How I work section)
+   ============================================================ */
+
+.pipeline-container {
+  position: relative;
+  width: 100%;
+}
+
+/* Node states */
+.pipeline-node.is-upcoming {
+  opacity: 0.45;
+  transition: opacity 0.4s var(--ease-out);
+}
+
+.pipeline-node.is-active {
+  opacity: 1;
+  transition: opacity 0.4s var(--ease-out);
+}
+
+.pipeline-node.is-active .pipeline-node-dot {
+  border-color: var(--color-leaf) !important;
+  box-shadow: 0 0 14px rgba(82, 183, 136, 0.55) !important;
+  background: var(--color-paper) !important;
+  color: var(--color-ink) !important;
+}
+
+.pipeline-node.is-done {
+  opacity: 1 !important;
+}
+
+.pipeline-node.is-done .pipeline-node-dot {
+  background: var(--color-forest) !important;
+  border-color: var(--color-leaf) !important;
+  color: var(--color-paper) !important;
+  box-shadow: 0 0 8px rgba(45, 106, 79, 0.4) !important;
+}
+
+.pipeline-node.is-done .pipeline-node-num {
+  display: none !important;
+}
+
+.pipeline-node.is-done .pipeline-node-check {
+  display: block !important;
+  color: var(--color-paper) !important;
+}
+
+/* Track connector */
+.pipeline-track {
+  background: var(--line);
+  overflow: hidden;
+  border-radius: 9999px;
+}
+
+.pipeline-line-fill {
+  background: var(--color-leaf);
+  will-change: transform;
+}
+
+/* Visual elements styling with green palette tokens */
+.jira-card {
+  background: var(--color-paper);
+  border-color: var(--line);
+  color: var(--color-ink);
+}
+
+.terminal-mockup {
+  background: var(--color-ink);
+  border-color: var(--color-forest);
+  color: var(--color-paper);
+}
+
+.terminal-prompt {
+  color: var(--color-leaf);
+}
+
+.terminal-typing {
+  color: var(--color-paper);
+  word-break: break-all;
+}
+
+.terminal-cursor {
+  background-color: var(--color-leaf);
+}
+
+.tdd-test-list,
+.ci-checks-list,
+.ship-badge-container {
+  background: var(--color-paper);
+  border-color: var(--line);
+}
+
+.ship-pill {
+  color: var(--color-forest);
+  background: rgba(82, 183, 136, 0.2);
+  border-color: var(--color-leaf);
+}
+
+/* ------------------------------------------------------------
+   Desktop (>=768px): Horizontal 5-Node Pipeline
+   ------------------------------------------------------------ */
+@media (min-width: 768px) {
+  .pipeline-stages {
+    display: grid !important;
+    grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
+    gap: 0.75rem !important;
+    border-top: none !important;
+  }
+
+  .pipeline-stages > :not([hidden]) ~ :not([hidden]) {
+    border-top-width: 0 !important;
+  }
+
+  .pipeline-stage {
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: flex-start !important;
+    padding-top: 0.5rem !important;
+    padding-bottom: 0.5rem !important;
+    min-width: 0 !important; /* Prevents grid blowout */
+    border-top: none !important;
+  }
+
+  .pipeline-track {
+    position: relative !important;
+    width: 100% !important;
+    height: 3px !important;
+    margin: 1.25rem 0 1rem 0 !important;
+    display: block !important;
+  }
+
+  .pipeline-line-fill {
+    width: 100% !important;
+    height: 100% !important;
+    transform-origin: 0% 50% !important;
+  }
+
+  .pipeline-node {
+    display: flex !important;
+    align-items: center !important;
+    gap: 0.5rem !important;
+    margin-bottom: 0.5rem !important;
+  }
+
+  .pipeline-visual {
+    padding-left: 0 !important;
+    margin-top: 0.25rem !important;
+    min-width: 0 !important;
+    width: 100% !important;
+    min-height: 130px;
+  }
+
+  .pipeline-caption {
+    padding-left: 0 !important;
+    margin-top: 0.5rem !important;
+    font-size: 0.7rem !important;
+    line-height: 1.35 !important;
+    min-width: 0 !important;
+  }
+
+  /* Compact styling for cards in horizontal grid to prevent overflow */
+  .jira-card,
+  .terminal-mockup,
+  .tdd-test-list,
+  .ci-checks-list,
+  .ship-badge-container {
+    padding: 0.5rem !important;
+    font-size: 0.7rem !important;
+    border-radius: 0.375rem !important;
+  }
+
+  .jira-title {
+    font-size: 0.72rem !important;
+    line-height: 1.2 !important;
+  }
+
+  .jira-meta {
+    font-size: 0.65rem !important;
+    margin-top: 0.4rem !important;
+  }
+
+  .terminal-command-line {
+    font-size: 0.65rem !important;
+  }
+
+  .terminal-typing {
+    font-size: 0.65rem !important;
+    line-height: 1.25 !important;
+  }
+
+  .tdd-test-row {
+    padding: 0.25rem 0.35rem !important;
+  }
+
+  .tdd-name {
+    font-size: 0.65rem !important;
+  }
+
+  .ci-checks-list {
+    grid-template-columns: 1fr !important;
+    gap: 0.25rem !important;
+  }
+
+  .ci-check-row {
+    padding: 0.25rem 0.35rem !important;
+  }
+
+  .ci-name {
+    font-size: 0.65rem !important;
+  }
+
+  .ship-badge-container {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 0.5rem !important;
+  }
+
+  .ship-pill {
+    font-size: 0.65rem !important;
+    padding: 0.25rem 0.5rem !important;
+    white-space: normal !important;
+    text-align: center;
+  }
+}
+
+/* ------------------------------------------------------------
+   Mobile (<768px): Vertical Stack & Vertical Connector
+   ------------------------------------------------------------ */
+@media (max-width: 767px) {
+  .pipeline-container {
+    overflow-x: hidden;
+    position: relative;
+  }
+
+  .pipeline-stages {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 1.5rem !important;
+    position: relative;
+    padding-left: 0.25rem;
+  }
+
+  /* Vertical connector line running through node dots */
+  .pipeline-track {
+    position: absolute !important;
+    left: 17px !important; /* Centers behind the 28px (w-7) node dot with left-padding */
+    top: 5.5rem !important;
+    bottom: 3.5rem !important;
+    width: 2px !important;
+    height: auto !important;
+    min-height: 200px;
+    z-index: 0;
+    margin: 0 !important;
+  }
+
+  .pipeline-line-fill {
+    width: 100% !important;
+    height: 100% !important;
+    transform-origin: 50% 0% !important;
+  }
+
+  .pipeline-stage {
+    position: relative;
+    z-index: 1;
+    padding-top: 1rem !important;
+    padding-bottom: 1rem !important;
+  }
+
+  .pipeline-node-dot {
+    position: relative;
+    z-index: 2;
+    background: var(--color-paper) !important;
+  }
+
+  .pipeline-visual,
+  .pipeline-caption {
+    padding-left: 2.5rem !important;
+    max-width: 100%;
+    overflow-wrap: break-word;
+  }
+}
+
+/* Reduced motion fallback: show full completed state instantly */
+html[data-motion='reduced'] .pipeline-node,
+@media (prefers-reduced-motion: reduce) {
+  .pipeline-node {
+    opacity: 1 !important;
+  }
+  .pipeline-node-dot {
+    background: var(--color-forest) !important;
+    border-color: var(--color-leaf) !important;
+    color: var(--color-paper) !important;
+  }
+  .pipeline-node-num {
+    display: none !important;
+  }
+  .pipeline-node-check {
+    display: block !important;
+    color: var(--color-paper) !important;
+  }
+  .pipeline-line-fill {
+    transform: scaleX(1) scaleY(1) !important;
+  }
+  .tdd-dot {
+    background-color: #10b981 !important;
+  }
+  .tdd-status-tag {
+    background-color: rgba(16, 185, 129, 0.15) !important;
+    color: #059669 !important;
+    border-color: rgba(16, 185, 129, 0.3) !important;
+  }
+  .ci-spinner {
+    display: none !important;
+  }
+  .ci-tick {
+    display: block !important;
+  }
+  .ship-pulse-ring .animate-ping {
+    animation: none !important;
+    display: none !important;
+  }
+}

@@ -32,7 +32,7 @@ const TERMINAL_STEPS: TerminalStep[] = [
   },
   {
     cmd: 'kamran --open-to',
-    output: 'paid remote internships',
+    output: 'internships + junior roles',
   },
 ];
 
@@ -291,9 +291,9 @@ export const Hero: React.FC = () => {
       <div className="hero-grid">
         <div className="hero-copy relative z-10 flex flex-col items-start gap-3 sm:gap-4 lg:gap-4 justify-center">
           <div className="hero-header flex flex-col items-start gap-2.5 sm:gap-3 w-full">
-            <div data-intro className="status-pill">
-              <span className="status-dot" aria-hidden="true" />
-              Open to paid remote internships
+            <div data-intro className="status-pill font-semibold text-xs sm:text-sm tracking-wide bg-[#1b4332]/60 border border-[#52b788]/40 shadow-md px-3.5 py-1.5 rounded-full inline-flex items-center gap-2">
+              <span className="status-dot animate-pulse" aria-hidden="true" />
+              Open to internships + junior roles
             </div>
 
             <h1
@@ -302,6 +302,20 @@ export const Hero: React.FC = () => {
               aria-label={personal.headline.join(' ').replace(/<[^>]+>/g, '')}
               dangerouslySetInnerHTML={{ __html: personal.headline.join('<br />') }}
             />
+
+            <div
+              data-intro
+              className="font-mono text-sm sm:text-base text-[#95d5b2] tracking-wide flex items-center gap-1.5 select-none"
+            >
+              <span className="text-[#52b788]">&gt;</span>
+              <span>I build</span>
+              <span
+                data-rotword
+                className="text-[#d8f3dc] font-bold transition-opacity duration-200 inline-block min-w-[5.5rem]"
+              >
+                software
+              </span>
+            </div>
           </div>
 
           <div className="hero-terminal-wrap w-full">

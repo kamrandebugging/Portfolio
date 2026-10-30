@@ -33,6 +33,13 @@ export interface PrincipleItem {
   desc: string;
 }
 
+export interface WorkflowStage {
+  id: string;
+  label: string;
+  visual: string;
+  caption: string;
+}
+
 export interface StatItem {
   value: string;
   label: string;
@@ -83,6 +90,7 @@ export interface PortfolioData {
     heading: string[];
     lead: string;
     principles: PrincipleItem[];
+    workflow: WorkflowStage[];
   };
   projects: ProjectItem[];
   achievements: {
@@ -124,9 +132,9 @@ export const portfolioData: PortfolioData = {
     lastName: 'Kamran',
     initials: 'MK',
     role: 'Web & Software Developer',
-    headline: ['Real <span data-rotword>software</span>,', 'not <em>demos.</em>'],
+    headline: ['Real software,', 'not <em>demos.</em>'],
     heroDesc:
-      'Live FBR-integrated invoicing in Laravel since 2025, and LabFlow, a multi-tenant SaaS for diagnostic labs in Django and React. Open to paid remote internships.',
+      'Live FBR-integrated invoicing in Laravel since 2025, and LabFlow, a multi-tenant SaaS for diagnostic labs in Django and React. Open to internships + junior roles.',
     resumeUrl: '',
     timezone: 'Asia/Karachi',
     heroImage: heroImg,
@@ -184,6 +192,38 @@ export const portfolioData: PortfolioData = {
     heading: ['How I', 'work.'],
     lead:
       "I'm a full-stack developer in Lahore, Pakistan. ADP Computer Science at Riphah International University (GPA 3.61 / 4.00), currently a BSCS 5th Semester Student at NCBA&E University. I'm building LabFlow — a multi-tenant SaaS for diagnostic labs — as my showcase project.",
+    workflow: [
+      {
+        id: 'ticket',
+        label: 'TICKET',
+        visual: 'KAN-53 · Tenant provisioning',
+        caption: 'Start from a real ticket — never a tutorial.',
+      },
+      {
+        id: 'branch',
+        label: 'BRANCH',
+        visual: 'git checkout -b feature/tenant-provisioning',
+        caption: 'The right stack for the job, on its own branch.',
+      },
+      {
+        id: 'tdd',
+        label: 'TDD',
+        visual: '3 test lines appear red as "FAIL", then flip one by one to green "PASS"',
+        caption: 'Red → green. Own the whole flow.',
+      },
+      {
+        id: 'ci',
+        label: 'CI',
+        visual: '6 check rows; each shows a spinner then ticks green, one after another, GitHub-Actions style',
+        caption: 'Keep CI green — 6 checks, 300 tests.',
+      },
+      {
+        id: 'ship',
+        label: 'SHIP',
+        visual: 'merged into main · deployed',
+        caption: 'Ship, then improve.',
+      },
+    ],
     principles: [
       {
         num: '01',
@@ -215,7 +255,7 @@ export const portfolioData: PortfolioData = {
       year: 'Django · React',
       outcome: 'Showcase Project',
       blurb:
-        'Multi-tenant SaaS for diagnostic labs in Pakistan. Patient registration and invoicing, samples with accession IDs, result entry validated against reference ranges, pathologist approval, PDF reports, and partner revenue-share.',
+        'Multi-tenant SaaS for diagnostic labs with accession tracking, validated results, pathologist approvals, and PDF reports.',
       stack:
         'Django 5 · DRF · React 18 + TypeScript · PostgreSQL 16 · Redis · Celery · Docker · Caddy · GitHub Actions',
       link: 'https://github.com/kamrandebugging/LabFlow',
@@ -229,7 +269,7 @@ export const portfolioData: PortfolioData = {
       year: 'Live since 2025',
       outcome: 'In production',
       blurb:
-        'Full-stack development on a live digital invoicing system integrated with FBR, in production use since 2025.',
+        'Live digital invoicing system integrated with FBR for tax compliance, in production use since 2025.',
       stack: 'Laravel · PHP · MySQL',
       link: '',
       image: fbrImg,
@@ -242,7 +282,7 @@ export const portfolioData: PortfolioData = {
       year: 'Trading platform',
       outcome: 'Trading Platform',
       blurb:
-        'A trading platform covering onboarding, trading adapter, payments and admin dashboard.',
+        'Trading platform covering user onboarding, trading adapter, payments, and administrative dashboard.',
       stack: 'Next.js · NestJS · TypeScript · PostgreSQL · Redis · Socket.IO',
       link: '',
       image: fundoraImg,
