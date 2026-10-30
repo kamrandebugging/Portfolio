@@ -5,6 +5,7 @@ import type { ProjectItem } from '../data/portfolio';
 import { Magnetic } from './ui/Magnetic';
 import SkelImage from './ui/SkelImage';
 import { BentoWidget, type BentoId } from './BentoWidget';
+import { TiltCard } from './ui/TiltCard';
 
 const BENTO_IDS: BentoId[] = ['labflow', 'fbr-invoicing', 'fundora-global'];
 
@@ -110,14 +111,14 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
     </div>
 
     {project.image && (
-      <div className="pframe">
+      <TiltCard className="pframe" max={7} glare>
         <SkelImage
           src={project.image}
           alt={`${project.name} preview`}
           loading={eager ? 'eager' : 'lazy'}
           wrapperClassName="h-full w-full"
         />
-      </div>
+      </TiltCard>
     )}
   </>
 );

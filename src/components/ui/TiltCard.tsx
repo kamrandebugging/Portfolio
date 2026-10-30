@@ -6,10 +6,12 @@ interface TiltCardProps {
   className?: string;
   /** Max rotation in degrees at the card's edge. */
   max?: number;
+  /** Add a specular glare highlight that follows the pointer. */
+  glare?: boolean;
 }
 
 /** A panel that tilts toward the cursor in 3D — pointer devices only. */
-export const TiltCard: React.FC<TiltCardProps> = ({ children, className = '', max = 10 }) => {
+export const TiltCard: React.FC<TiltCardProps> = ({ children, className = '', max = 10, glare = false }) => {
   const ref = useRef<HTMLDivElement>(null);
 
   useGSAP(
@@ -26,16 +28,24 @@ export const TiltCard: React.FC<TiltCardProps> = ({ children, className = '', ma
 
         const onMove = (e: PointerEvent) => {
           const r = el.getBoundingClientRect();
-          const px = (e.clientX - r.left) / r.width - 0.5;
-          const py = (e.clientY - r.top) / r.height - 0.5;
-          ryTo(px * max);
-          rxTo(-py * max);
+          const px = (e.clientX - r.left) / r.width;
+          const py = (e.clientY - r.top) / r.height;
+          ryTo((px - 0.5) * max);
+          rxTo(-(py - 0.5) * max);
           sTo(1.03);
+          if (glare) {
+            el.style.setProperty('--tilt-gx', `${(px * 100).toFixed(1)}%`);
+            el.style.setProperty('--tilt-gy', `${(py * 100).toFixed(1)}%`);
+          }
         };
         const onLeave = () => {
           rxTo(0);
           ryTo(0);
           sTo(1);
+          if (glare) {
+            el.style.removeProperty('--tilt-gx');
+            el.style.removeProperty('--tilt-gy');
+          }
         };
 
         el.addEventListener('pointermove', onMove);
@@ -51,8 +61,9 @@ export const TiltCard: React.FC<TiltCardProps> = ({ children, className = '', ma
   );
 
   return (
-    <div ref={ref} className={className}>
+    <div ref={ref} className={`tilt-card${glare ? ' tilt-card--glare' : ''}${className ? ` ${className}` : ''}`}>
       {children}
+      {glare && <div className="tilt-glare" aria-hidden="true" />}
     </div>
   );
 };

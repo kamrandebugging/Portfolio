@@ -275,6 +275,24 @@ html:not([data-motion='reduced']) .skel:not(.skel--done) {
   z-index: 0;
 }
 
+/* ---------- TiltCard glare overlay ---------- */
+.tilt-glare {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  border-radius: inherit;
+  background: radial-gradient(
+    circle at var(--tilt-gx, 50%) var(--tilt-gy, 50%),
+    rgba(255 255 255 / 0.10) 0%,
+    transparent 65%
+  );
+  opacity: 0;
+  transition: opacity 0.35s;
+}
+.tilt-card--glare:hover .tilt-glare {
+  opacity: 1;
+}
+
 /* ---------- ASCII Section Dividers ---------- */
 .section-divider {
   font-family: var(--font-mono);
