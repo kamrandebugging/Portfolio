@@ -4,7 +4,6 @@ import { gsap, useGSAP } from '../engine/gsap';
 import { getLenis } from '../engine/scroll';
 import { isReduced, setMotionPref, systemReducesMotion } from '../engine/motion';
 import { portfolioData } from '../data/portfolio';
-import { LocalTime } from './ui/LocalTime';
 
 interface EditorialMenuProps {
   open: boolean;
@@ -152,8 +151,7 @@ export const EditorialMenu: React.FC<EditorialMenuProps> = ({ open, onClose, go:
 
       <div className="menu-bottom">
         <div className="flex flex-wrap items-center gap-x-5 gap-y-2">
-          <LocalTime className="text-paper/70" />
-          <button
+                    <button
             type="button"
             className="motion-toggle"
             tabIndex={open ? 0 : -1}

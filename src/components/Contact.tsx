@@ -10,7 +10,6 @@ import {
   motionMatchMedia,
 } from '../engine/gsap';
 import { portfolioData } from '../data/portfolio';
-import { LocalTime } from './ui/LocalTime';
 import { Magnetic } from './ui/Magnetic';
 
 interface Social { name: string; url: string; }
@@ -213,8 +212,7 @@ export const Contact: React.FC = () => {
           <div className="md:col-span-5">
             <p className="display text-3xl">{personal.name}</p>
             <p className="muted mt-2 text-sm">{personal.tagline}</p>
-            <LocalTime className="muted mt-3 block" />
-          </div>
+                      </div>
 
           <nav className="md:col-span-4" aria-label="Social profiles">
             <ul className="flex flex-col gap-1">

@@ -14,7 +14,6 @@ import {
 import { scrollToTarget } from '../engine/scroll';
 import { portfolioData } from '../data/portfolio';
 import { Magnetic } from './ui/Magnetic';
-import { LocalTime } from './ui/LocalTime';
 
 interface TerminalStep {
   cmd: string;
@@ -347,8 +346,7 @@ export const Hero: React.FC = () => {
 
             <div data-intro className="flex items-center gap-4 text-paper/60">
               <span className="scroll-cue" aria-hidden="true" />
-              <LocalTime />
-            </div>
+                          </div>
           </div>
         </div>
 
