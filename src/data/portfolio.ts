@@ -191,7 +191,7 @@ export const portfolioData: PortfolioData = {
     eyebrow: 'About Me',
     heading: ['How I', 'work.'],
     lead:
-      "I'm a full-stack developer in Lahore, Pakistan. ADP Computer Science at Riphah International University (GPA 3.61 / 4.00), currently a BSCS 5th Semester Student at NCBA&E University. I'm building LabFlow — a multi-tenant SaaS for diagnostic labs — as my showcase project.",
+      "Full-stack developer in Lahore, Pakistan. BSCS student building LabFlow — a multi-tenant SaaS for diagnostic labs — with Django, React, and Laravel.",
     workflow: [
       {
         id: 'ticket',
