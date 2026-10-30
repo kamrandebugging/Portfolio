@@ -1041,6 +1041,28 @@ html[data-motion='reduced'] .psheet {
   transform-origin: left;
   transform: scaleX(0.2);
 }
+.flow-step-dots {
+  position: absolute;
+  right: clamp(1rem, 3vw, 2rem);
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+  z-index: 10;
+  pointer-events: none;
+}
+.flow-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: rgb(116 198 157 / 0.28);
+  transition: background 0.35s ease, transform 0.35s ease;
+}
+.flow-dot[data-active='true'] {
+  background: var(--color-leaf, #74c69d);
+  transform: scale(1.7);
+}
 
 /* Reduced motion: both scenes become plain, fully visible stacked content. */
 html[data-motion='reduced'] .why-labflow,
@@ -1093,6 +1115,7 @@ html[data-motion='reduced'] .flow-inner {
 html[data-motion='reduced'] .flow-blur,
 html[data-motion='reduced'] .flow-scrim,
 html[data-motion='reduced'] .flow-progress,
+html[data-motion='reduced'] .flow-step-dots,
 html[data-motion='reduced'] .flow-panel {
   display: none !important;
 }
@@ -1184,6 +1207,7 @@ html[data-motion='reduced'] .flow-item-img {
   .flow-blur,
   .flow-scrim,
   .flow-progress,
+  .flow-step-dots,
   .flow-panel {
     display: none !important;
   }

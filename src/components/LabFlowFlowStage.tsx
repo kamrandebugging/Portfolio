@@ -55,6 +55,8 @@ export const LabFlowFlowStage: React.FC = () => {
           }
         });
 
+        const dots = el.querySelectorAll<HTMLElement>('.flow-dot');
+
         const setA11y = (activeIndex: number) => {
           blocks.forEach((block, idx) => {
             const isActive = idx === activeIndex;
@@ -66,6 +68,9 @@ export const LabFlowFlowStage: React.FC = () => {
               block.setAttribute('aria-hidden', 'true');
               block.setAttribute('inert', '');
             }
+          });
+          dots.forEach((dot, idx) => {
+            dot.dataset.active = String(idx === activeIndex);
           });
         };
 
@@ -244,6 +249,12 @@ export const LabFlowFlowStage: React.FC = () => {
               ))}
             </div>
           </div>
+        </div>
+
+        <div className="flow-step-dots" aria-hidden="true">
+          {flow.steps.map((_, i) => (
+            <span key={i} className="flow-dot" data-active={i === 0} />
+          ))}
         </div>
 
         <div className="flow-progress" aria-hidden="true">
