@@ -96,6 +96,29 @@ export const Proof: React.FC = () => {
           ))}
         </dl>
 
+        <div className="proof-labflow-bento mt-20" data-fade>
+          <div className="proof-bento-header" aria-hidden="true">
+            <span className="proof-bento-dot" />
+            <span className="proof-bento-dot" />
+            <span className="proof-bento-dot" />
+            <span className="proof-bento-title">labflow — production stats</span>
+          </div>
+          <dl className="proof-bento-grid">
+            <div className="proof-bento-tile">
+              <dd className="proof-bento-num" data-count="7">7</dd>
+              <dt className="proof-bento-label">PRs merged</dt>
+            </div>
+            <div className="proof-bento-tile">
+              <dd className="proof-bento-num" data-count="300">300</dd>
+              <dt className="proof-bento-label">tests passing</dt>
+            </div>
+            <div className="proof-bento-tile">
+              <dd className="proof-bento-num" data-count="6">6</dd>
+              <dt className="proof-bento-label">CI checks green</dt>
+            </div>
+          </dl>
+        </div>
+
         <div className="mt-28 grid items-center gap-12 lg:grid-cols-12">
           <figure className="reveal-frame lg:col-span-5">
             <img
