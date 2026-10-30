@@ -115,37 +115,38 @@
   height: 100%;
   display: grid;
   grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.8fr);
-  align-items: end;
+  align-items: center;
   gap: 2rem;
-  padding: 7rem var(--pad-x) 6.5rem;
+  padding: clamp(4.5rem, 7svh, 6rem) var(--pad-x) clamp(3rem, 5svh, 4.5rem);
 }
 .hero-title {
-  font-size: clamp(2.5rem, 5.8vw, 5.75rem);
+  font-size: clamp(2.25rem, 5vw, 5.25rem);
   line-height: 0.98;
 }
 .hero-portrait {
   position: relative;
-  align-self: stretch;
+  align-self: center;
   display: flex;
-  align-items: flex-end;
+  align-items: center;
   justify-content: center;
   min-height: 0;
+  height: 100%;
 }
 .hero-portrait img {
   position: relative;
   z-index: 2;
   width: auto;
-  max-height: min(78svh, 46rem);
+  max-height: min(72svh, 36rem);
   object-fit: contain;
-  transform: translateY(calc(var(--cover, 0) * 6svh));
+  transform: translateY(calc(var(--cover, 0) * 4svh));
 }
 .hero-ring {
   position: absolute;
+  top: 50%;
   left: 50%;
-  bottom: 6%;
-  width: min(34rem, 92%);
+  width: min(32rem, 90%);
   aspect-ratio: 1;
-  translate: -50% 0;
+  translate: -50% -50%;
   border-radius: 9999px;
   border: 1px solid rgb(149 213 178 / 0.28);
   rotate: calc(var(--cover, 0) * 90deg);
@@ -164,11 +165,11 @@
 }
 .hero-glow {
   position: absolute;
+  top: 50%;
   left: 50%;
-  bottom: 4%;
-  width: min(40rem, 110%);
+  width: min(38rem, 105%);
   aspect-ratio: 1;
-  translate: -50% 0;
+  translate: -50% -50%;
   border-radius: 9999px;
   background: radial-gradient(
     circle,
@@ -213,25 +214,58 @@
 }
 
 @media (max-width: 767px) {
-  /* Hero: portrait on top, copy below; both drift as the hero scrolls away. */
+  /* Hero on mobile: headline -> portrait -> terminal -> actions */
+  .hero {
+    position: relative;
+    height: auto;
+    min-height: 100svh;
+    transform: none;
+    overflow: visible;
+  }
   .hero-grid {
-    grid-template-columns: 1fr;
-    align-items: start;
-    padding-top: 6rem;
-    padding-bottom: 6.5rem;
-    gap: 1rem;
-  }
-  .hero-portrait {
-    order: -1;
-    max-height: 34svh;
-  }
-  .hero-portrait img {
-    max-height: 34svh;
-    transform: translateY(calc(var(--cover, 0) * -5svh)) scale(calc(1 + var(--cover, 0) * 0.07));
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    padding-top: 5.5rem;
+    padding-bottom: 3.5rem;
+    gap: 1.25rem;
+    height: auto;
   }
   .hero-copy {
-    transform: translateY(calc(var(--cover, 0) * -7svh));
-    opacity: calc(1 - var(--cover, 0) * 0.9);
+    display: contents;
+  }
+  .hero-header {
+    order: 1;
+    width: 100%;
+  }
+  .hero-portrait {
+    order: 2;
+    width: 100%;
+    max-height: 32svh;
+    margin: 0.25rem 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .hero-portrait img {
+    max-height: 30svh;
+    width: auto;
+    object-fit: contain;
+    transform: none;
+  }
+  .hero-ring {
+    width: min(20rem, 80%);
+  }
+  .hero-glow {
+    width: min(22rem, 88%);
+  }
+  .hero-terminal-wrap {
+    order: 3;
+    width: 100%;
+  }
+  .hero-actions {
+    order: 4;
+    width: 100%;
   }
 }
 
@@ -241,18 +275,16 @@ html[data-motion='reduced'] .hero-portrait img {
   transform: none;
   opacity: 1;
 }
-@media (max-width: 1023px) {
+@media (min-width: 768px) and (max-width: 1023px) {
   .hero-grid {
-    grid-template-columns: 1fr;
-    align-items: start;
-    gap: 1rem;
-  }
-  .hero-portrait {
-    order: -1;
-    max-height: 36svh;
+    grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+    align-items: center;
+    gap: 1.5rem;
+    padding-top: 5.5rem;
+    padding-bottom: 3.5rem;
   }
   .hero-portrait img {
-    max-height: 36svh;
+    max-height: min(55svh, 28rem);
   }
 }
 

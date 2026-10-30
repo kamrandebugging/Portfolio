@@ -38,7 +38,7 @@ const TERMINAL_STEPS: TerminalStep[] = [
 const Cursor: React.FC = () => (
   <span
     aria-hidden="true"
-    className="ml-1 inline-block h-[1.05em] w-2 translate-y-[2px] bg-[#52b788] animate-pulse"
+    className="ml-1 inline-block h-[1.05em] w-1.5 sm:w-2 translate-y-[2px] bg-[#52b788] animate-pulse"
     style={{ animationDuration: '0.8s' }}
   />
 );
@@ -64,24 +64,24 @@ const HeroTerminal: React.FC = () => {
       if (charCount < currentItem.cmd.length) {
         timer = setTimeout(() => {
           setCharCount((prev) => prev + 1);
-        }, 38);
+        }, 36);
       } else {
         timer = setTimeout(() => {
           setPhase('output');
           setCharCount(0);
-        }, 220);
+        }, 200);
       }
     } else {
       if (charCount < currentItem.output.length) {
         timer = setTimeout(() => {
           setCharCount((prev) => prev + 1);
-        }, 18);
+        }, 16);
       } else {
         timer = setTimeout(() => {
           setStepIndex((prev) => prev + 1);
           setPhase('cmd');
           setCharCount(0);
-        }, 320);
+        }, 280);
       }
     }
 
@@ -101,23 +101,23 @@ const HeroTerminal: React.FC = () => {
       data-intro
       onClick={handleFastForward}
       title={isCompleted ? undefined : 'Click to complete'}
-      className="w-full max-w-[34rem] overflow-hidden rounded-lg border border-[rgb(216_243_220/0.14)] bg-[#081c15]/95 text-[#d8f3dc] shadow-2xl backdrop-blur-sm cursor-default"
+      className="w-full max-w-[34rem] overflow-hidden rounded-lg border border-[rgb(216_243_220/0.14)] bg-[#081c15]/95 text-[#d8f3dc] shadow-xl backdrop-blur-sm cursor-default"
       role="region"
       aria-label="Interactive Terminal Profile"
     >
       {/* Terminal Titlebar Chrome */}
-      <div className="flex items-center justify-between border-b border-[rgb(216_243_220/0.12)] bg-[#1b4332]/40 px-3.5 py-2 select-none">
+      <div className="flex items-center justify-between border-b border-[rgb(216_243_220/0.12)] bg-[#1b4332]/40 px-3 py-1.5 select-none">
         <div className="flex items-center gap-1.5" aria-hidden="true">
-          <span className="h-2.5 w-2.5 rounded-full bg-[#2d6a4f]" />
-          <span className="h-2.5 w-2.5 rounded-full bg-[#40916c]" />
-          <span className="h-2.5 w-2.5 rounded-full bg-[#52b788]" />
+          <span className="h-2 w-2 rounded-full bg-[#2d6a4f]" />
+          <span className="h-2 w-2 rounded-full bg-[#40916c]" />
+          <span className="h-2 w-2 rounded-full bg-[#52b788]" />
         </div>
-        <span className="font-mono text-xs text-[#95d5b2]/80">bash ~ kamran</span>
+        <span className="font-mono text-[11px] text-[#95d5b2]/80">bash ~ kamran</span>
         <span className="w-10 text-right font-mono text-[10px] text-[#74c69d]/60">80×24</span>
       </div>
 
       {/* Terminal Output */}
-      <div className="p-4 font-mono text-xs sm:text-sm leading-relaxed space-y-2.5 min-h-[10.5rem]">
+      <div className="p-3 sm:px-3.5 sm:py-2.5 font-mono text-xs sm:text-[13px] leading-snug space-y-1.5 min-h-[7.5rem] max-h-[10.5rem] overflow-y-auto">
         {TERMINAL_STEPS.map((step, idx) => {
           const isPastStep = idx < stepIndex;
           const isCurrentStep = idx === stepIndex;
@@ -137,10 +137,14 @@ const HeroTerminal: React.FC = () => {
             ? step.output.slice(0, charCount)
             : '';
 
+          const isLastItem = idx === TERMINAL_STEPS.length - 1;
+          const showCursorOnOutput =
+            (isCurrentStep && phase === 'output') || (isCompleted && isLastItem);
+
           return (
-            <div key={step.cmd} className="space-y-1">
+            <div key={step.cmd} className="space-y-0.5">
               {/* Command row */}
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-1.5">
                 <span className="text-[#52b788] select-none font-bold">$</span>
                 <span className="text-[#d8f3dc]">{displayCmd}</span>
                 {isCurrentStep && phase === 'cmd' && <Cursor />}
@@ -148,23 +152,17 @@ const HeroTerminal: React.FC = () => {
 
               {/* Output row */}
               {showOutput && (
-                <div className="flex items-start gap-2 pl-2 text-[#95d5b2]">
-                  <span className="text-[#74c69d] select-none">→</span>
-                  <span className="text-[#b7e4c7]">{displayOutput}</span>
-                  {isCurrentStep && phase === 'output' && <Cursor />}
+                <div className="flex items-start gap-1.5 pl-2 text-[#95d5b2]">
+                  <span className="text-[#74c69d] select-none font-bold">→</span>
+                  <span className="text-[#b7e4c7] break-words">
+                    {displayOutput}
+                    {showCursorOnOutput && <Cursor />}
+                  </span>
                 </div>
               )}
             </div>
           );
         })}
-
-        {/* Final Prompt with active cursor once typing finishes */}
-        {isCompleted && (
-          <div className="flex items-center gap-2 pt-0.5">
-            <span className="text-[#52b788] select-none font-bold">$</span>
-            <Cursor />
-          </div>
-        )}
       </div>
     </div>
   );
@@ -261,46 +259,52 @@ export const Hero: React.FC = () => {
       <div className="hero-veil" aria-hidden="true" />
 
       <div className="hero-grid">
-        <div className="hero-copy relative z-10 flex flex-col items-start gap-7">
-          <div data-intro className="status-pill">
-            <span className="status-dot" aria-hidden="true" />
-            Open to paid remote internships
+        <div className="hero-copy relative z-10 flex flex-col items-start gap-3 sm:gap-4 lg:gap-4 justify-center">
+          <div className="hero-header flex flex-col items-start gap-2.5 sm:gap-3 w-full">
+            <div data-intro className="status-pill">
+              <span className="status-dot" aria-hidden="true" />
+              Open to paid remote internships
+            </div>
+
+            <h1
+              data-title
+              className="display hero-title"
+              aria-label={personal.headline.join(' ').replace(/<[^>]+>/g, '')}
+              dangerouslySetInnerHTML={{ __html: personal.headline.join('<br />') }}
+            />
           </div>
 
-          <h1
-            data-title
-            className="display hero-title"
-            aria-label={personal.headline.join(' ').replace(/<[^>]+>/g, '')}
-            dangerouslySetInnerHTML={{ __html: personal.headline.join('<br />') }}
-          />
+          <div className="hero-terminal-wrap w-full">
+            <HeroTerminal />
+          </div>
 
-          <HeroTerminal />
-
-          <div data-intro className="flex flex-wrap items-center gap-3">
-            <Magnetic>
-              <button
-                type="button"
-                className="btn btn-solid"
-                onClick={() => scrollToTarget('#projects')}
-                data-cursor="Scroll"
-              >
-                View projects
-                <ArrowDown className="h-4 w-4" aria-hidden="true" />
-              </button>
-            </Magnetic>
-            <a className="btn" href={`mailto:${personal.email}`}>
-              Email me
-            </a>
-            {personal.resumeUrl && (
-              <a className="btn" href={personal.resumeUrl} download>
-                Résumé
+          <div className="hero-actions flex flex-col items-start gap-3 sm:gap-3.5 w-full">
+            <div data-intro className="flex flex-wrap items-center gap-3">
+              <Magnetic>
+                <button
+                  type="button"
+                  className="btn btn-solid"
+                  onClick={() => scrollToTarget('#projects')}
+                  data-cursor="Scroll"
+                >
+                  View projects
+                  <ArrowDown className="h-4 w-4" aria-hidden="true" />
+                </button>
+              </Magnetic>
+              <a className="btn" href={`mailto:${personal.email}`}>
+                Email me
               </a>
-            )}
-          </div>
+              {personal.resumeUrl && (
+                <a className="btn" href={personal.resumeUrl} download>
+                  Résumé
+                </a>
+              )}
+            </div>
 
-          <div data-intro className="mt-2 flex items-center gap-4 text-paper/60">
-            <span className="scroll-cue" aria-hidden="true" />
-            <LocalTime />
+            <div data-intro className="flex items-center gap-4 text-paper/60">
+              <span className="scroll-cue" aria-hidden="true" />
+              <LocalTime />
+            </div>
           </div>
         </div>
 
