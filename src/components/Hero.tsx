@@ -290,17 +290,16 @@ export const Hero: React.FC = () => {
       <div className="hero-grid">
         <div className="hero-copy relative z-10 flex flex-col items-start gap-3 sm:gap-4 lg:gap-4 justify-center">
           <div className="hero-header flex flex-col items-start gap-2.5 sm:gap-3 w-full">
-            <div data-intro className="status-pill font-semibold text-xs sm:text-sm tracking-wide bg-[#1b4332]/60 border border-[#52b788]/40 shadow-md px-3.5 py-1.5 rounded-full inline-flex items-center gap-2">
-              <span className="status-dot animate-pulse" aria-hidden="true" />
-              Open to internships + junior roles
-            </div>
-
             <h1
               data-title
               className="display hero-title"
               aria-label={personal.headline.join(' ').replace(/<[^>]+>/g, '')}
               dangerouslySetInnerHTML={{ __html: personal.headline.join('<br />') }}
             />
+
+            <p data-intro className="font-sans text-base sm:text-lg text-[var(--color-mint)]">
+              Open to internships and junior roles.
+            </p>
 
             <div
               data-intro
