@@ -33,6 +33,13 @@ export interface PrincipleItem {
   desc: string;
 }
 
+export interface WorkflowStage {
+  id: string;
+  label: string;
+  visual: string;
+  caption: string;
+}
+
 export interface StatItem {
   value: string;
   label: string;
@@ -83,6 +90,7 @@ export interface PortfolioData {
     heading: string[];
     lead: string;
     principles: PrincipleItem[];
+    workflow: WorkflowStage[];
   };
   projects: ProjectItem[];
   achievements: {
@@ -184,6 +192,38 @@ export const portfolioData: PortfolioData = {
     heading: ['How I', 'work.'],
     lead:
       "I'm a full-stack developer in Lahore, Pakistan. ADP Computer Science at Riphah International University (GPA 3.61 / 4.00), currently a BSCS 5th Semester Student at NCBA&E University. I'm building LabFlow — a multi-tenant SaaS for diagnostic labs — as my showcase project.",
+    workflow: [
+      {
+        id: 'ticket',
+        label: 'TICKET',
+        visual: 'KAN-53 · Tenant provisioning',
+        caption: 'Start from a real ticket — never a tutorial.',
+      },
+      {
+        id: 'branch',
+        label: 'BRANCH',
+        visual: 'git checkout -b feature/tenant-provisioning',
+        caption: 'The right stack for the job, on its own branch.',
+      },
+      {
+        id: 'tdd',
+        label: 'TDD',
+        visual: '3 test lines appear red as "FAIL", then flip one by one to green "PASS"',
+        caption: 'Red → green. Own the whole flow.',
+      },
+      {
+        id: 'ci',
+        label: 'CI',
+        visual: '6 check rows; each shows a spinner then ticks green, one after another, GitHub-Actions style',
+        caption: 'Keep CI green — 6 checks, 300 tests.',
+      },
+      {
+        id: 'ship',
+        label: 'SHIP',
+        visual: 'merged into main · deployed',
+        caption: 'Ship, then improve.',
+      },
+    ],
     principles: [
       {
         num: '01',
