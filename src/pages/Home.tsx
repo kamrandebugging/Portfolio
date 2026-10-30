@@ -8,7 +8,6 @@ import { Projects } from '../components/Projects';
 import { Proof } from '../components/Proof';
 import { Experience } from '../components/Experience';
 import { Contact } from '../components/Contact';
-import { SectionDivider } from '../components/ui/SectionDivider';
 import { scrollToTarget } from '../engine/scroll';
 
 export const Home: React.FC = () => {
@@ -39,12 +38,9 @@ export const Home: React.FC = () => {
           <Hero />
           <About />
         </div>
-        <SectionDivider index="02" label="projects" />
-        <Projects />
-        <SectionDivider index="03" label="proof" />
-        <Proof />
-        <SectionDivider index="04" label="experience" />
-        <Experience />
+                <Projects />
+                <Proof />
+                <Experience />
       </main>
 
       <div id="contact-sentinel" className="footer-sentinel" aria-hidden="true" />

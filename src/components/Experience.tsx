@@ -26,14 +26,13 @@ export const Experience: React.FC = () => {
 
         <ol className="mt-16">
           {experience.entries.map((item) => (
-            <li key={item.num} className="relative grid gap-3 py-9 md:grid-cols-[4rem_1.3fr_1fr] md:gap-8">
+            <li key={item.num} className="relative grid gap-3 py-9 md:grid-cols-[1.3fr_1fr] md:gap-8">
               <span
                 data-line
                 className="absolute inset-x-0 top-0 h-px"
                 style={{ background: 'var(--line)' }}
               />
-              <span className="font-mono text-sm tabular-nums text-[var(--accent)]">{item.num}</span>
-              <h3 data-fade className="display text-[clamp(1.5rem,2.6vw,2.4rem)]">
+                            <h3 data-fade className="display text-[clamp(1.5rem,2.6vw,2.4rem)]">
                 {item.title}
               </h3>
               <p data-fade className="muted leading-relaxed">

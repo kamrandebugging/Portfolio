@@ -131,10 +131,7 @@ export const EditorialMenu: React.FC<EditorialMenuProps> = ({ open, onClose, go:
             data-cursor="Go"
             className={`menu-panel ${PANEL_TONES[i % PANEL_TONES.length]}`}
           >
-            <span className="font-mono text-xs tabular-nums opacity-80">
-              {String(i + 1).padStart(2, '0')}
-            </span>
-            <span>
+                        <span>
               <span className="block overflow-hidden">
                 <span className="menu-rise display block text-[clamp(2rem,4.2vw,4.25rem)]">
                   {link.label}

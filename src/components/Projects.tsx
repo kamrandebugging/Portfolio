@@ -247,10 +247,7 @@ export const Projects: React.FC = () => {
                   aria-haspopup="dialog"
                   onClick={() => openRow(i)}
                 >
-                  <span className="font-mono text-xs tabular-nums muted">
-                    {String(featured.length + i + 1).padStart(2, '0')}
-                  </span>
-                  <span className="display text-[clamp(1.6rem,3vw,2.6rem)]">{project.name}</span>
+                                    <span className="display text-[clamp(1.6rem,3vw,2.6rem)]">{project.name}</span>
                   <span className="text-sm muted">{project.cat}</span>
                   <span className="font-mono text-xs uppercase tracking-[0.1em] muted">
                     {project.outcome}
