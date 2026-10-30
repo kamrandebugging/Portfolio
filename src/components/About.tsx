@@ -7,7 +7,7 @@ export const About: React.FC = () => {
   const root = useRef<HTMLElement>(null);
   const { story } = portfolioData;
   useReveals(root);
-  const { replay } = usePipeline(root);
+  usePipeline(root);
 
   const renderStageVisual = (stageId: string) => {
     switch (stageId) {
@@ -194,17 +194,7 @@ export const About: React.FC = () => {
                 Pipeline · Ticket to Ship
               </span>
             </div>
-            <button
-              type="button"
-              onClick={replay}
-              className="pipeline-replay-btn inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-[var(--line)] bg-[var(--color-paper)] text-[var(--color-ink)] hover:border-[var(--color-forest)] font-mono text-xs font-semibold tracking-wide transition-all shadow-sm cursor-pointer"
-              aria-label="Replay ticket-to-ship pipeline"
-            >
-              <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                <polygon points="5 3 19 12 5 21 5 3" fill="currentColor" />
-              </svg>
-              <span>Run it</span>
-            </button>
+            <span className="pipeline-scroll-hint font-mono text-xs text-[var(--fg-muted)] tracking-wider">scroll to run ↓</span>
           </div>
 
           <div className="pipeline-track relative w-full h-1 bg-[var(--line)] rounded-full overflow-hidden my-4" aria-hidden="true">
