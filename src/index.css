@@ -275,6 +275,12 @@ html:not([data-motion='reduced']) .skel:not(.skel--done) {
   z-index: 0;
 }
 
+/* ---------- Rotating headline word ---------- */
+[data-rotword] {
+  display: inline;
+  transition: opacity 0.18s ease;
+}
+
 /* ---------- TiltCard glare overlay ---------- */
 .tilt-glare {
   position: absolute;

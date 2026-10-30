@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { ArrowDown } from 'lucide-react';
 import { HeroParticles } from './ui/HeroParticles';
 import {
@@ -169,6 +169,10 @@ const HeroTerminal: React.FC = () => {
   );
 };
 
+const ROT_WORDS = ['software', 'APIs', 'dashboards', 'SaaS'];
+const ROT_INTERVAL = 2600;
+const ROT_FADE = 200;
+
 export const Hero: React.FC = () => {
   const root = useRef<HTMLElement>(null);
   const { personal } = portfolioData;
@@ -247,6 +251,30 @@ export const Hero: React.FC = () => {
     },
     { scope: root }
   );
+
+  useEffect(() => {
+    const reduced =
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches ||
+      document.documentElement.dataset.motion === 'reduced';
+    if (reduced) return;
+
+    let idx = 0;
+    const rotate = () => {
+      const span = root.current?.querySelector<HTMLElement>('[data-rotword]');
+      if (!span) return;
+      span.style.opacity = '0';
+      setTimeout(() => {
+        idx = (idx + 1) % ROT_WORDS.length;
+        if (span.isConnected) {
+          span.textContent = ROT_WORDS[idx];
+          span.style.opacity = '';
+        }
+      }, ROT_FADE);
+    };
+
+    const id = setInterval(rotate, ROT_INTERVAL);
+    return () => clearInterval(id);
+  }, []);
 
   return (
     <section
