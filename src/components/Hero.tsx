@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { ArrowDown } from 'lucide-react';
 import { HeroParticles } from './ui/HeroParticles';
 import {
