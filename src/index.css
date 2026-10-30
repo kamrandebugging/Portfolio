@@ -265,6 +265,195 @@ html:not([data-motion='reduced']) .skel:not(.skel--done) {
 .hero-cs-media {
   background: var(--color-pine);
 }
+/* ---------- Command Palette ---------- */
+.cmdk-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  background: rgb(8 28 21 / 0.72);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding-top: clamp(5rem, 12vh, 9rem);
+  padding-inline: var(--pad-x);
+}
+
+.cmdk {
+  width: 100%;
+  max-width: 600px;
+  background: var(--color-forest);
+  border: 1px solid rgb(82 183 136 / 0.22);
+  border-radius: 6px;
+  overflow: hidden;
+  box-shadow: 0 28px 60px -18px rgb(0 0 0 / 0.7), 0 0 0 1px rgb(82 183 136 / 0.08);
+  font-family: var(--font-mono);
+}
+
+.cmdk-input-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.85rem 1rem;
+}
+
+.cmdk-prompt {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: var(--color-leaf);
+  flex-shrink: 0;
+  letter-spacing: 0.05em;
+}
+
+.cmdk-input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  font-family: var(--font-mono);
+  font-size: 0.875rem;
+  color: var(--color-paper);
+  caret-color: var(--color-leaf);
+}
+
+.cmdk-input::placeholder {
+  color: rgb(216 243 220 / 0.3);
+}
+
+.cmdk-esc-badge {
+  flex-shrink: 0;
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.08em;
+  padding: 0.2rem 0.5rem;
+  border: 1px solid rgb(216 243 220 / 0.2);
+  border-radius: 3px;
+  color: rgb(216 243 220 / 0.45);
+  cursor: default;
+}
+
+.cmdk-divider {
+  height: 1px;
+  background: rgb(216 243 220 / 0.1);
+}
+
+.cmdk-list {
+  list-style: none;
+  max-height: min(360px, 55vh);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 0.35rem 0;
+  scrollbar-width: thin;
+  scrollbar-color: rgb(82 183 136 / 0.25) transparent;
+}
+
+.cmdk-empty {
+  padding: 1rem 1.25rem;
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: rgb(216 243 220 / 0.35);
+}
+
+.cmdk-item {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  padding: 0.6rem 1rem;
+  cursor: default;
+  transition: background 0.12s;
+}
+
+.cmdk-item--active {
+  background: rgb(82 183 136 / 0.14);
+}
+
+.cmdk-glyph {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: var(--color-leaf);
+  flex-shrink: 0;
+  width: 2.4rem;
+  text-align: center;
+  letter-spacing: 0.04em;
+}
+
+.cmdk-label {
+  flex: 1;
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  color: var(--color-paper);
+  letter-spacing: 0.01em;
+}
+
+.cmdk-item--active .cmdk-label {
+  color: var(--color-mint);
+}
+
+.cmdk-hint {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.1em;
+  color: rgb(216 243 220 / 0.3);
+  text-transform: lowercase;
+  flex-shrink: 0;
+}
+
+.cmdk-item--active .cmdk-hint {
+  color: rgb(149 213 178 / 0.55);
+}
+
+.cmdk-footer {
+  display: flex;
+  gap: 1.25rem;
+  padding: 0.55rem 1rem;
+  border-top: 1px solid rgb(216 243 220 / 0.08);
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.08em;
+  color: rgb(216 243 220 / 0.3);
+}
+
+.cmdk-footer kbd {
+  font-family: var(--font-mono);
+  color: rgb(216 243 220 / 0.55);
+}
+
+/* Ctrl K hint pill in nav */
+.nav-cmdk-hint {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.28rem 0.65rem;
+  border: 1px solid rgb(216 243 220 / 0.18);
+  border-radius: 4px;
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.1em;
+  color: rgb(216 243 220 / 0.45);
+  cursor: pointer;
+  background: transparent;
+  transition: color 0.25s, border-color 0.25s;
+  white-space: nowrap;
+}
+
+.nav-cmdk-hint:hover,
+.nav-cmdk-hint:focus-visible {
+  color: var(--color-paper);
+  border-color: rgb(216 243 220 / 0.4);
+}
+
+@media (max-width: 479px) {
+  .nav-cmdk-hint-label {
+    display: none;
+  }
+}
+
+html[data-motion='reduced'] .cmdk,
+html[data-motion='reduced'] .cmdk-backdrop {
+  transition: none !important;
+  animation: none !important;
+}
+
 .flow-blur {
   background: rgb(8 28 21);
 }

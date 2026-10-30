@@ -4,9 +4,13 @@ import { portfolioData } from '../data/portfolio';
 import { goToSection } from '../engine/scroll';
 import { EditorialMenu } from './EditorialMenu';
 import { LocalTime } from './ui/LocalTime';
+import { CommandPalette } from './CommandPalette';
+
+const isMac = typeof navigator !== 'undefined' && /Mac|iPhone|iPad|iPod/.test(navigator.platform);
 
 export const Navbar: React.FC = () => {
   const [open, setOpen] = useState(false);
+  const [paletteOpen, setPaletteOpen] = useState(false);
   const trigger = useRef<HTMLButtonElement>(null);
   const wasOpen = useRef(false);
   const close = useCallback(() => setOpen(false), []);
@@ -19,6 +23,21 @@ export const Navbar: React.FC = () => {
     if (wasOpen.current && !open) trigger.current?.focus();
     wasOpen.current = open;
   }, [open]);
+
+  // Global Ctrl+K / Cmd+K to open palette; Esc to close.
+  useEffect(() => {
+    const handler = (e: KeyboardEvent) => {
+      if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+        e.preventDefault();
+        setPaletteOpen((v) => !v);
+      }
+      if (e.key === 'Escape') {
+        setPaletteOpen(false);
+      }
+    };
+    window.addEventListener('keydown', handler);
+    return () => window.removeEventListener('keydown', handler);
+  }, []);
 
   return (
     <>
@@ -57,6 +76,18 @@ export const Navbar: React.FC = () => {
           <LocalTime className="hidden text-[var(--ui-fg-muted)] md:inline" />
 
           <button
+            type="button"
+            className="nav-cmdk-hint"
+            onClick={() => setPaletteOpen(true)}
+            aria-label="Open command palette"
+            aria-keyshortcuts={isMac ? 'Meta+K' : 'Control+K'}
+          >
+            <span className="nav-cmdk-hint-label">cmd</span>
+            <kbd>{isMac ? '⌘' : 'Ctrl'}</kbd>
+            <kbd>K</kbd>
+          </button>
+
+          <button
             ref={trigger}
             type="button"
             onClick={() => setOpen(true)}
@@ -72,6 +103,7 @@ export const Navbar: React.FC = () => {
       </header>
 
       <EditorialMenu open={open} onClose={close} go={go} />
+      <CommandPalette open={paletteOpen} onClose={() => setPaletteOpen(false)} />
     </>
   );
 };
