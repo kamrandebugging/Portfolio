@@ -474,6 +474,99 @@ html[data-motion='reduced'] .bento-cursor { animation: none; }
   color: rgb(216 243 220 / 0.45);
 }
 
+/* ---------- Contact Terminal ---------- */
+.contact-terminal {
+  max-width: 40rem;
+  border-radius: 0.75rem;
+  border: 1px solid rgb(82 183 136 / 0.16);
+  background: #081c15;
+  overflow: hidden;
+  font-family: var(--font-mono);
+}
+.contact-terminal-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.5rem 1rem;
+  border-bottom: 1px solid rgb(82 183 136 / 0.1);
+  background: rgb(27 67 50 / 0.35);
+}
+.contact-terminal-dot {
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+}
+.contact-terminal-dot:nth-child(1) { background: #2d6a4f; }
+.contact-terminal-dot:nth-child(2) { background: #40916c; }
+.contact-terminal-dot:nth-child(3) { background: #52b788; }
+.contact-terminal-name {
+  margin-left: 0.5rem;
+  font-size: 0.68rem;
+  color: rgb(116 198 157 / 0.5);
+  letter-spacing: 0.06em;
+}
+.contact-terminal-body {
+  padding: 1rem 1.25rem 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  font-size: 0.78rem;
+}
+.contact-terminal-row {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  line-height: 1.6;
+}
+.contact-terminal-spacer {
+  margin-top: 0.6rem;
+}
+.contact-terminal-prompt {
+  color: #52b788;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+.contact-terminal-arrow {
+  color: #74c69d;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+.contact-terminal-cmd {
+  color: #d8f3dc;
+}
+.contact-terminal-val {
+  color: #b7e4c7;
+}
+.contact-terminal-link {
+  text-decoration: none;
+  transition: color 0.2s;
+}
+.contact-terminal-link:hover {
+  color: #74c69d;
+  text-decoration: underline;
+}
+.contact-terminal-copy {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  margin-left: auto;
+  padding: 0.2rem 0.55rem;
+  border-radius: 3px;
+  border: 1px solid rgb(82 183 136 / 0.25);
+  background: transparent;
+  color: rgb(116 198 157 / 0.7);
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  cursor: pointer;
+  transition: border-color 0.2s, color 0.2s, background 0.2s;
+}
+.contact-terminal-copy:hover {
+  border-color: rgb(82 183 136 / 0.5);
+  background: rgb(82 183 136 / 0.08);
+  color: #74c69d;
+}
+
 /* ---------- Proof LabFlow Bento ---------- */
 .proof-labflow-bento {
   max-width: 52rem;

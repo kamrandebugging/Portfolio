@@ -1,5 +1,5 @@
-import React, { useEffect, useRef } from 'react';
-import { ArrowUpRight } from 'lucide-react';
+import React, { useEffect, useRef, useState, useCallback } from 'react';
+import { ArrowUpRight, Copy, Check } from 'lucide-react';
 import {
   gsap,
   ScrollTrigger,
@@ -12,6 +12,70 @@ import {
 import { portfolioData } from '../data/portfolio';
 import { LocalTime } from './ui/LocalTime';
 import { Magnetic } from './ui/Magnetic';
+
+interface Social { name: string; url: string; }
+
+const ContactTerminal: React.FC<{ email: string; socials: Social[] }> = ({ email, socials }) => {
+  const [copied, setCopied] = useState(false);
+  const copy = useCallback(() => {
+    navigator.clipboard.writeText(email).then(() => {
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    });
+  }, [email]);
+
+  const urlLabel = (url: string) => url.replace(/^https?:\/\//, '');
+
+  return (
+    <div data-contact-fade className="contact-terminal mt-14">
+      <div className="contact-terminal-bar" aria-hidden="true">
+        <span className="contact-terminal-dot" />
+        <span className="contact-terminal-dot" />
+        <span className="contact-terminal-dot" />
+        <span className="contact-terminal-name">bash ~ kamran</span>
+      </div>
+      <div className="contact-terminal-body">
+        <div className="contact-terminal-row">
+          <span className="contact-terminal-prompt">$</span>
+          <span className="contact-terminal-cmd">contact --email</span>
+        </div>
+        <div className="contact-terminal-row contact-terminal-output">
+          <span className="contact-terminal-arrow">→</span>
+          <span className="contact-terminal-val">{email}</span>
+          <button
+            type="button"
+            className="contact-terminal-copy"
+            onClick={copy}
+            aria-label={copied ? 'Copied!' : 'Copy email address'}
+          >
+            {copied
+              ? <Check className="h-3.5 w-3.5" aria-hidden="true" />
+              : <Copy className="h-3.5 w-3.5" aria-hidden="true" />}
+            <span>{copied ? 'copied' : 'copy'}</span>
+          </button>
+        </div>
+
+        <div className="contact-terminal-row contact-terminal-spacer">
+          <span className="contact-terminal-prompt">$</span>
+          <span className="contact-terminal-cmd">contact --socials</span>
+        </div>
+        {socials.map((s) => (
+          <div key={s.name} className="contact-terminal-row contact-terminal-output">
+            <span className="contact-terminal-arrow">→</span>
+            <a
+              href={s.url}
+              target="_blank"
+              rel="noreferrer noopener"
+              className="contact-terminal-val contact-terminal-link"
+            >
+              {urlLabel(s.url)}
+            </a>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
 
 /**
  * Footer reveal: on desktop this sits fixed behind the page and is uncovered
@@ -138,6 +202,8 @@ export const Contact: React.FC = () => {
               </a>
             </Magnetic>
           </div>
+
+          <ContactTerminal email={contact.email} socials={contact.socials} />
         </div>
 
         <div
