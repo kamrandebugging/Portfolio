@@ -17,10 +17,7 @@ export const Experience: React.FC = () => {
       className="tone-dark px-[var(--pad-x)] py-28 md:py-36"
     >
       <div className="mx-auto max-w-[88rem]">
-        <span data-fade className="eyebrow">
-          {experience.eyebrow}
-        </span>
-        <h2 data-split className="display mt-6 text-[clamp(3.25rem,8vw,8rem)]">
+        <h2 data-split className="display text-[clamp(3.25rem,8vw,8rem)]">
           What I&rsquo;ve <em>done.</em>
         </h2>
 

@@ -175,10 +175,7 @@ export const About: React.FC = () => {
     >
       <div className="mx-auto grid max-w-[88rem] gap-16 lg:grid-cols-12">
         <div className="lg:col-span-5">
-          <span data-fade className="eyebrow">
-            {story.eyebrow}
-          </span>
-          <h2 data-split className="display mt-6 text-[clamp(3.5rem,9vw,8.5rem)]">
+          <h2 data-split className="display text-[clamp(3.5rem,9vw,8.5rem)]">
             {story.heading[0]} <em>{story.heading[1]}</em>
           </h2>
           <p data-fade className="muted mt-8 max-w-[32rem] text-lg leading-relaxed">
@@ -187,13 +184,8 @@ export const About: React.FC = () => {
         </div>
 
         <div className="pipeline-container lg:col-span-7 lg:pt-4">
-          <div className="pipeline-header flex items-center justify-between pb-4 border-b border-[var(--line)]">
-            <div className="flex items-center gap-2">
-              <span className="inline-block w-2 h-2 rounded-full bg-[var(--accent)] animate-pulse" />
-              <span className="font-mono text-xs uppercase tracking-wider text-[var(--fg-muted)]">
-                Pipeline · Ticket to Ship
-              </span>
-            </div>
+          <div className="pipeline-header flex items-center justify-end pb-4 border-b border-[var(--line)]">
+            
             <span className="pipeline-scroll-hint font-mono text-xs text-[var(--fg-muted)] tracking-wider">scroll to run ↓</span>
           </div>
 

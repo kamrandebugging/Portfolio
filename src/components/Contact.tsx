@@ -171,12 +171,9 @@ export const Contact: React.FC = () => {
     >
       <div className="mx-auto flex min-h-[inherit] max-w-[88rem] flex-col justify-between gap-16 px-[var(--pad-x)] pb-10 pt-28">
         <div>
-          <span data-contact-fade className="eyebrow">
-            {contact.eyebrow}
-          </span>
           <h2
             data-contact-title
-            className="display mt-6 text-[clamp(3rem,8.4vw,9rem)]"
+            className="display text-[clamp(3rem,8.4vw,9rem)]"
           >
             {contact.heading[0]} {contact.heading[1]} <em>{contact.heading[2]}</em>
           </h2>

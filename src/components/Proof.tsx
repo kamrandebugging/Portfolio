@@ -73,10 +73,7 @@ export const Proof: React.FC = () => {
       className="tone-light px-[var(--pad-x)] py-28 md:py-36"
     >
       <div className="mx-auto max-w-[88rem]">
-        <span data-fade className="eyebrow">
-          {impact.eyebrow}
-        </span>
-        <h2 data-split className="display mt-6 text-[clamp(3.25rem,8vw,8rem)]">
+        <h2 data-split className="display text-[clamp(3.25rem,8vw,8rem)]">
           {impact.heading[0]} <em>{impact.heading[1]}</em>
         </h2>
 
@@ -119,10 +116,7 @@ export const Proof: React.FC = () => {
             />
           </figure>
           <div className="lg:col-span-6 lg:col-start-7">
-            <span data-fade className="eyebrow">
-              {achievements.eyebrow}
-            </span>
-            <h3 data-split className="display mt-6 text-[clamp(2.4rem,5vw,5rem)]">
+            <h3 data-split className="display text-[clamp(2.4rem,5vw,5rem)]">
               {achievements.title}
             </h3>
             <p data-fade className="muted mt-6 max-w-[34rem] text-lg leading-relaxed">

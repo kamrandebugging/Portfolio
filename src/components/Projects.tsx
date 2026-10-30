@@ -183,10 +183,7 @@ export const Projects: React.FC = () => {
       <div className="mx-auto max-w-[88rem]">
         <div className="mb-16 flex flex-wrap items-end justify-between gap-6">
           <div>
-            <span data-fade className="eyebrow">
-              Featured work
-            </span>
-            <h2 data-split className="display mt-6 text-[clamp(3.25rem,8vw,8rem)]">
+            <h2 data-split className="display text-[clamp(3.25rem,8vw,8rem)]">
               Featured <em>Projects.</em>
             </h2>
           </div>
@@ -231,7 +228,7 @@ export const Projects: React.FC = () => {
 
         <div className="mt-24">
           <div className="mb-6 flex items-center justify-between" data-fade>
-            <span className="eyebrow">More work</span>
+            <h3 className="display text-2xl">More work</h3>
             <span className="font-mono text-xs uppercase tracking-[0.16em] muted">
               Hover to preview · click to open
             </span>
