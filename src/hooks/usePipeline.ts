@@ -1,13 +1,8 @@
-import { RefObject, useRef } from 'react';
-import { gsap, ScrollTrigger, useGSAP, MOTION_OK, motionMatchMedia } from '../engine/gsap';
+import { RefObject } from 'react';
+import { gsap, useGSAP, MOTION_OK, motionMatchMedia } from '../engine/gsap';
+import { isReduced } from '../engine/motion';
 
-export interface UsePipelineReturn {
-  replay: () => void;
-}
-
-export function usePipeline(root: RefObject<HTMLElement | null>): UsePipelineReturn {
-  const tlRef = useRef<gsap.core.Timeline | null>(null);
-
+export function usePipeline(root: RefObject<HTMLElement | null>): void {
   useGSAP(
     () => {
       if (!root.current) return;
@@ -15,8 +10,9 @@ export function usePipeline(root: RefObject<HTMLElement | null>): UsePipelineRet
 
       mm.add(MOTION_OK, () => {
         const container = root.current?.querySelector<HTMLElement>('.pipeline-container');
-        if (!container) return;
+        if (!container || !root.current) return;
 
+        const scrollHint = container.querySelector<HTMLElement>('.pipeline-scroll-hint');
         const connectorFill = container.querySelector<HTMLElement>('.pipeline-line-fill');
         const nodes = gsap.utils.toArray<HTMLElement>('.pipeline-node', container);
 
@@ -46,6 +42,35 @@ export function usePipeline(root: RefObject<HTMLElement | null>): UsePipelineRet
           node.classList.add(`is-${state}`);
         };
 
+        // Node states derive ONLY from timeline progress (0.0 to 1.0)
+        // Stage boundaries at 0.0 / 0.2 / 0.4 / 0.6 / 0.8 / 1.0
+        const updateNodeStates = (p: number) => {
+          // Stage 1: TICKET (0.0 .. 0.2)
+          if (p < 0.005) setNodeState(0, 'upcoming');
+          else if (p < 0.2) setNodeState(0, 'active');
+          else setNodeState(0, 'done');
+
+          // Stage 2: BRANCH (0.2 .. 0.4)
+          if (p < 0.2) setNodeState(1, 'upcoming');
+          else if (p < 0.4) setNodeState(1, 'active');
+          else setNodeState(1, 'done');
+
+          // Stage 3: TDD (0.4 .. 0.6)
+          if (p < 0.4) setNodeState(2, 'upcoming');
+          else if (p < 0.6) setNodeState(2, 'active');
+          else setNodeState(2, 'done');
+
+          // Stage 4: CI (0.6 .. 0.8)
+          if (p < 0.6) setNodeState(3, 'upcoming');
+          else if (p < 0.8) setNodeState(3, 'active');
+          else setNodeState(3, 'done');
+
+          // Stage 5: SHIP (0.8 .. 1.0)
+          if (p < 0.8) setNodeState(4, 'upcoming');
+          else if (p < 0.999) setNodeState(4, 'active');
+          else setNodeState(4, 'done');
+        };
+
         // Reset all elements to initial state
         const resetInitial = () => {
           if (connectorFill) {
@@ -53,6 +78,10 @@ export function usePipeline(root: RefObject<HTMLElement | null>): UsePipelineRet
           }
 
           nodes.forEach((_, idx) => setNodeState(idx, 'upcoming'));
+
+          if (scrollHint) {
+            gsap.set(scrollHint, { autoAlpha: 1 });
+          }
 
           if (jiraCard) {
             const isDesktop = window.innerWidth >= 768;
@@ -67,10 +96,10 @@ export function usePipeline(root: RefObject<HTMLElement | null>): UsePipelineRet
             terminalTyping.textContent = '';
           }
           if (terminalOutput) {
-            gsap.set(terminalOutput, { autoAlpha: 0 });
+            gsap.set(terminalOutput, { autoAlpha: 0, y: 4 });
           }
           if (terminalPromptNext) {
-            gsap.set(terminalPromptNext, { autoAlpha: 0 });
+            gsap.set(terminalPromptNext, { autoAlpha: 0, y: 4 });
           }
 
           tddRows.forEach((row) => {
@@ -82,7 +111,7 @@ export function usePipeline(root: RefObject<HTMLElement | null>): UsePipelineRet
               tag.className =
                 'tdd-status-tag px-2 py-0.5 rounded text-[10px] font-bold font-mono tracking-wider uppercase bg-red-500/15 text-red-600 border border-red-500/30';
             }
-            gsap.set(row, { autoAlpha: 0, y: 10 });
+            gsap.set(row, { autoAlpha: 0, y: 8 });
           });
 
           ciRows.forEach((row) => {
@@ -90,155 +119,249 @@ export function usePipeline(root: RefObject<HTMLElement | null>): UsePipelineRet
             const tick = row.querySelector<HTMLElement>('.ci-tick');
             if (spinner) spinner.classList.remove('hidden');
             if (tick) tick.classList.add('hidden');
-            gsap.set(row, { autoAlpha: 0, y: 8 });
+            gsap.set(row, { autoAlpha: 0, y: 6 });
           });
 
           if (shipBadge) {
-            gsap.set(shipBadge, { autoAlpha: 0, scale: 0.95 });
+            gsap.set(shipBadge, { autoAlpha: 0, scale: 0.94, boxShadow: 'none' });
           }
         };
 
         resetInitial();
 
-        // Build Master Timeline
+        // PIN the section during sequence:
+        // ScrollTrigger on section#about: pin: true, pinSpacing: true, start: "top top", end: "+=300%", scrub: 0.5.
+        // Timeline duration is normalized to 5.0 seconds so time / 5.0 maps 1:1 to timeline progress.
+        // Stage boundaries are exactly at 0.0 / 0.2 / 0.4 / 0.6 / 0.8 / 1.0 (times 0.0, 1.0, 2.0, 3.0, 4.0, 5.0).
         const tl = gsap.timeline({
-          paused: true,
-          defaults: { ease: 'expo.out' },
+          scrollTrigger: {
+            trigger: root.current,
+            pin: true,
+            pinSpacing: true,
+            start: 'top top',
+            end: '+=300%',
+            scrub: 0.5,
+            onUpdate: (self) => {
+              updateNodeStates(self.progress);
+            },
+          },
+          defaults: { ease: 'none' },
         });
 
-        // ================= STAGE 1: TICKET =================
-        tl.addLabel('stage1')
-          .call(() => setNodeState(0, 'active'))
-          .to(connectorFill, { scaleX: 0.2, scaleY: 0.2, duration: 0.6 })
-          .to(
+        // 1. Scroll hint: fades out once timeline progress > 0.05 (time > 0.25)
+        if (scrollHint) {
+          tl.fromTo(
+            scrollHint,
+            { autoAlpha: 1 },
+            { autoAlpha: 0, duration: 0.25, ease: 'none' },
+            0
+          );
+        }
+
+        // 2. Connector fill: maps 1:1 to timeline progress from 0 to 1 across 5.0s
+        if (connectorFill) {
+          tl.fromTo(
+            connectorFill,
+            { scaleX: 0, scaleY: 0 },
+            { scaleX: 1, scaleY: 1, duration: 5.0, ease: 'none' },
+            0
+          );
+        }
+
+        // ================= STAGE 1: TICKET (0.0 -> 1.0, progress 0.0 -> 0.2) =================
+        if (jiraCard) {
+          const isDesktop = window.innerWidth >= 768;
+          tl.fromTo(
             jiraCard,
+            {
+              autoAlpha: 0,
+              x: isDesktop ? -24 : 0,
+              y: isDesktop ? 0 : 20,
+            },
             {
               autoAlpha: 1,
               x: 0,
               y: 0,
-              duration: 0.8,
+              duration: 0.7,
+              ease: 'expo.out',
             },
-            '-=0.4'
-          )
-          .call(() => setNodeState(0, 'done'));
+            0.15
+          );
+        }
 
-        // ================= STAGE 2: BRANCH =================
-        tl.addLabel('stage2')
-          .call(() => setNodeState(1, 'active'))
-          .to(connectorFill, { scaleX: 0.4, scaleY: 0.4, duration: 0.6 })
-          .call(() => {
-            if (terminalTyping) {
-              terminalTyping.textContent = '';
-            }
-          });
-
-        // Typewriter effect
-        const textObj = { count: 0 };
-        tl.to(textObj, {
-          count: fullBranchCommand.length,
-          duration: 0.9,
-          ease: 'none',
-          onUpdate: () => {
-            if (terminalTyping) {
-              terminalTyping.textContent = fullBranchCommand.slice(0, Math.floor(textObj.count));
-            }
-          },
-        })
-          .to(terminalOutput, { autoAlpha: 1, duration: 0.3 })
-          .to(terminalPromptNext, { autoAlpha: 1, duration: 0.3 })
-          .call(() => setNodeState(1, 'done'));
-
-        // ================= STAGE 3: TDD =================
-        tl.addLabel('stage3')
-          .call(() => setNodeState(2, 'active'))
-          .to(connectorFill, { scaleX: 0.6, scaleY: 0.6, duration: 0.6 })
-          .to(tddRows, {
-            autoAlpha: 1,
-            y: 0,
-            duration: 0.5,
-            stagger: 0.12,
-          });
-
-        // Flip FAIL to PASS one by one
-        tddRows.forEach((row, i) => {
-          tl.call(
-            () => {
-              const dot = row.querySelector<HTMLElement>('.tdd-dot');
-              const tag = row.querySelector<HTMLElement>('.tdd-status-tag');
-              if (dot) dot.style.backgroundColor = '#10b981';
-              if (tag) {
-                tag.textContent = 'PASS';
-                tag.className =
-                  'tdd-status-tag px-2 py-0.5 rounded text-[10px] font-bold font-mono tracking-wider uppercase bg-emerald-500/15 text-emerald-600 border border-emerald-500/30';
+        // ================= STAGE 2: BRANCH (1.0 -> 2.0, progress 0.2 -> 0.4) =================
+        // scrub-driven: tween {n: 0 -> full length}, onUpdate slices the string - proportional to timeline progress
+        const typeState = { n: 0 };
+        tl.fromTo(
+          typeState,
+          { n: 0 },
+          {
+            n: fullBranchCommand.length,
+            duration: 0.7,
+            ease: 'none',
+            onUpdate: () => {
+              if (terminalTyping) {
+                terminalTyping.textContent = fullBranchCommand.slice(0, Math.round(typeState.n));
               }
-              gsap.fromTo(row, { scale: 0.98 }, { scale: 1, duration: 0.3, ease: 'back.out(2)' });
             },
-            undefined,
-            `+=${0.15 + i * 0.15}`
+          },
+          1.15
+        );
+
+        if (terminalOutput) {
+          tl.fromTo(
+            terminalOutput,
+            { autoAlpha: 0, y: 4 },
+            { autoAlpha: 1, y: 0, duration: 0.12, ease: 'expo.out' },
+            1.86
           );
-        });
+        }
 
-        tl.call(() => setNodeState(2, 'done'));
+        if (terminalPromptNext) {
+          tl.fromTo(
+            terminalPromptNext,
+            { autoAlpha: 0, y: 4 },
+            { autoAlpha: 1, y: 0, duration: 0.12, ease: 'expo.out' },
+            1.94
+          );
+        }
 
-        // ================= STAGE 4: CI =================
-        tl.addLabel('stage4')
-          .call(() => setNodeState(3, 'active'))
-          .to(connectorFill, { scaleX: 0.8, scaleY: 0.8, duration: 0.6 })
-          .to(ciRows, {
-            autoAlpha: 1,
-            y: 0,
-            duration: 0.4,
-            stagger: 0.08,
+        // ================= STAGE 3: TDD (2.0 -> 3.0, progress 0.4 -> 0.6) =================
+        // 3 test lines appear red as "FAIL", then flip one by one to green "PASS"
+        if (tddRows.length) {
+          tl.fromTo(
+            tddRows,
+            { autoAlpha: 0, y: 8 },
+            { autoAlpha: 1, y: 0, duration: 0.2, stagger: 0.04, ease: 'expo.out' },
+            2.05
+          );
+
+          tddRows.forEach((row, i) => {
+            const dot = row.querySelector<HTMLElement>('.tdd-dot');
+            const tag = row.querySelector<HTMLElement>('.tdd-status-tag');
+            const flipObj = { val: 0 };
+            const flipTime = 2.32 + i * 0.18;
+
+            if (dot) {
+              tl.fromTo(
+                dot,
+                { backgroundColor: '#ef4444' },
+                { backgroundColor: '#10b981', duration: 0.12, ease: 'none' },
+                flipTime
+              );
+            }
+
+            if (tag) {
+              tl.fromTo(
+                flipObj,
+                { val: 0 },
+                {
+                  val: 1,
+                  duration: 0.12,
+                  ease: 'none',
+                  onUpdate: () => {
+                    if (flipObj.val >= 0.5) {
+                      tag.textContent = 'PASS';
+                      tag.className =
+                        'tdd-status-tag px-2 py-0.5 rounded text-[10px] font-bold font-mono tracking-wider uppercase bg-emerald-500/15 text-emerald-600 border border-emerald-500/30';
+                    } else {
+                      tag.textContent = 'FAIL';
+                      tag.className =
+                        'tdd-status-tag px-2 py-0.5 rounded text-[10px] font-bold font-mono tracking-wider uppercase bg-red-500/15 text-red-600 border border-red-500/30';
+                    }
+                  },
+                },
+                flipTime
+              );
+              tl.fromTo(
+                row,
+                { scale: 0.98 },
+                { scale: 1, duration: 0.12, ease: 'back.out(2)' },
+                flipTime
+              );
+            }
           });
+        }
 
-        // Tick each CI check green one after another
-        ciRows.forEach((row) => {
-          tl.call(
-            () => {
-              const spinner = row.querySelector<HTMLElement>('.ci-spinner');
-              const tick = row.querySelector<HTMLElement>('.ci-tick');
-              if (spinner) spinner.classList.add('hidden');
-              if (tick) tick.classList.remove('hidden');
-              gsap.fromTo(tick, { scale: 0.4 }, { scale: 1, duration: 0.25, ease: 'back.out(2)' });
-            },
-            undefined,
-            '+=0.1'
+        // ================= STAGE 4: CI (3.0 -> 4.0, progress 0.6 -> 0.8) =================
+        // 6 check rows; each shows a spinner then ticks green, one after another, GitHub-Actions style
+        if (ciRows.length) {
+          tl.fromTo(
+            ciRows,
+            { autoAlpha: 0, y: 6 },
+            { autoAlpha: 1, y: 0, duration: 0.18, stagger: 0.02, ease: 'expo.out' },
+            3.05
           );
-        });
 
-        tl.call(() => setNodeState(3, 'done'));
+          ciRows.forEach((row, i) => {
+            const spinner = row.querySelector<HTMLElement>('.ci-spinner');
+            const tick = row.querySelector<HTMLElement>('.ci-tick');
+            const checkObj = { val: 0 };
+            const checkTime = 3.25 + i * 0.09;
 
-        // ================= STAGE 5: SHIP =================
-        tl.addLabel('stage5')
-          .call(() => setNodeState(4, 'active'))
-          .to(connectorFill, { scaleX: 1, scaleY: 1, duration: 0.6 })
-          .to(shipBadge, {
-            autoAlpha: 1,
-            scale: 1,
-            duration: 0.8,
-            boxShadow: '0 0 24px rgba(16, 185, 129, 0.35)',
-          })
-          .call(() => setNodeState(4, 'done'));
+            tl.fromTo(
+              checkObj,
+              { val: 0 },
+              {
+                val: 1,
+                duration: 0.08,
+                ease: 'none',
+                onUpdate: () => {
+                  if (checkObj.val >= 0.5) {
+                    if (spinner) spinner.classList.add('hidden');
+                    if (tick) tick.classList.remove('hidden');
+                  } else {
+                    if (spinner) spinner.classList.remove('hidden');
+                    if (tick) tick.classList.add('hidden');
+                  }
+                },
+              },
+              checkTime
+            );
 
-        tlRef.current = tl;
+            if (tick) {
+              tl.fromTo(
+                tick,
+                { scale: 0.3, autoAlpha: 0 },
+                { scale: 1, autoAlpha: 1, duration: 0.09, ease: 'back.out(2)' },
+                checkTime
+              );
+            }
+          });
+        }
 
-        // Auto-play once on scroll into view
-        ScrollTrigger.create({
-          trigger: root.current,
-          start: 'top 75%',
-          once: true,
-          onEnter: () => tl.play(),
-        });
+        // ================= STAGE 5: SHIP (4.0 -> 5.0, progress 0.8 -> 1.0) =================
+        // "merged into main · deployed" with glow pulse
+        if (shipBadge) {
+          tl.fromTo(
+            shipBadge,
+            { autoAlpha: 0, scale: 0.94 },
+            { autoAlpha: 1, scale: 1, duration: 0.5, ease: 'expo.out' },
+            4.1
+          );
+
+          tl.fromTo(
+            shipBadge,
+            { boxShadow: '0 0 0px rgba(16, 185, 129, 0)' },
+            { boxShadow: '0 0 24px rgba(16, 185, 129, 0.45)', duration: 0.6, ease: 'sine.inOut' },
+            4.35
+          );
+        }
 
         return () => {
           tl.kill();
         };
       });
 
-      // Reduced motion fallback: set all stages to final complete state instantly
+      // Reduced motion fallback: NO pin, NO timeline — render all 5 stages complete statically, hide the scroll hint
       const setReducedMotionState = () => {
         const container = root.current?.querySelector<HTMLElement>('.pipeline-container');
         if (!container) return;
+
+        const scrollHint = container.querySelector<HTMLElement>('.pipeline-scroll-hint');
+        if (scrollHint) {
+          gsap.set(scrollHint, { display: 'none' });
+        }
 
         const connectorFill = container.querySelector<HTMLElement>('.pipeline-line-fill');
         if (connectorFill) {
@@ -262,11 +385,11 @@ export function usePipeline(root: RefObject<HTMLElement | null>): UsePipelineRet
         }
         const terminalOutput = container.querySelector<HTMLElement>('.terminal-output');
         if (terminalOutput) {
-          gsap.set(terminalOutput, { autoAlpha: 1 });
+          gsap.set(terminalOutput, { autoAlpha: 1, y: 0 });
         }
         const terminalPromptNext = container.querySelector<HTMLElement>('.terminal-prompt-next');
         if (terminalPromptNext) {
-          gsap.set(terminalPromptNext, { autoAlpha: 1 });
+          gsap.set(terminalPromptNext, { autoAlpha: 1, y: 0 });
         }
 
         const tddRows = gsap.utils.toArray<HTMLElement>('.tdd-test-row', container);
@@ -293,11 +416,12 @@ export function usePipeline(root: RefObject<HTMLElement | null>): UsePipelineRet
 
         const shipBadge = container.querySelector<HTMLElement>('.ship-badge-container');
         if (shipBadge) {
-          gsap.set(shipBadge, { autoAlpha: 1, scale: 1 });
+          gsap.set(shipBadge, { autoAlpha: 1, scale: 1, boxShadow: '0 0 24px rgba(16, 185, 129, 0.45)' });
         }
       };
 
       if (
+        isReduced() ||
         document.documentElement.dataset.motion === 'reduced' ||
         window.matchMedia('(prefers-reduced-motion: reduce)').matches
       ) {
@@ -306,15 +430,6 @@ export function usePipeline(root: RefObject<HTMLElement | null>): UsePipelineRet
     },
     { scope: root }
   );
-
-  const replay = () => {
-    if (tlRef.current) {
-      tlRef.current.pause(0);
-      tlRef.current.play();
-    }
-  };
-
-  return { replay };
 }
 
 export default usePipeline;
