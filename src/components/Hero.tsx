@@ -113,7 +113,7 @@ const HeroTerminal: React.FC = () => {
           <span className="h-2 w-2 rounded-full bg-[#52b788]" />
         </div>
         <span className="font-mono text-[11px] text-[#95d5b2]/80">bash ~ kamran</span>
-        <span className="w-10 text-right font-mono text-[10px] text-[#74c69d]/60">80×24</span>
+        <div className="w-10" aria-hidden="true" />
       </div>
 
       {/* Terminal Output */}
