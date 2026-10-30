@@ -215,7 +215,7 @@ export const portfolioData: PortfolioData = {
       year: 'Django · React',
       outcome: 'Showcase Project',
       blurb:
-        'Multi-tenant SaaS for diagnostic labs in Pakistan. Patient registration and invoicing, samples with accession IDs, result entry validated against reference ranges, pathologist approval, PDF reports, and partner revenue-share.',
+        'Multi-tenant SaaS for diagnostic labs with accession tracking, validated results, pathologist approvals, and PDF reports.',
       stack:
         'Django 5 · DRF · React 18 + TypeScript · PostgreSQL 16 · Redis · Celery · Docker · Caddy · GitHub Actions',
       link: 'https://github.com/kamrandebugging/LabFlow',
@@ -229,7 +229,7 @@ export const portfolioData: PortfolioData = {
       year: 'Live since 2025',
       outcome: 'In production',
       blurb:
-        'Full-stack development on a live digital invoicing system integrated with FBR, in production use since 2025.',
+        'Live digital invoicing system integrated with FBR for tax compliance, in production use since 2025.',
       stack: 'Laravel · PHP · MySQL',
       link: '',
       image: fbrImg,
@@ -242,7 +242,7 @@ export const portfolioData: PortfolioData = {
       year: 'Trading platform',
       outcome: 'Trading Platform',
       blurb:
-        'A trading platform covering onboarding, trading adapter, payments and admin dashboard.',
+        'Trading platform covering user onboarding, trading adapter, payments, and administrative dashboard.',
       stack: 'Next.js · NestJS · TypeScript · PostgreSQL · Redis · Socket.IO',
       link: '',
       image: fundoraImg,
