@@ -4,6 +4,9 @@ import { ArrowUpRight, BookOpen } from 'lucide-react';
 import type { ProjectItem } from '../data/portfolio';
 import { Magnetic } from './ui/Magnetic';
 import SkelImage from './ui/SkelImage';
+import { BentoWidget, type BentoId } from './BentoWidget';
+
+const BENTO_IDS: BentoId[] = ['labflow', 'fbr-invoicing', 'fundora-global'];
 
 interface ProjectCardProps {
   project: ProjectItem;
@@ -46,6 +49,11 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
         <p className="mt-5 max-w-[34rem] leading-relaxed text-[var(--fg-muted)]">
           {project.blurb}
         </p>
+        {(BENTO_IDS as string[]).includes(project.id) && (
+          <div className="mt-6">
+            <BentoWidget id={project.id as BentoId} />
+          </div>
+        )}
       </div>
 
       <div>

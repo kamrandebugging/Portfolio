@@ -265,6 +265,193 @@ html:not([data-motion='reduced']) .skel:not(.skel--done) {
 .hero-cs-media {
   background: var(--color-pine);
 }
+/* ---------- Bento Widgets ---------- */
+
+/* Shared */
+.bento-pipeline,
+.bento-terminal,
+.bento-stats {
+  font-family: var(--font-mono);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+/* ── CI Pipeline ── */
+.bento-pipeline {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  padding: 0.9rem 1rem;
+  background: rgb(8 28 21 / 0.55);
+  border: 1px solid rgb(82 183 136 / 0.18);
+}
+
+.bento-pipeline-label {
+  font-size: 0.6rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgb(82 183 136 / 0.55);
+}
+
+.bento-pipeline-track {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  flex-wrap: nowrap;
+}
+
+.bento-stage {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.3rem 0.6rem;
+  border-radius: 4px;
+  border: 1px solid transparent;
+  transition: border-color 0.3s, background 0.3s;
+}
+
+.bento-stage--done {
+  border-color: rgb(82 183 136 / 0.3);
+  background: rgb(82 183 136 / 0.08);
+}
+.bento-stage--running {
+  border-color: rgb(116 198 157 / 0.5);
+  background: rgb(116 198 157 / 0.12);
+}
+.bento-stage--pending {
+  border-color: rgb(216 243 220 / 0.08);
+  background: transparent;
+}
+
+.bento-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  transition: background 0.3s;
+}
+.bento-dot--done    { background: var(--color-leaf); }
+.bento-dot--pending { background: rgb(216 243 220 / 0.2); }
+.bento-dot--running {
+  background: var(--color-sage);
+  animation: bento-pulse 0.9s ease-in-out infinite;
+}
+html[data-motion='reduced'] .bento-dot--running {
+  animation: none;
+}
+
+@keyframes bento-pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%       { opacity: 0.4; transform: scale(0.7); }
+}
+
+.bento-stage-name {
+  font-size: 0.68rem;
+  letter-spacing: 0.06em;
+  text-transform: lowercase;
+  color: var(--color-paper);
+}
+.bento-stage--pending .bento-stage-name { color: rgb(216 243 220 / 0.35); }
+
+.bento-connector {
+  flex: 1;
+  min-width: 12px;
+  max-width: 28px;
+  height: 1px;
+  background: rgb(216 243 220 / 0.12);
+  transition: background 0.5s;
+}
+.bento-connector--done { background: rgb(82 183 136 / 0.45); }
+
+/* ── Terminal ── */
+.bento-terminal {
+  background: rgb(8 28 21 / 0.7);
+  border: 1px solid rgb(82 183 136 / 0.15);
+}
+
+.bento-terminal-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.45rem 0.75rem;
+  background: rgb(0 0 0 / 0.25);
+  border-bottom: 1px solid rgb(82 183 136 / 0.1);
+}
+
+.bento-wdot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.bento-wdot--r { background: #ff5f57; }
+.bento-wdot--y { background: #febc2e; }
+.bento-wdot--g { background: #28c840; }
+
+.bento-terminal-title {
+  margin-left: 0.4rem;
+  font-size: 0.62rem;
+  letter-spacing: 0.1em;
+  color: rgb(216 243 220 / 0.35);
+}
+
+.bento-terminal-body {
+  padding: 0.65rem 0.9rem;
+  font-size: 0.72rem;
+  line-height: 1.7;
+  color: var(--color-leaf);
+  min-height: 4.5rem;
+  white-space: pre-wrap;
+  word-break: break-all;
+}
+
+.bento-cursor {
+  display: inline-block;
+  color: var(--color-leaf);
+  animation: bento-blink 1.1s step-end infinite;
+}
+html[data-motion='reduced'] .bento-cursor { animation: none; }
+
+@keyframes bento-blink {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0; }
+}
+
+/* ── Count-up Stats ── */
+.bento-stats {
+  display: flex;
+  gap: 1px;
+  background: rgb(82 183 136 / 0.15);
+  border: 1px solid rgb(82 183 136 / 0.18);
+}
+
+.bento-stat {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.2rem;
+  padding: 0.75rem 0.5rem;
+  background: rgb(8 28 21 / 0.45);
+}
+
+.bento-stat-value {
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: var(--color-leaf);
+  line-height: 1;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+}
+
+.bento-stat-label {
+  font-size: 0.6rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgb(216 243 220 / 0.45);
+}
+
 /* ---------- Command Palette ---------- */
 .cmdk-backdrop {
   position: fixed;
