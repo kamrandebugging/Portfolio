@@ -80,41 +80,30 @@ export const Proof: React.FC = () => {
           {impact.heading[0]} <em>{impact.heading[1]}</em>
         </h2>
 
-        <dl className="mt-16 grid grid-cols-2 gap-x-6 gap-y-12 lg:grid-cols-4">
-          {impact.stats.map((stat) => (
-            <div key={stat.label} className="relative pt-5">
-              <span
-                data-line
-                className="absolute inset-x-0 top-0 h-px"
-                style={{ background: 'var(--line)' }}
-              />
-              <dd className="stat-num" data-count={stat.value}>
-                {stat.value}
-              </dd>
-              <dt className="muted mt-3 max-w-[16rem] text-sm leading-snug">{stat.label}</dt>
-            </div>
-          ))}
-        </dl>
-
-        <div className="proof-labflow-bento mt-20" data-fade>
+        {/* Bento Stats Terminal Card (Old duplicate stats row removed) */}
+        <div className="proof-labflow-bento mt-16 w-full max-w-[56rem]" data-fade>
           <div className="proof-bento-header" aria-hidden="true">
             <span className="proof-bento-dot" />
             <span className="proof-bento-dot" />
             <span className="proof-bento-dot" />
-            <span className="proof-bento-title">labflow — production stats</span>
+            <span className="proof-bento-title">kamran — proof</span>
           </div>
           <dl className="proof-bento-grid">
             <div className="proof-bento-tile">
+              <dd className="proof-bento-num" data-count="1+">1+</dd>
+              <dt className="proof-bento-label">Years production backend experience</dt>
+            </div>
+            <div className="proof-bento-tile">
               <dd className="proof-bento-num" data-count="7">7</dd>
-              <dt className="proof-bento-label">PRs merged</dt>
+              <dt className="proof-bento-label">Real projects shipped</dt>
             </div>
             <div className="proof-bento-tile">
-              <dd className="proof-bento-num" data-count="300">300</dd>
-              <dt className="proof-bento-label">tests passing</dt>
+              <dd className="proof-bento-num" data-count="2">2</dd>
+              <dt className="proof-bento-label">CodeExcellence 1st places</dt>
             </div>
             <div className="proof-bento-tile">
-              <dd className="proof-bento-num" data-count="6">6</dd>
-              <dt className="proof-bento-label">CI checks green</dt>
+              <dd className="proof-bento-num" data-count="3.61">3.61</dd>
+              <dt className="proof-bento-label">CGPA</dt>
             </div>
           </dl>
         </div>
