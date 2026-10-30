@@ -126,7 +126,7 @@ export const portfolioData: PortfolioData = {
     role: 'Web & Software Developer',
     headline: ['Real software,', 'not <em>demos.</em>'],
     heroDesc:
-      'Live FBR-integrated invoicing in Laravel since 2025, and LabFlow, a multi-tenant SaaS for diagnostic labs in Django and React. Open to paid remote internships.',
+      'Live FBR-integrated invoicing in Laravel since 2025, and LabFlow, a multi-tenant SaaS for diagnostic labs in Django and React. Open to internships + junior roles.',
     resumeUrl: '',
     timezone: 'Asia/Karachi',
     heroImage: heroImg,
