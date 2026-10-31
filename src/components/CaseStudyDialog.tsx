@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import { X, ExternalLink, CheckCircle2, Layers } from 'lucide-react';
 import { getLenis } from '../engine/scroll';
+import { playDialogOpen, playDialogClose } from '../engine/sound';
 
 interface CaseStudyDialogProps {
   projectId: 'labflow' | 'fbr-invoicing' | null;
@@ -23,6 +24,17 @@ export const CaseStudyDialog: React.FC<CaseStudyDialogProps> = ({
   triggerElementRef,
 }) => {
   const closeBtnRef = useRef<HTMLButtonElement>(null);
+
+  // The dialog stays mounted and renders null when closed — fire the
+  // paper tap on the open transition so every close path (Esc, backdrop,
+  // close button) is covered.
+  const isOpen = projectId !== null;
+  const wasOpen = useRef(isOpen);
+  useEffect(() => {
+    if (isOpen && !wasOpen.current) playDialogOpen();
+    else if (!isOpen && wasOpen.current) playDialogClose();
+    wasOpen.current = isOpen;
+  }, [isOpen]);
 
   useEffect(() => {
     if (!projectId) return;

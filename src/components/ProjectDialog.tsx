@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import { ArrowLeft, ArrowRight, X } from 'lucide-react';
 import type { ProjectItem } from '../data/portfolio';
 import { getLenis } from '../engine/scroll';
+import { playDialogOpen, playDialogClose, playNavTick } from '../engine/sound';
 import { ProjectCard } from './ProjectCard';
 
 interface ProjectDialogProps {
@@ -33,6 +34,29 @@ export const ProjectDialog: React.FC<ProjectDialogProps> = ({
   const closeBtn = useRef<HTMLButtonElement>(null);
   const opener = useRef<HTMLElement | null>(null);
   const isOpen = project !== null;
+  const prevPosition = useRef(position);
+
+  // The dialog stays mounted and renders null when closed — paper tap on
+  // the open transition. Declared before the paging effect so a fresh open
+  // re-syncs the position cursor before the paging check runs.
+  const wasOpen = useRef(isOpen);
+  useEffect(() => {
+    if (isOpen && !wasOpen.current) {
+      playDialogOpen();
+      prevPosition.current = position;
+    } else if (!isOpen && wasOpen.current) {
+      playDialogClose();
+    }
+    wasOpen.current = isOpen;
+  }, [isOpen, position]);
+
+  // Paging between projects keeps the dialog mounted — tick quietly with
+  // the direction of travel instead of replaying the open tap.
+  useEffect(() => {
+    if (prevPosition.current === position) return;
+    playNavTick(position > prevPosition.current);
+    prevPosition.current = position;
+  }, [position]);
 
   useEffect(() => {
     if (!isOpen) return;

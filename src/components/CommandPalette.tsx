@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom';
 import { portfolioData } from '../data/portfolio';
 import { goToSection } from '../engine/scroll';
+import { playPaletteOpen, playPaletteClose, playNavTick, playConfirm } from '../engine/sound';
 
 interface Command {
   id: string;
@@ -20,6 +21,7 @@ interface Props {
 export const CommandPalette: React.FC<Props> = ({ open, onClose }) => {
   const [query, setQuery] = useState('');
   const [active, setActive] = useState(0);
+  const [notice, setNotice] = useState<string | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const listRef = useRef<HTMLUListElement>(null);
   const navigate = useNavigate();
@@ -128,8 +130,15 @@ export const CommandPalette: React.FC<Props> = ({ open, onClose }) => {
         hint: 'clipboard',
         keywords: 'copy email clipboard kamran',
         run: () => {
-          navigator.clipboard.writeText(email);
-          onClose();
+          // Confirm only after the clipboard write actually resolves.
+          navigator.clipboard
+            .writeText(email)
+            .then(() => {
+              playConfirm();
+              setNotice('email copied to clipboard');
+              window.setTimeout(onClose, 900);
+            })
+            .catch(() => onClose());
         },
       },
       {
@@ -170,9 +179,20 @@ export const CommandPalette: React.FC<Props> = ({ open, onClose }) => {
     if (open) {
       setQuery('');
       setActive(0);
+      setNotice(null);
       requestAnimationFrame(() => inputRef.current?.focus());
     }
   }, [open]);
+
+  // The palette stays mounted and renders null when closed — fire the
+  // open/close family on the `open` transition so every close path
+  // (Esc, backdrop, command) is covered.
+  const wasOpen = useRef(open);
+  useEffect(() => {
+    if (open && !wasOpen.current) playPaletteOpen();
+    else if (!open && wasOpen.current) playPaletteClose();
+    wasOpen.current = open;
+  }, [open ]);
 
   useEffect(() => {
     setActive((i) => Math.min(i, Math.max(0, filtered.length - 1)));
@@ -188,9 +208,11 @@ export const CommandPalette: React.FC<Props> = ({ open, onClose }) => {
       if (e.key === 'ArrowDown') {
         e.preventDefault();
         setActive((i) => Math.min(i + 1, filtered.length - 1));
+        playNavTick(false);
       } else if (e.key === 'ArrowUp') {
         e.preventDefault();
         setActive((i) => Math.max(i - 1, 0));
+        playNavTick(true);
       } else if (e.key === 'Enter') {
         e.preventDefault();
         filtered[active]?.run();
@@ -264,16 +286,22 @@ export const CommandPalette: React.FC<Props> = ({ open, onClose }) => {
             </li>
           ))}
         </ul>
-        <div className="cmdk-footer" aria-hidden="true">
-          <span>
-            <kbd>↑↓</kbd> navigate
-          </span>
-          <span>
-            <kbd>↵</kbd> run
-          </span>
-          <span>
-            <kbd>Esc</kbd> close
-          </span>
+        <div className="cmdk-footer" aria-hidden={notice === null}>
+          {notice ? (
+            <span role="status">{notice} ✓</span>
+          ) : (
+            <>
+              <span>
+                <kbd>↑↓</kbd> navigate
+              </span>
+              <span>
+                <kbd>↵</kbd> run
+              </span>
+              <span>
+                <kbd>Esc</kbd> close
+              </span>
+            </>
+          )}
         </div>
       </div>
     </div>
