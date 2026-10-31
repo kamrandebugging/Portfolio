@@ -12,6 +12,7 @@ import {
   motionMatchMedia,
 } from '../engine/gsap';
 import { scrollToTarget } from '../engine/scroll';
+import { playKey, playPop } from '../engine/sound';
 import { portfolioData } from '../data/portfolio';
 import { Magnetic } from './ui/Magnetic';
 
@@ -59,6 +60,7 @@ const HeroTerminal: React.FC = () => {
       if (charCount < currentItem.cmd.length) {
         timer = setTimeout(() => {
           setCharCount((prev) => prev + 1);
+          playKey();
         }, 36);
       } else {
         timer = setTimeout(() => {
@@ -84,6 +86,7 @@ const HeroTerminal: React.FC = () => {
   }, [stepIndex, phase, charCount]);
 
   const handleFastForward = () => {
+    playPop(0.25);
     setStepIndex(TERMINAL_STEPS.length);
     setPhase('output');
     setCharCount(999);

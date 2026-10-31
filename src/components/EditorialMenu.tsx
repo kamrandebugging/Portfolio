@@ -3,6 +3,7 @@ import { ArrowUpRight, X } from 'lucide-react';
 import { gsap, useGSAP } from '../engine/gsap';
 import { getLenis } from '../engine/scroll';
 import { portfolioData } from '../data/portfolio';
+import { playOpen, playClose, playTick } from '../engine/sound';
 
 interface EditorialMenuProps {
   open: boolean;
@@ -40,11 +41,17 @@ export const EditorialMenu: React.FC<EditorialMenuProps> = ({ open, onClose, go:
       gsap.killTweensOf([panels, words, el]);
 
       if (open) {
+        playOpen(0.12);
         gsap.set(el, { autoAlpha: 1 });
         gsap.fromTo(
           panels,
           { clipPath: 'inset(100% 0% 0% 0%)' },
-          { clipPath: 'inset(0% 0% 0% 0%)', duration: 0.9 * k, ease: 'expo.out', stagger: 0.07 * k }
+          {
+            clipPath: 'inset(0% 0% 0% 0%)',
+            duration: 0.9 * k,
+            ease: 'expo.out',
+            stagger: { each: 0.07 * k, onStart: () => playTick(0.07) },
+          }
         );
         gsap.fromTo(
           words,
@@ -53,6 +60,7 @@ export const EditorialMenu: React.FC<EditorialMenuProps> = ({ open, onClose, go:
         );
         closeBtn.current?.focus();
       } else {
+        playClose(0.12);
         gsap.to(panels, {
           clipPath: 'inset(0% 0% 100% 0%)',
           duration: 0.6 * k,

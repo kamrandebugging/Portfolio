@@ -1,5 +1,6 @@
 import React, { useRef } from 'react';
 import { gsap, useGSAP, motionMatchMedia } from '../../engine/gsap';
+import { playTick } from '../../engine/sound';
 
 /**
  * Trailing ring + dot. Grows on links and shows a label for any element
@@ -37,19 +38,17 @@ export const Cursor: React.FC = () => {
         dy(e.clientY);
       };
 
+      let lastState = '';
       const onOver = (e: PointerEvent) => {
         const target = (e.target as Element | null)?.closest<HTMLElement>(
           '[data-cursor], a, button, summary'
         );
         const text = target?.dataset.cursor;
-        if (text) {
-          labelEl.textContent = text;
-          ringEl.dataset.state = 'label';
-        } else if (target) {
-          ringEl.dataset.state = 'link';
-        } else {
-          ringEl.dataset.state = '';
-        }
+        const next = text ? 'label' : target ? 'link' : '';
+        if (text) labelEl.textContent = text;
+        if (next !== lastState && next !== '') playTick(0.08);
+        lastState = next;
+        ringEl.dataset.state = next;
       };
 
       const onLeaveWindow = () => {
