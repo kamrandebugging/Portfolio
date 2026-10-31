@@ -77,30 +77,35 @@ export const ProjectDialog: React.FC<ProjectDialogProps> = ({
       />
 
       <div className="dialog-panel relative z-10 w-full max-w-[72rem]">
-        <div className="mb-4 flex items-center justify-between gap-4 text-paper">
-          <span className="font-mono text-xs uppercase tracking-[0.16em] text-paper/70">
+        <div className="mb-4 flex flex-wrap items-center justify-between gap-4 text-paper">
+          <span className="min-w-0 truncate font-mono text-xs uppercase tracking-[0.16em] text-paper/70">
             {String(position).padStart(2, '0')} / {String(total).padStart(2, '0')} · More work
           </span>
           <div className="flex items-center gap-2">
             <button
               type="button"
-              className="btn !p-3"
+              className="btn !p-2.5 sm:!p-3"
               onClick={onPrev}
               aria-label="Previous project"
             >
               <ArrowLeft className="h-4 w-4" aria-hidden="true" />
             </button>
-            <button type="button" className="btn !p-3" onClick={onNext} aria-label="Next project">
+            <button
+              type="button"
+              className="btn !p-2.5 sm:!p-3"
+              onClick={onNext}
+              aria-label="Next project"
+            >
               <ArrowRight className="h-4 w-4" aria-hidden="true" />
             </button>
             <button
               ref={closeBtn}
               type="button"
-              className="btn !py-3"
+              className="btn !p-2.5 sm:!py-3 sm:!px-[1.4rem]"
               onClick={onClose}
               aria-label="Close project"
             >
-              Close
+              <span className="hidden sm:inline">Close</span>
               <X className="h-4 w-4" aria-hidden="true" />
             </button>
           </div>
