@@ -207,7 +207,7 @@ export const About: React.FC = () => {
               >
                 <div className="pipeline-node flex items-center gap-3 is-upcoming">
                   <span className="pipeline-node-dot relative flex items-center justify-center w-7 h-7 rounded-full border border-[var(--line)] bg-[var(--color-paper)] font-mono text-xs font-bold text-[var(--color-forest)] transition-colors">
-                    <span className="pipeline-node-num">{index + 1}</span>
+                    <span className="pipeline-node-num tabular-nums">{index + 1}</span>
                     <svg
                       className="pipeline-node-check hidden w-3.5 h-3.5 text-white"
                       viewBox="0 0 24 24"

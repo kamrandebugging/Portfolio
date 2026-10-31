@@ -1288,6 +1288,10 @@ html[data-motion='reduced'] .flow-item-img {
   box-shadow: 0 0 8px rgba(45, 106, 79, 0.4) !important;
 }
 
+.pipeline-node-num {
+  font-variant-numeric: tabular-nums;
+}
+
 .pipeline-node.is-done .pipeline-node-num {
   display: none !important;
 }
