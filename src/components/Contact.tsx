@@ -1,89 +1,22 @@
-import React, { useEffect, useRef, useState, useCallback } from 'react';
-import { ArrowUpRight, Copy, Check } from 'lucide-react';
+import React, { useEffect, useRef } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import {
   gsap,
   ScrollTrigger,
-  SplitText,
   useGSAP,
   MOTION_OK,
   SCENES_ON,
   motionMatchMedia,
 } from '../engine/gsap';
+import { goToSection } from '../engine/scroll';
 import { portfolioData } from '../data/portfolio';
-import { Magnetic } from './ui/Magnetic';
 
-interface Social { name: string; url: string; }
-
-const ContactTerminal: React.FC<{ email: string; socials: Social[] }> = ({ email, socials }) => {
-  const [copied, setCopied] = useState(false);
-  const copy = useCallback(() => {
-    navigator.clipboard.writeText(email).then(() => {
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
-    });
-  }, [email]);
-
-  const urlLabel = (url: string) => url.replace(/^https?:\/\//, '');
-
-  return (
-    <div data-contact-fade className="contact-terminal mt-14">
-      <div className="contact-terminal-bar" aria-hidden="true">
-        <span className="contact-terminal-dot" />
-        <span className="contact-terminal-dot" />
-        <span className="contact-terminal-dot" />
-        <span className="contact-terminal-name">bash ~ kamran</span>
-      </div>
-      <div className="contact-terminal-body">
-        <div className="contact-terminal-row">
-          <span className="contact-terminal-prompt">$</span>
-          <span className="contact-terminal-cmd">contact --email</span>
-        </div>
-        <div className="contact-terminal-row contact-terminal-output">
-          <span className="contact-terminal-arrow">→</span>
-          <span className="contact-terminal-val">{email}</span>
-          <button
-            type="button"
-            className="contact-terminal-copy"
-            onClick={copy}
-            aria-label={copied ? 'Copied!' : 'Copy email address'}
-          >
-            {copied
-              ? <Check className="h-3.5 w-3.5" aria-hidden="true" />
-              : <Copy className="h-3.5 w-3.5" aria-hidden="true" />}
-            <span>{copied ? 'copied' : 'copy'}</span>
-          </button>
-        </div>
-
-        <div className="contact-terminal-row contact-terminal-spacer">
-          <span className="contact-terminal-prompt">$</span>
-          <span className="contact-terminal-cmd">contact --socials</span>
-        </div>
-        {socials.map((s) => (
-          <div key={s.name} className="contact-terminal-row contact-terminal-output">
-            <span className="contact-terminal-arrow">→</span>
-            <a
-              href={s.url}
-              target="_blank"
-              rel="noreferrer noopener"
-              className="contact-terminal-val contact-terminal-link"
-            >
-              {urlLabel(s.url)}
-            </a>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-};
-
-/**
- * Footer reveal: on desktop this sits fixed behind the page and is uncovered
- * as the last section scrolls away (the spacer below <main> provides the
- * scroll distance). Phones and reduced-motion get a normal footer.
- */
 export const Contact: React.FC = () => {
   const root = useRef<HTMLElement>(null);
-  const { contact, personal } = portfolioData;
+  const navigate = useNavigate();
+  const onHome = useLocation().pathname === '/';
+
+  const navLinks = portfolioData.navLinks.filter((link) => link.href !== '#contact');
 
   useEffect(() => {
     const el = root.current;
@@ -109,8 +42,6 @@ export const Contact: React.FC = () => {
           trigger: spacer,
           start: 'top bottom',
           end: 'max',
-          // Progress-based (not active-based): a trigger is inactive at progress 1, which is
-          // exactly the end of the page, and a jump straight to the end skips the toggle.
           onUpdate: (self) => {
             el.style.visibility = self.progress > 0 ? 'visible' : 'hidden';
           },
@@ -123,37 +54,79 @@ export const Contact: React.FC = () => {
 
       mm.add(MOTION_OK, () => {
         const target = spacer && spacer.offsetHeight > 0 ? spacer : el;
-        const heading = el.querySelector<HTMLElement>('[data-contact-title]');
-        const fades = gsap.utils.toArray<HTMLElement>('[data-contact-fade]', el);
-        const start = target === spacer ? 'top 62%' : 'top 82%';
+        const words = gsap.utils.toArray<HTMLElement>('.footer-word', el);
+        const subline = el.querySelector<HTMLElement>('.footer-subline');
 
-        const split = heading
-          ? SplitText.create(heading, {
-              type: 'lines',
-              mask: 'lines',
-              autoSplit: true,
-              onSplit: (self) =>
-                gsap.from(self.lines, {
-                  yPercent: 112,
-                  duration: 1.2,
-                  ease: 'expo.out',
-                  stagger: 0.1,
-                  scrollTrigger: { trigger: target, start, once: true },
-                }),
-            })
-          : null;
-
-        gsap.from(fades, {
-          y: 30,
-          autoAlpha: 0,
-          duration: 1,
-          ease: 'expo.out',
-          stagger: 0.08,
-          delay: 0.35,
-          scrollTrigger: { trigger: target, start, once: true },
+        const tl = gsap.timeline({
+          scrollTrigger: {
+            trigger: target,
+            start: 'top 70%',
+            once: true,
+          },
         });
 
-        return () => split?.revert();
+        tl.fromTo(
+          words,
+          {
+            opacity: 0,
+            yPercent: -100,
+            rotationX: 90,
+            transformOrigin: '50% 100%',
+          },
+          {
+            opacity: 1,
+            yPercent: 0,
+            rotationX: 0,
+            duration: 0.3,
+            ease: 'back.out(1.7)',
+            stagger: 0.1,
+            delay: 0.3,
+          }
+        );
+
+        if (subline) {
+          tl.fromTo(
+            subline,
+            {
+              opacity: 0,
+              yPercent: -100,
+              rotationX: 90,
+              transformOrigin: '50% 100%',
+            },
+            {
+              opacity: 1,
+              yPercent: 0,
+              rotationX: 0,
+              duration: 0.3,
+              ease: 'back.out(1.7)',
+            },
+            '+=0.05'
+          );
+        }
+
+        // Native IntersectionObserver backup to guarantee trigger on mobile touch
+        let observer: IntersectionObserver | null = null;
+        if (typeof IntersectionObserver !== 'undefined') {
+          observer = new IntersectionObserver(
+            (entries) => {
+              entries.forEach((entry) => {
+                if (entry.isIntersecting) {
+                  observer?.disconnect();
+                  if (tl.progress() === 0) {
+                    tl.play();
+                  }
+                }
+              });
+            },
+            { threshold: 0.25 }
+          );
+          observer.observe(target);
+        }
+
+        return () => {
+          tl.kill();
+          observer?.disconnect();
+        };
       });
     },
     { scope: root }
@@ -167,72 +140,100 @@ export const Contact: React.FC = () => {
       data-chapter-title="Contact"
       data-tone="dark"
       data-trigger="#contact-sentinel"
-      className="footer-reveal tone-dark"
+      className="footer-reveal tone-dark relative flex min-h-screen w-full flex-col items-center justify-center bg-[#081c15] text-[#d8f3dc] px-[var(--pad-x)] py-16 sm:py-20 select-none"
     >
-      <div className="mx-auto flex min-h-[inherit] max-w-[88rem] flex-col justify-between gap-16 px-[var(--pad-x)] pb-10 pt-28">
-        <div>
-          <h2
-            data-contact-title
-            className="display text-[clamp(3rem,8.4vw,9rem)]"
-          >
-            {contact.heading[0]} {contact.heading[1]} <em>{contact.heading[2]}</em>
-          </h2>
-          <p data-contact-fade className="muted mt-8 max-w-[30rem] text-lg leading-relaxed">
-            {contact.lead}
-          </p>
-
-          <div data-contact-fade className="mt-10">
-            <Magnetic strength={0.15}>
-              <a
-                href={`mailto:${contact.email}`}
-                className="group inline-flex items-center gap-4 font-display text-[clamp(1.5rem,4.4vw,4.5rem)] leading-none tracking-tight"
-                data-cursor="Email"
-              >
-                <span className="underline decoration-leaf/40 decoration-1 underline-offset-[0.18em] transition-[text-decoration-color] duration-500 group-hover:decoration-leaf">
-                  {contact.email}
-                </span>
-                <ArrowUpRight
-                  className="h-[0.8em] w-[0.8em] shrink-0 text-leaf transition-transform duration-500 group-hover:-translate-y-1 group-hover:translate-x-1"
-                  aria-hidden="true"
-                />
-              </a>
-            </Magnetic>
-          </div>
-
-          <ContactTerminal email={contact.email} socials={contact.socials} />
-        </div>
-
-        <div
-          data-contact-fade
-          className="grid items-end gap-8 border-t border-[var(--line)] pt-8 md:grid-cols-12"
-        >
-          <div className="md:col-span-5">
-            <p className="display text-3xl">{personal.name}</p>
-            <p className="muted mt-2 text-sm">{personal.tagline}</p>
-                      </div>
-
-          <nav className="md:col-span-4" aria-label="Social profiles">
-            <ul className="flex flex-col gap-1">
-              {[
-                ...contact.socials,
-                ...(personal.resumeUrl ? [{ name: 'Résumé', url: personal.resumeUrl }] : []),
-              ].map((social) => (
-                <li key={social.name}>
+      <div className="mx-auto flex w-full max-w-[72rem] flex-col items-center justify-center text-center gap-8 sm:gap-10 md:gap-12">
+        {/* Nav row: existing section links, text-xs, muted, separated by ·, opacity-30 -> 100 on hover, no movement */}
+        <nav aria-label="Footer navigation">
+          <ul className="flex flex-wrap items-center justify-center gap-x-3 gap-y-1.5 sm:gap-x-4">
+            {navLinks.map((link, idx) => (
+              <React.Fragment key={link.label}>
+                {idx > 0 && (
+                  <li aria-hidden="true" className="text-xs text-[#d8f3dc] opacity-30 select-none">
+                    ·
+                  </li>
+                )}
+                <li>
                   <a
-                    href={social.url}
-                    target="_blank"
-                    rel="noreferrer noopener"
-                    className="nav-link inline-block !text-base !normal-case !tracking-normal"
+                    href={link.href}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      if (link.href.startsWith('#')) {
+                        goToSection(navigate, onHome, link.href);
+                      } else {
+                        navigate(link.href);
+                      }
+                    }}
+                    className="text-xs text-[#d8f3dc] opacity-30 transition-opacity duration-200 hover:opacity-100"
                   >
-                    {social.name}
+                    {link.label}
                   </a>
                 </li>
-              ))}
-            </ul>
-          </nav>
+              </React.Fragment>
+            ))}
+          </ul>
+        </nav>
 
-          <p className="muted font-sans text-xs md:col-span-3 md:text-right">
-            {personal.copyright}
+        {/* Monumental Headline: "Code. Ship. Repeat." */}
+        <div style={{ perspective: '900px' }} className="w-full">
+          <h2 className="font-display font-semibold text-[clamp(3rem,9vw,8.5rem)] leading-[1.1] sm:leading-[0.95] tracking-tight text-[#d8f3dc]">
+            <span className="footer-word inline-block mx-1">Code.</span>
+            <span className="footer-word inline-block mx-1">Ship.</span>
+            <span className="footer-word inline-block mx-1">Repeat.</span>
+          </h2>
+        </div>
+
+        {/* CTA: One big white pill "Get in touch" */}
+        <div>
+          <a
+            href="mailto:kamrandebugging@gmail.com"
+            className="inline-flex items-center justify-center rounded-full bg-white px-8 sm:px-10 py-4 sm:py-4.5 font-sans text-base sm:text-lg font-medium text-[#081c15] shadow-[0_0_35px_rgba(255,255,255,0.25)] transition-transform duration-300 hover:scale-[1.03]"
+            data-cursor="Email"
+          >
+            Get in touch
+          </a>
+        </div>
+
+        {/* Email row */}
+        <div>
+          <a
+            href="mailto:kamrandebugging@gmail.com"
+            className="font-mono text-sm sm:text-base text-[var(--fg-muted)] opacity-60 transition-opacity duration-200 hover:opacity-100"
+          >
+            kamrandebugging@gmail.com
+          </a>
+        </div>
+
+        {/* Socials: GitHub + LinkedIn icons, opacity-30 -> 100, no movement */}
+        <div className="flex items-center justify-center gap-5">
+          <a
+            href="https://github.com/kamrandebugging"
+            target="_blank"
+            rel="noreferrer noopener"
+            className="text-[#d8f3dc] opacity-30 transition-opacity duration-200 hover:opacity-100"
+            aria-label="GitHub profile"
+          >
+            <svg className="h-5 w-5 fill-current" viewBox="0 0 24 24" aria-hidden="true">
+              <path fillRule="evenodd" clipRule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" />
+            </svg>
+          </a>
+          <a
+            href="https://linkedin.com/in/kamran-debug"
+            target="_blank"
+            rel="noreferrer noopener"
+            className="text-[#d8f3dc] opacity-30 transition-opacity duration-200 hover:opacity-100"
+            aria-label="LinkedIn profile"
+          >
+            <svg className="h-5 w-5 fill-current" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.46 10.9h2.79v8.37H6.46v-8.37M7.86 6.35a1.64 1.64 0 1 0 0 3.28 1.64 1.64 0 0 0 0-3.28z" />
+            </svg>
+          </a>
+        </div>
+
+        {/* Subline with smaller 3D flip */}
+        <div style={{ perspective: '900px' }} className="w-full">
+          <p className="footer-subline inline-block font-mono text-xs sm:text-sm text-[var(--fg-muted)] tracking-wider">
+            © 2026 Muhammad Kamran · Lahore, Pakistan
           </p>
         </div>
       </div>
