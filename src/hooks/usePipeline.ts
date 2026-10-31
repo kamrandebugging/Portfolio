@@ -136,7 +136,50 @@ export function usePipeline(root: RefObject<HTMLElement | null>): void {
 
         resetInitial();
 
-        // ---- Mobile helper: reveal one stage in its final animated state (no pin on phones) ----
+        // ---- Mobile helpers: replayable per-stage reveal (no pin on phones) ----
+        // Pending delayedCalls are tracked so a fast reverse scroll can't leave stale flips behind.
+        let stageTimers: gsap.core.Tween[] = [];
+        const killStageTimers = () => {
+          stageTimers.forEach((t) => t.kill());
+          stageTimers = [];
+        };
+
+        const resetStage = (id: string) => {
+          killStageTimers();
+          if (id === 'ticket' && jiraCard) {
+            gsap.killTweensOf(jiraCard);
+            gsap.set(jiraCard, { autoAlpha: 0, x: 0, y: 20 });
+          } else if (id === 'branch') {
+            if (terminalTyping) terminalTyping.textContent = '';
+            if (terminalOutput) gsap.set(terminalOutput, { autoAlpha: 0, y: 4 });
+            if (terminalPromptNext) gsap.set(terminalPromptNext, { autoAlpha: 0, y: 4 });
+          } else if (id === 'tdd') {
+            tddRows.forEach((row) => {
+              gsap.killTweensOf(row);
+              const dot = row.querySelector<HTMLElement>('.tdd-dot');
+              const tag = row.querySelector<HTMLElement>('.tdd-status-tag');
+              if (dot) dot.style.backgroundColor = '#ef4444';
+              if (tag) {
+                tag.textContent = 'FAIL';
+                tag.className = 'tdd-status-tag px-2 py-0.5 rounded text-[10px] font-bold font-mono tracking-wider uppercase bg-red-500/15 text-red-600 border border-red-500/30';
+              }
+              gsap.set(row, { autoAlpha: 0, y: 8 });
+            });
+          } else if (id === 'ci') {
+            ciRows.forEach((row) => {
+              gsap.killTweensOf(row);
+              const spinner = row.querySelector<HTMLElement>('.ci-spinner');
+              const tick = row.querySelector<HTMLElement>('.ci-tick');
+              if (spinner) spinner.classList.remove('hidden');
+              if (tick) tick.classList.add('hidden');
+              gsap.set(row, { autoAlpha: 0, y: 6 });
+            });
+          } else if (id === 'ship' && shipBadge) {
+            gsap.killTweensOf(shipBadge);
+            gsap.set(shipBadge, { autoAlpha: 0, scale: 0.94, boxShadow: 'none' });
+          }
+        };
+
         const revealStage = (id: string) => {
           if (id === 'ticket' && jiraCard) {
             gsap.to(jiraCard, { autoAlpha: 1, x: 0, y: 0, duration: 0.7, ease: 'expo.out' });
@@ -162,7 +205,7 @@ export function usePipeline(root: RefObject<HTMLElement | null>): void {
               'tdd-status-tag px-2 py-0.5 rounded text-[10px] font-bold font-mono tracking-wider uppercase bg-emerald-500/15 text-emerald-600 border border-emerald-500/30';
             tddRows.forEach((row, i) => {
               gsap.to(row, { autoAlpha: 1, y: 0, duration: 0.4, delay: i * 0.12, ease: 'expo.out' });
-              gsap.delayedCall(i * 0.12 + 0.35, () => {
+              stageTimers.push(gsap.delayedCall(i * 0.12 + 0.35, () => {
                 const dot = row.querySelector<HTMLElement>('.tdd-dot');
                 const tag = row.querySelector<HTMLElement>('.tdd-status-tag');
                 if (dot) dot.style.backgroundColor = '#10b981';
@@ -170,17 +213,17 @@ export function usePipeline(root: RefObject<HTMLElement | null>): void {
                   tag.textContent = 'PASS';
                   tag.className = passTag;
                 }
-              });
+              }));
             });
           } else if (id === 'ci') {
             ciRows.forEach((row, i) => {
               gsap.to(row, { autoAlpha: 1, y: 0, duration: 0.4, delay: i * 0.12, ease: 'expo.out' });
-              gsap.delayedCall(i * 0.12 + 0.45, () => {
+              stageTimers.push(gsap.delayedCall(i * 0.12 + 0.45, () => {
                 const spinner = row.querySelector<HTMLElement>('.ci-spinner');
                 const tick = row.querySelector<HTMLElement>('.ci-tick');
                 if (spinner) spinner.classList.add('hidden');
                 if (tick) tick.classList.remove('hidden');
-              });
+              }));
             });
           } else if (id === 'ship' && shipBadge) {
             gsap.to(shipBadge, {
@@ -442,16 +485,22 @@ export function usePipeline(root: RefObject<HTMLElement | null>): void {
           stages.forEach((stage) => {
             const id = stage.dataset.stage ?? '';
             const node = stage.querySelector<HTMLElement>('.pipeline-node');
+            const setNode = (cls: 'is-upcoming' | 'is-done') => {
+              if (!node) return;
+              node.classList.remove('is-upcoming', 'is-active', 'is-done');
+              node.classList.add(cls);
+            };
             ScrollTrigger.create({
               trigger: stage,
               start: 'top 80%',
-              once: true,
               onEnter: () => {
-                if (node) {
-                  node.classList.remove('is-upcoming', 'is-active');
-                  node.classList.add('is-done');
-                }
+                resetStage(id);
+                setNode('is-done');
                 revealStage(id);
+              },
+              onLeaveBack: () => {
+                resetStage(id);
+                setNode('is-upcoming');
               },
             });
           });
