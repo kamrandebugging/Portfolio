@@ -134,7 +134,7 @@ export const Contact: React.FC = () => {
       data-chapter-title="Contact"
       data-tone="dark"
       data-trigger="#contact-sentinel"
-      className="footer-reveal tone-dark relative flex w-full md:min-h-screen flex-col items-center justify-center bg-[#081c15] text-[#d8f3dc] px-[var(--pad-x)] py-16 sm:py-20 select-none"
+      className="footer-reveal tone-dark relative flex w-full flex-col items-center justify-center bg-[#081c15] text-[#d8f3dc] px-[var(--pad-x)] py-16 sm:py-20 select-none"
     >
       <div className="mx-auto flex w-full max-w-[72rem] flex-col items-center justify-center text-center gap-8 sm:gap-10 md:gap-12">
         {/* Monumental Headline: "Code. Ship. Repeat." */}

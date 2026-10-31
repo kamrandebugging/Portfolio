@@ -704,7 +704,7 @@ html[data-motion='reduced'] .psheet {
     position: fixed;
     inset: auto 0 0 0;
     z-index: 0;
-    min-height: 100svh;
+    min-height: 78svh;
     visibility: hidden;
   }
   html:not([data-motion='reduced']) .footer-sentinel {
