@@ -1,5 +1,4 @@
 import React, { useEffect, useRef } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
 import {
   gsap,
   ScrollTrigger,
@@ -8,15 +7,9 @@ import {
   SCENES_ON,
   motionMatchMedia,
 } from '../engine/gsap';
-import { goToSection } from '../engine/scroll';
-import { portfolioData } from '../data/portfolio';
 
 export const Contact: React.FC = () => {
   const root = useRef<HTMLElement>(null);
-  const navigate = useNavigate();
-  const onHome = useLocation().pathname === '/';
-
-  const navLinks = portfolioData.navLinks.filter((link) => link.href !== '#contact');
 
   useEffect(() => {
     const el = root.current;
@@ -143,37 +136,6 @@ export const Contact: React.FC = () => {
       className="footer-reveal tone-dark relative flex min-h-screen w-full flex-col items-center justify-center bg-[#081c15] text-[#d8f3dc] px-[var(--pad-x)] py-16 sm:py-20 select-none"
     >
       <div className="mx-auto flex w-full max-w-[72rem] flex-col items-center justify-center text-center gap-8 sm:gap-10 md:gap-12">
-        {/* Nav row: existing section links, text-xs, muted, separated by ·, opacity-30 -> 100 on hover, no movement */}
-        <nav aria-label="Footer navigation">
-          <ul className="flex flex-wrap items-center justify-center gap-x-3 gap-y-1.5 sm:gap-x-4">
-            {navLinks.map((link, idx) => (
-              <React.Fragment key={link.label}>
-                {idx > 0 && (
-                  <li aria-hidden="true" className="text-xs text-[#d8f3dc] opacity-30 select-none">
-                    ·
-                  </li>
-                )}
-                <li>
-                  <a
-                    href={link.href}
-                    onClick={(e) => {
-                      e.preventDefault();
-                      if (link.href.startsWith('#')) {
-                        goToSection(navigate, onHome, link.href);
-                      } else {
-                        navigate(link.href);
-                      }
-                    }}
-                    className="text-xs text-[#d8f3dc] opacity-30 transition-opacity duration-200 hover:opacity-100"
-                  >
-                    {link.label}
-                  </a>
-                </li>
-              </React.Fragment>
-            ))}
-          </ul>
-        </nav>
-
         {/* Monumental Headline: "Code. Ship. Repeat." */}
         <div style={{ perspective: '900px' }} className="w-full">
           <h2 className="font-display font-semibold text-[clamp(3rem,9vw,8.5rem)] leading-[1.1] sm:leading-[0.95] tracking-tight text-[#d8f3dc]">
