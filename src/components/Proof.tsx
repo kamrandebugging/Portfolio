@@ -1,10 +1,8 @@
 import React, { useRef } from 'react';
 import { gsap, ScrollTrigger, useGSAP, MOTION_OK, motionMatchMedia } from '../engine/gsap';
-import { isReduced } from '../engine/motion';
+import { playPop } from '../engine/sound';
 import { portfolioData } from '../data/portfolio';
 import { useReveals } from '../hooks/useReveals';
-
-const SCRAMBLE_CHARS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789+/';
 
 export const Proof: React.FC = () => {
   const root = useRef<HTMLElement>(null);
@@ -15,79 +13,72 @@ export const Proof: React.FC = () => {
     () => {
       const mm = motionMatchMedia();
       mm.add(MOTION_OK, () => {
+        const grid = root.current?.querySelector<HTMLElement>('.stats-grid');
         const cells = gsap.utils.toArray<HTMLElement>('.stat-cell', root.current);
+        const cleanups: (() => void)[] = [];
 
-        if (cells.length) {
-          gsap.from(cells, {
-            y: 28,
-            autoAlpha: 0,
-            duration: 1,
-            ease: 'expo.out',
-            stagger: 0.08,
-            scrollTrigger: { trigger: cells[0], start: 'top 92%', once: true },
-          });
-        }
+        // Pop-up stat badges: each cell pops with back.out overshoot + a
+        // synthesized pop sound, staggered 0.12s apart. Number counts up
+        // inside while the cell pops (no scramble — pop + scramble is noise).
+        if (grid && cells.length) {
+          gsap.set(cells, { scale: 0.85, autoAlpha: 0, transformOrigin: '50% 50%' });
 
-        const counters = gsap.utils.toArray<HTMLElement>('[data-count]', root.current);
-        const activeCleanups: (() => void)[] = [];
-
-        counters.forEach((el, i) => {
-          const raw = el.dataset.count ?? '';
-          const match = raw.match(/^([\d.]+)(.*)$/);
-          if (!match) return;
-          const target = parseFloat(match[1]);
-          const decimals = (match[1].split('.')[1] ?? '').length;
-          const suffix = match[2];
-          const state = { v: 0 };
-          const len = raw.length;
-
-          let hasTriggered = false;
-          let scrambleTimer: ReturnType<typeof setInterval> | null = null;
-          let delayTimer: ReturnType<typeof setTimeout> | null = null;
-          let countTween: gsap.core.Tween | null = null;
-
-          const triggerAnimation = () => {
-            if (hasTriggered || isReduced()) return;
-            hasTriggered = true;
-
-            delayTimer = setTimeout(() => {
-              const startTime = Date.now();
-              const scrambleDuration = 700; // ~0.7s
-
-              scrambleTimer = setInterval(() => {
-                const elapsed = Date.now() - startTime;
-                if (elapsed >= scrambleDuration) {
-                  if (scrambleTimer) clearInterval(scrambleTimer);
-                  scrambleTimer = null;
-                  el.textContent = (0).toFixed(decimals) + suffix;
-                  countTween = gsap.to(state, {
-                    v: target,
-                    duration: 1.9,
-                    ease: 'power3.out',
-                    onUpdate: () => {
-                      el.textContent = state.v.toFixed(decimals) + suffix;
-                    },
-                  });
-                } else {
-                  let scrambled = '';
-                  for (let c = 0; c < len; c++) {
-                    scrambled += SCRAMBLE_CHARS[Math.floor(Math.random() * SCRAMBLE_CHARS.length)];
-                  }
-                  el.textContent = scrambled;
-                }
-              }, 40);
-            }, i * 100);
+          const startCount = (el: HTMLElement, delay: number) => {
+            const raw = el.dataset.count ?? '';
+            const match = raw.match(/^([\d.]+)(.*)$/);
+            if (!match) return;
+            const target = parseFloat(match[1]);
+            const decimals = (match[1].split('.')[1] ?? '').length;
+            const suffix = match[2];
+            const state = { v: 0 };
+            const tween = gsap.to(state, {
+              v: target,
+              duration: 1.6,
+              delay,
+              ease: 'power3.out',
+              onUpdate: () => {
+                el.textContent = state.v.toFixed(decimals) + suffix;
+              },
+            });
+            cleanups.push(() => {
+              tween.kill();
+              el.textContent = raw;
+            });
           };
 
-          // 1. ScrollTrigger trigger
+          let played = false;
+          const playAll = () => {
+            if (played) return;
+            played = true;
+            cells.forEach((cell, i) => {
+              const delay = i * 0.12;
+              const tween = gsap.fromTo(
+                cell,
+                { scale: 0.85, autoAlpha: 0 },
+                {
+                  scale: 1,
+                  autoAlpha: 1,
+                  duration: 0.5,
+                  delay,
+                  ease: 'back.out(1.7)',
+                  onStart: () => playPop(),
+                }
+              );
+              cleanups.push(() => tween.kill());
+              const num = cell.querySelector<HTMLElement>('[data-count]');
+              if (num) startCount(num, delay + 0.15);
+            });
+          };
+
           const st = ScrollTrigger.create({
-            trigger: el,
+            trigger: grid,
             start: 'top 92%',
             once: true,
-            onEnter: triggerAnimation,
+            onEnter: playAll,
           });
+          cleanups.push(() => st.kill());
 
-          // 2. IntersectionObserver fallback (guarantees execution on mobile browsers)
+          // IntersectionObserver fallback (guarantees execution on mobile browsers)
           let observer: IntersectionObserver | null = null;
           if (typeof IntersectionObserver !== 'undefined') {
             observer = new IntersectionObserver(
@@ -95,24 +86,16 @@ export const Proof: React.FC = () => {
                 entries.forEach((entry) => {
                   if (entry.isIntersecting) {
                     observer?.disconnect();
-                    triggerAnimation();
+                    playAll();
                   }
                 });
               },
               { threshold: 0.15 }
             );
-            observer.observe(el);
+            observer.observe(grid);
+            cleanups.push(() => observer?.disconnect());
           }
-
-          activeCleanups.push(() => {
-            if (delayTimer) clearTimeout(delayTimer);
-            if (scrambleTimer) clearInterval(scrambleTimer);
-            if (countTween) countTween.kill();
-            st.kill();
-            observer?.disconnect();
-            el.textContent = el.dataset.count ?? '';
-          });
-        });
+        }
 
         const frame = root.current?.querySelector<HTMLElement>('.reveal-frame');
         const img = frame?.querySelector('img');
@@ -134,7 +117,7 @@ export const Proof: React.FC = () => {
         }
 
         return () => {
-          activeCleanups.forEach((cleanup) => cleanup());
+          cleanups.forEach((cleanup) => cleanup());
         };
       });
     },
@@ -155,9 +138,9 @@ export const Proof: React.FC = () => {
           {impact.heading[0]} <em>{impact.heading[1]}</em>
         </h2>
 
-        {/* 2x2 Scramble Stats Grid */}
+        {/* 2x2 Pop-up Stats Grid */}
         <div className="mt-16 w-full max-w-[64rem]">
-          <dl className="grid grid-cols-2">
+          <dl className="stats-grid grid grid-cols-2">
             {impact.stats.map((stat, i) => (
               <div
                 key={stat.label}
