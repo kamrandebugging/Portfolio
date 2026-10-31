@@ -1,13 +1,5 @@
 import { RefObject } from 'react';
-import {
-  gsap,
-  ScrollTrigger,
-  useGSAP,
-  MOTION_OK,
-  SCENES_ON,
-  MOBILE_SCENES,
-  motionMatchMedia,
-} from '../engine/gsap';
+import { gsap, ScrollTrigger, useGSAP, MOTION_OK, motionMatchMedia } from '../engine/gsap';
 
 export function usePipeline(root: RefObject<HTMLElement | null>): void {
   useGSAP(
@@ -136,57 +128,23 @@ export function usePipeline(root: RefObject<HTMLElement | null>): void {
 
         resetInitial();
 
-        // ---- Mobile helpers: replayable per-stage reveal (no pin on phones) ----
-        // Pending delayedCalls are tracked so a fast reverse scroll can't leave stale flips behind.
-        let stageTimers: gsap.core.Tween[] = [];
-        const killStageTimers = () => {
-          stageTimers.forEach((t) => t.kill());
-          stageTimers = [];
-        };
+        // ---- Mobile helper: one paused timeline per stage.
+        // toggleActions 'play none none reverse' replays the stage on reverse scroll
+        // (the GSAP-documented replay pattern). Class flips ride on tiny tweens so
+        // reversing the playhead reverts them too — no manual reset needed. ----
+        const PASS_TAG =
+          'tdd-status-tag px-2 py-0.5 rounded text-[10px] font-bold font-mono tracking-wider uppercase bg-emerald-500/15 text-emerald-600 border border-emerald-500/30';
+        const FAIL_TAG =
+          'tdd-status-tag px-2 py-0.5 rounded text-[10px] font-bold font-mono tracking-wider uppercase bg-red-500/15 text-red-600 border border-red-500/30';
 
-        const resetStage = (id: string) => {
-          killStageTimers();
+        const buildStageTimeline = (id: string, tl: gsap.core.Timeline) => {
           if (id === 'ticket' && jiraCard) {
-            gsap.killTweensOf(jiraCard);
-            gsap.set(jiraCard, { autoAlpha: 0, x: 0, y: 20 });
+            tl.to(jiraCard, { autoAlpha: 1, x: 0, y: 0, duration: 0.7, ease: 'expo.out' }, 0);
           } else if (id === 'branch') {
-            if (terminalTyping) terminalTyping.textContent = '';
-            if (terminalOutput) gsap.set(terminalOutput, { autoAlpha: 0, y: 4 });
-            if (terminalPromptNext) gsap.set(terminalPromptNext, { autoAlpha: 0, y: 4 });
-          } else if (id === 'tdd') {
-            tddRows.forEach((row) => {
-              gsap.killTweensOf(row);
-              const dot = row.querySelector<HTMLElement>('.tdd-dot');
-              const tag = row.querySelector<HTMLElement>('.tdd-status-tag');
-              if (dot) dot.style.backgroundColor = '#ef4444';
-              if (tag) {
-                tag.textContent = 'FAIL';
-                tag.className = 'tdd-status-tag px-2 py-0.5 rounded text-[10px] font-bold font-mono tracking-wider uppercase bg-red-500/15 text-red-600 border border-red-500/30';
-              }
-              gsap.set(row, { autoAlpha: 0, y: 8 });
-            });
-          } else if (id === 'ci') {
-            ciRows.forEach((row) => {
-              gsap.killTweensOf(row);
-              const spinner = row.querySelector<HTMLElement>('.ci-spinner');
-              const tick = row.querySelector<HTMLElement>('.ci-tick');
-              if (spinner) spinner.classList.remove('hidden');
-              if (tick) tick.classList.add('hidden');
-              gsap.set(row, { autoAlpha: 0, y: 6 });
-            });
-          } else if (id === 'ship' && shipBadge) {
-            gsap.killTweensOf(shipBadge);
-            gsap.set(shipBadge, { autoAlpha: 0, scale: 0.94, boxShadow: 'none' });
-          }
-        };
-
-        const revealStage = (id: string) => {
-          if (id === 'ticket' && jiraCard) {
-            gsap.to(jiraCard, { autoAlpha: 1, x: 0, y: 0, duration: 0.7, ease: 'expo.out' });
-          } else if (id === 'branch') {
-            if (terminalTyping) {
-              const o = { n: 0 };
-              gsap.to(o, {
+            const o = { n: 0 };
+            tl.to(
+              o,
+              {
                 n: fullBranchCommand.length,
                 duration: 0.9,
                 ease: 'none',
@@ -194,50 +152,70 @@ export function usePipeline(root: RefObject<HTMLElement | null>): void {
                   if (terminalTyping)
                     terminalTyping.textContent = fullBranchCommand.slice(0, Math.round(o.n));
                 },
-              });
-            }
-            if (terminalOutput)
-              gsap.to(terminalOutput, { autoAlpha: 1, y: 0, duration: 0.4, delay: 0.9 });
+              },
+              0
+            );
+            if (terminalOutput) tl.to(terminalOutput, { autoAlpha: 1, y: 0, duration: 0.4 }, 0.9);
             if (terminalPromptNext)
-              gsap.to(terminalPromptNext, { autoAlpha: 1, y: 0, duration: 0.4, delay: 1.0 });
+              tl.to(terminalPromptNext, { autoAlpha: 1, y: 0, duration: 0.4 }, 1.0);
           } else if (id === 'tdd') {
-            const passTag =
-              'tdd-status-tag px-2 py-0.5 rounded text-[10px] font-bold font-mono tracking-wider uppercase bg-emerald-500/15 text-emerald-600 border border-emerald-500/30';
             tddRows.forEach((row, i) => {
-              gsap.to(row, { autoAlpha: 1, y: 0, duration: 0.4, delay: i * 0.12, ease: 'expo.out' });
-              stageTimers.push(gsap.delayedCall(i * 0.12 + 0.35, () => {
-                const dot = row.querySelector<HTMLElement>('.tdd-dot');
-                const tag = row.querySelector<HTMLElement>('.tdd-status-tag');
-                if (dot) dot.style.backgroundColor = '#10b981';
-                if (tag) {
-                  tag.textContent = 'PASS';
-                  tag.className = passTag;
-                }
-              }));
+              const t = i * 0.4;
+              const dot = row.querySelector<HTMLElement>('.tdd-dot');
+              const tag = row.querySelector<HTMLElement>('.tdd-status-tag');
+              const flip = { v: 0 };
+              tl.to(row, { autoAlpha: 1, y: 0, duration: 0.4 }, t);
+              if (dot) tl.to(dot, { backgroundColor: '#10b981', duration: 0.25, ease: 'none' }, t + 0.3);
+              if (tag)
+                tl.to(
+                  flip,
+                  {
+                    v: 1,
+                    duration: 0.01,
+                    ease: 'none',
+                    onUpdate: () => {
+                      const pass = flip.v >= 0.5;
+                      tag.textContent = pass ? 'PASS' : 'FAIL';
+                      tag.className = pass ? PASS_TAG : FAIL_TAG;
+                    },
+                  },
+                  t + 0.3
+                );
             });
           } else if (id === 'ci') {
             ciRows.forEach((row, i) => {
-              gsap.to(row, { autoAlpha: 1, y: 0, duration: 0.4, delay: i * 0.12, ease: 'expo.out' });
-              stageTimers.push(gsap.delayedCall(i * 0.12 + 0.45, () => {
-                const spinner = row.querySelector<HTMLElement>('.ci-spinner');
-                const tick = row.querySelector<HTMLElement>('.ci-tick');
-                if (spinner) spinner.classList.add('hidden');
-                if (tick) tick.classList.remove('hidden');
-              }));
+              const t = i * 0.4;
+              const spinner = row.querySelector<HTMLElement>('.ci-spinner');
+              const tick = row.querySelector<HTMLElement>('.ci-tick');
+              const flip = { v: 0 };
+              tl.to(row, { autoAlpha: 1, y: 0, duration: 0.4 }, t);
+              tl.to(
+                flip,
+                {
+                  v: 1,
+                  duration: 0.01,
+                  ease: 'none',
+                  onUpdate: () => {
+                    const done = flip.v >= 0.5;
+                    if (spinner) spinner.classList.toggle('hidden', done);
+                    if (tick) tick.classList.toggle('hidden', !done);
+                  },
+                },
+                t + 0.35
+              );
             });
           } else if (id === 'ship' && shipBadge) {
-            gsap.to(shipBadge, {
-              autoAlpha: 1,
-              scale: 1,
-              boxShadow: '0 0 24px rgba(16, 185, 129, 0.45)',
-              duration: 0.5,
-              ease: 'back.out(1.6)',
-            });
+            tl.to(shipBadge, { autoAlpha: 1, scale: 1, duration: 0.5, ease: 'expo.out' }, 0);
+            tl.to(
+              shipBadge,
+              { boxShadow: '0 0 24px rgba(16, 185, 129, 0.45)', duration: 0.6, ease: 'sine.inOut' },
+              0.25
+            );
           }
         };
 
+        if (window.innerWidth >= 768) {
         // ---- Desktop / tablet: pinned scrub timeline (unchanged behaviour) ----
-        mm.add(SCENES_ON, () => {
 
         // PIN the section during sequence:
         // ScrollTrigger on section#about: pin: true, pinSpacing: true, start: "top top", end: "+=300%", scrub: 0.5.
@@ -461,11 +439,9 @@ export function usePipeline(root: RefObject<HTMLElement | null>): void {
         return () => {
           tl.kill();
         };
-        });
-
-        // ---- Phones: no pin. Each stage reveals once as it scrolls into view.
-        // Permanent fix: the pinned scrub timeline gets stuck on mobile. ----
-        mm.add(MOBILE_SCENES, () => {
+        } else {
+        // ---- Phones: no pin. One paused timeline per stage; toggleActions
+        // 'play none none reverse' replays the stage on reverse scroll. ----
           if (scrollHint) gsap.set(scrollHint, { autoAlpha: 0 });
 
           if (connectorFill) {
@@ -485,26 +461,28 @@ export function usePipeline(root: RefObject<HTMLElement | null>): void {
           stages.forEach((stage) => {
             const id = stage.dataset.stage ?? '';
             const node = stage.querySelector<HTMLElement>('.pipeline-node');
-            const setNode = (cls: 'is-upcoming' | 'is-done') => {
-              if (!node) return;
-              node.classList.remove('is-upcoming', 'is-active', 'is-done');
-              node.classList.add(cls);
-            };
+            const stl = gsap.timeline({ paused: true });
+            buildStageTimeline(id, stl);
             ScrollTrigger.create({
               trigger: stage,
               start: 'top 80%',
+              animation: stl,
+              toggleActions: 'play none none reverse',
               onEnter: () => {
-                resetStage(id);
-                setNode('is-done');
-                revealStage(id);
+                if (node) {
+                  node.classList.remove('is-upcoming', 'is-active');
+                  node.classList.add('is-done');
+                }
               },
               onLeaveBack: () => {
-                resetStage(id);
-                setNode('is-upcoming');
+                if (node) {
+                  node.classList.remove('is-active', 'is-done');
+                  node.classList.add('is-upcoming');
+                }
               },
             });
           });
-        });
+        }
       });
 
     },
