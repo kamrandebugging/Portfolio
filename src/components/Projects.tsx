@@ -233,9 +233,9 @@ export const Projects: React.FC = () => {
               Hover to preview · click to open
             </span>
           </div>
-          <ul>
+          <ul className="list-none">
             {more.map((project, i) => (
-              <li key={project.id}>
+              <li key={project.id} className="list-none">
                 <button
                   type="button"
                   className="mrow"
@@ -244,15 +244,18 @@ export const Projects: React.FC = () => {
                   aria-haspopup="dialog"
                   onClick={() => openRow(i)}
                 >
-                                    <span className="display text-[clamp(1.6rem,3vw,2.6rem)]">{project.name}</span>
+                  <span className="display text-[clamp(1.6rem,3vw,2.6rem)]">{project.name}</span>
                   <span className="text-sm muted">{project.cat}</span>
                   <span className="font-sans text-sm muted">
                     {project.outcome}
                   </span>
+                  <span className="font-sans text-xs text-[var(--accent)] border border-[var(--accent)]/40 rounded-full px-3 py-1.5 md:hidden mt-1.5 inline-flex items-center">
+                    See details &rarr;
+                  </span>
                 </button>
               </li>
             ))}
-            <li className="border-t border-[var(--line)]" aria-hidden="true" />
+            <li className="border-t border-[var(--line)] list-none" aria-hidden="true" />
           </ul>
         </div>
       </div>

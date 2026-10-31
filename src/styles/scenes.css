@@ -422,7 +422,7 @@ html[data-motion='reduced'] .psheet {
 .mrow {
   display: grid;
   width: 100%;
-  grid-template-columns: 3rem minmax(0, 1.4fr) minmax(0, 1fr) minmax(0, 0.8fr);
+  grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr) minmax(0, 0.8fr);
   align-items: baseline;
   gap: 1rem;
   padding: 1.5rem 0;
@@ -441,10 +441,11 @@ html[data-motion='reduced'] .psheet {
 }
 @media (max-width: 767px) {
   .mrow {
-    grid-template-columns: 2rem 1fr;
-  }
-  .mrow > :nth-child(n + 3) {
-    grid-column: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.35rem;
+    padding: 1.25rem 0;
   }
 }
 .mpreview {
