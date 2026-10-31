@@ -1,4 +1,5 @@
 import React, { useEffect, useRef } from 'react';
+import { Calendar } from 'lucide-react';
 import {
   gsap,
   ScrollTrigger,
@@ -145,14 +146,17 @@ export const Contact: React.FC = () => {
           </h2>
         </div>
 
-        {/* CTA: One big white pill "Get in touch" */}
+        {/* CTA: One big white pill "Book a Call" */}
         <div>
           <a
-            href="mailto:kamrandebugging@gmail.com"
-            className="inline-flex items-center justify-center rounded-full bg-white px-8 sm:px-10 py-4 sm:py-4.5 font-sans text-base sm:text-lg font-medium text-[#081c15] shadow-[0_0_35px_rgba(255,255,255,0.25)] transition-transform duration-300 hover:scale-[1.03]"
-            data-cursor="Email"
+            href="https://cal.com/kamrandebugging/intro-call"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center justify-center gap-2.5 rounded-full bg-white px-8 sm:px-10 py-4 sm:py-4.5 font-sans text-base sm:text-lg font-medium text-[#081c15] shadow-[0_0_35px_rgba(255,255,255,0.25)] transition-transform duration-300 hover:scale-[1.03]"
+            data-cursor="Book"
           >
-            Get in touch
+            <Calendar className="h-4 w-4 shrink-0 text-current" aria-hidden="true" />
+            Book a Call
           </a>
         </div>
 

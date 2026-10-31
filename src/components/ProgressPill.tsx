@@ -1,6 +1,6 @@
 import React, { useRef } from 'react';
+import { Calendar } from 'lucide-react';
 import { gsap, ScrollTrigger, useGSAP } from '../engine/gsap';
-import { scrollToTarget } from '../engine/scroll';
 
 /**
  * One fixed control instead of three: it travels along the bottom edge with
@@ -9,7 +9,7 @@ import { scrollToTarget } from '../engine/scroll';
  */
 export const ProgressPill: React.FC = () => {
   const pill = useRef<HTMLDivElement>(null);
-    const title = useRef<HTMLSpanElement>(null);
+  const title = useRef<HTMLSpanElement>(null);
 
   useGSAP(
     () => {
@@ -53,7 +53,7 @@ export const ProgressPill: React.FC = () => {
           end: 'bottom 60%',
           onToggle: (self) => {
             if (!self.isActive) return;
-                        if (title.current) title.current.textContent = chapterTitle ?? '';
+            if (title.current) title.current.textContent = chapterTitle ?? '';
             el.style.opacity = hide ? '0' : '1';
             el.style.pointerEvents = hide ? 'none' : 'auto';
           },
@@ -85,17 +85,19 @@ export const ProgressPill: React.FC = () => {
     <>
       <div className="scroll-progress" aria-hidden="true" />
       <div ref={pill} className="pill" role="group" aria-label="Page position">
-      <span className="pill-label">
-        <span ref={title}>Intro</span>
-      </span>
-      <button
-        type="button"
-        className="pill-btn"
-        onClick={() => scrollToTarget('#contact')}
-        data-cursor="Email"
-      >
-        Get in touch
-      </button>
+        <span className="pill-label">
+          <span ref={title}>Intro</span>
+        </span>
+        <a
+          href="https://cal.com/kamrandebugging/intro-call"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="pill-btn inline-flex items-center gap-1.5"
+          data-cursor="Book"
+        >
+          <Calendar className="h-4 w-4 shrink-0 text-current" aria-hidden="true" />
+          Book a Call
+        </a>
       </div>
     </>
   );
