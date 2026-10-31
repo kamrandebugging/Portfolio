@@ -1,8 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 
-const isReducedMotion = () =>
-  window.matchMedia('(prefers-reduced-motion: reduce)').matches ||
-  document.documentElement.dataset.motion === 'reduced';
+// Owner decision 2026-10-31: animations always run on every device.
+const isReducedMotion = () => false;
 
 /* ─────────────────────────────────────────────────────────────────
    CI Pipeline — LabFlow

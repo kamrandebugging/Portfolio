@@ -18,10 +18,8 @@ export const getMotionPref = (): MotionPref => {
 export const systemReducesMotion = (): boolean =>
   window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-export const isReduced = (): boolean => {
-  const pref = getMotionPref();
-  return pref === 'off' || (pref === 'auto' && systemReducesMotion());
-};
+/** Owner decision 2026-10-31: animations always run on every device. */
+export const isReduced = (): boolean => false;
 
 export const applyMotionAttribute = (): void => {
   document.documentElement.dataset.motion = isReduced() ? 'reduced' : 'full';

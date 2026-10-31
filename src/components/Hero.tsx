@@ -44,17 +44,12 @@ const Cursor: React.FC = () => (
 );
 
 const HeroTerminal: React.FC = () => {
-  const [isReducedMotion] = useState(() => {
-    if (typeof window === 'undefined') return false;
-    return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  });
-
-  const [stepIndex, setStepIndex] = useState(isReducedMotion ? TERMINAL_STEPS.length : 0);
-  const [phase, setPhase] = useState<'cmd' | 'output'>(isReducedMotion ? 'output' : 'cmd');
-  const [charCount, setCharCount] = useState(isReducedMotion ? 999 : 0);
+  // Owner decision 2026-10-31: the terminal always types, on every device.
+  const [stepIndex, setStepIndex] = useState(0);
+  const [phase, setPhase] = useState<'cmd' | 'output'>('cmd');
+  const [charCount, setCharCount] = useState(0);
 
   useEffect(() => {
-    if (isReducedMotion) return;
     if (stepIndex >= TERMINAL_STEPS.length) return;
 
     const currentItem = TERMINAL_STEPS[stepIndex];
@@ -86,7 +81,7 @@ const HeroTerminal: React.FC = () => {
     }
 
     return () => clearTimeout(timer);
-  }, [stepIndex, phase, charCount, isReducedMotion]);
+  }, [stepIndex, phase, charCount]);
 
   const handleFastForward = () => {
     setStepIndex(TERMINAL_STEPS.length);
@@ -252,11 +247,6 @@ export const Hero: React.FC = () => {
   );
 
   useEffect(() => {
-    const reduced =
-      window.matchMedia('(prefers-reduced-motion: reduce)').matches ||
-      document.documentElement.dataset.motion === 'reduced';
-    if (reduced) return;
-
     let idx = 0;
     const rotate = () => {
       const span = root.current?.querySelector<HTMLElement>('[data-rotword]');

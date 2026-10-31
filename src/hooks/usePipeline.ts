@@ -1,6 +1,5 @@
 import { RefObject } from 'react';
 import { gsap, useGSAP, MOTION_OK, motionMatchMedia } from '../engine/gsap';
-import { isReduced } from '../engine/motion';
 
 export function usePipeline(root: RefObject<HTMLElement | null>): void {
   useGSAP(
@@ -353,80 +352,6 @@ export function usePipeline(root: RefObject<HTMLElement | null>): void {
         };
       });
 
-      // Reduced motion fallback: NO pin, NO timeline — render all 5 stages complete statically, hide the scroll hint
-      const setReducedMotionState = () => {
-        const container = root.current?.querySelector<HTMLElement>('.pipeline-container');
-        if (!container) return;
-
-        const scrollHint = container.querySelector<HTMLElement>('.pipeline-scroll-hint');
-        if (scrollHint) {
-          gsap.set(scrollHint, { display: 'none' });
-        }
-
-        const connectorFill = container.querySelector<HTMLElement>('.pipeline-line-fill');
-        if (connectorFill) {
-          gsap.set(connectorFill, { scaleX: 1, scaleY: 1 });
-        }
-
-        const nodes = gsap.utils.toArray<HTMLElement>('.pipeline-node', container);
-        nodes.forEach((node) => {
-          node.classList.remove('is-upcoming', 'is-active');
-          node.classList.add('is-done');
-        });
-
-        const jiraCard = container.querySelector<HTMLElement>('.jira-card');
-        if (jiraCard) {
-          gsap.set(jiraCard, { autoAlpha: 1, x: 0, y: 0 });
-        }
-
-        const terminalTyping = container.querySelector<HTMLElement>('.terminal-typing');
-        if (terminalTyping) {
-          terminalTyping.textContent = 'git checkout -b feature/tenant-provisioning';
-        }
-        const terminalOutput = container.querySelector<HTMLElement>('.terminal-output');
-        if (terminalOutput) {
-          gsap.set(terminalOutput, { autoAlpha: 1, y: 0 });
-        }
-        const terminalPromptNext = container.querySelector<HTMLElement>('.terminal-prompt-next');
-        if (terminalPromptNext) {
-          gsap.set(terminalPromptNext, { autoAlpha: 1, y: 0 });
-        }
-
-        const tddRows = gsap.utils.toArray<HTMLElement>('.tdd-test-row', container);
-        tddRows.forEach((row) => {
-          const dot = row.querySelector<HTMLElement>('.tdd-dot');
-          const tag = row.querySelector<HTMLElement>('.tdd-status-tag');
-          if (dot) dot.style.backgroundColor = '#10b981';
-          if (tag) {
-            tag.textContent = 'PASS';
-            tag.className =
-              'tdd-status-tag px-2 py-0.5 rounded text-[10px] font-bold font-mono tracking-wider uppercase bg-emerald-500/15 text-emerald-600 border border-emerald-500/30';
-          }
-          gsap.set(row, { autoAlpha: 1, y: 0 });
-        });
-
-        const ciRows = gsap.utils.toArray<HTMLElement>('.ci-check-row', container);
-        ciRows.forEach((row) => {
-          const spinner = row.querySelector<HTMLElement>('.ci-spinner');
-          const tick = row.querySelector<HTMLElement>('.ci-tick');
-          if (spinner) spinner.classList.add('hidden');
-          if (tick) tick.classList.remove('hidden');
-          gsap.set(row, { autoAlpha: 1, y: 0 });
-        });
-
-        const shipBadge = container.querySelector<HTMLElement>('.ship-badge-container');
-        if (shipBadge) {
-          gsap.set(shipBadge, { autoAlpha: 1, scale: 1, boxShadow: '0 0 24px rgba(16, 185, 129, 0.45)' });
-        }
-      };
-
-      if (
-        isReduced() ||
-        document.documentElement.dataset.motion === 'reduced' ||
-        window.matchMedia('(prefers-reduced-motion: reduce)').matches
-      ) {
-        setReducedMotionState();
-      }
     },
     { scope: root }
   );

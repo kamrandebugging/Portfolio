@@ -22,11 +22,6 @@ export const HeroParticles: React.FC = () => {
     const canvas = canvasRef.current;
     if (!canvas) return;
 
-    const reduced =
-      window.matchMedia('(prefers-reduced-motion: reduce)').matches ||
-      document.documentElement.dataset.motion === 'reduced';
-    if (reduced) return;
-
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 

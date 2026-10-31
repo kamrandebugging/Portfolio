@@ -2,7 +2,6 @@ import React, { useEffect, useRef } from 'react';
 import { ArrowUpRight, X } from 'lucide-react';
 import { gsap, useGSAP } from '../engine/gsap';
 import { getLenis } from '../engine/scroll';
-import { isReduced, setMotionPref, systemReducesMotion } from '../engine/motion';
 import { portfolioData } from '../data/portfolio';
 
 interface EditorialMenuProps {
@@ -34,7 +33,7 @@ export const EditorialMenu: React.FC<EditorialMenuProps> = ({ open, onClose, go:
     () => {
       const el = root.current;
       if (!el) return;
-      const k = isReduced() ? 0 : 1;
+      const k = 1;
       const panels = el.querySelectorAll('.menu-panel');
       const words = el.querySelectorAll('.menu-rise');
 
@@ -148,17 +147,6 @@ export const EditorialMenu: React.FC<EditorialMenuProps> = ({ open, onClose, go:
 
       <div className="menu-bottom">
         <div className="flex flex-wrap items-center gap-x-5 gap-y-2">
-                    <button
-            type="button"
-            className="motion-toggle"
-            tabIndex={open ? 0 : -1}
-            aria-pressed={!isReduced()}
-            onClick={() => setMotionPref(isReduced() ? 'on' : 'off')}
-          >
-            <span className="motion-dot" data-on={!isReduced()} aria-hidden="true" />
-            Animations {isReduced() ? 'off' : 'on'}
-            {isReduced() && systemReducesMotion() ? ' (device setting)' : ''}
-          </button>
         </div>
         <a
           href={`mailto:${portfolioData.contact.email}`}
