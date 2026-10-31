@@ -77,30 +77,24 @@ export const Proof: React.FC = () => {
           {impact.heading[0]} <em>{impact.heading[1]}</em>
         </h2>
 
-        {/* Bento Stats Terminal Card (Old duplicate stats row removed) */}
-        <div className="proof-labflow-bento mt-16 w-full max-w-[56rem]" data-fade>
-          <div className="proof-bento-header" aria-hidden="true">
-            <span className="proof-bento-dot" />
-            <span className="proof-bento-dot" />
-            <span className="proof-bento-dot" />
-            <span className="proof-bento-title">kamran — proof</span>
-          </div>
-          <dl className="proof-bento-grid">
-            <div className="proof-bento-tile">
-              <dd className="proof-bento-num" data-count="1+">1+</dd>
-              <dt className="proof-bento-label">Years production backend experience</dt>
+        {/* Composed Stats Strip */}
+        <div className="proof-stats-strip mt-16 w-full max-w-[64rem]" data-fade>
+          <dl className="proof-stats-grid">
+            <div className="proof-stats-tile">
+              <dd className="proof-stats-num tabular-nums" data-count="1+">1+</dd>
+              <dt className="proof-stats-label">Years production backend experience</dt>
             </div>
-            <div className="proof-bento-tile">
-              <dd className="proof-bento-num" data-count="7">7</dd>
-              <dt className="proof-bento-label">Real projects shipped</dt>
+            <div className="proof-stats-tile">
+              <dd className="proof-stats-num tabular-nums" data-count="7">7</dd>
+              <dt className="proof-stats-label">Real projects shipped</dt>
             </div>
-            <div className="proof-bento-tile">
-              <dd className="proof-bento-num" data-count="2">2</dd>
-              <dt className="proof-bento-label">CodeExcellence 1st places</dt>
+            <div className="proof-stats-tile">
+              <dd className="proof-stats-num tabular-nums" data-count="2">2</dd>
+              <dt className="proof-stats-label">CodeExcellence 1st places</dt>
             </div>
-            <div className="proof-bento-tile">
-              <dd className="proof-bento-num" data-count="3.61">3.61</dd>
-              <dt className="proof-bento-label">CGPA</dt>
+            <div className="proof-stats-tile">
+              <dd className="proof-stats-num tabular-nums" data-count="3.61">3.61</dd>
+              <dt className="proof-stats-label">CGPA</dt>
             </div>
           </dl>
         </div>
