@@ -188,7 +188,7 @@ export const Projects: React.FC = () => {
             </h2>
           </div>
           <span data-fade className="font-sans text-xs tracking-wider muted">
-            {String(projects.length).padStart(2, '0')} projects · 03 featured
+            {projects.length} projects · 3 featured
           </span>
         </div>
 

@@ -585,32 +585,7 @@ html[data-motion='reduced'] .psheet {
   transform: translateY(-2px);
 }
 
-/* ---------- Status pill ---------- */
-.status-pill {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.65rem;
-  padding: 0.45rem 1rem;
-  border: 1px solid var(--line);
-  border-radius: 9999px;
-  font-size: 0.82rem;
-}
-.status-dot {
-  width: 0.5rem;
-  height: 0.5rem;
-  border-radius: 9999px;
-  background: var(--accent);
-  animation: ping 2.2s var(--ease-out) infinite;
-}
-@keyframes ping {
-  0% {
-    box-shadow: 0 0 0 0 rgb(82 183 136 / 0.55);
-  }
-  70%,
-  100% {
-    box-shadow: 0 0 0 0.6rem rgb(82 183 136 / 0);
-  }
-}
+
 
 /* ---------- Editorial menu ---------- */
 .menu {
