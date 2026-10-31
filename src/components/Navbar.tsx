@@ -1,9 +1,7 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { Volume2, VolumeX } from 'lucide-react';
 import { portfolioData } from '../data/portfolio';
 import { goToSection } from '../engine/scroll';
-import { isMuted, setMuted } from '../engine/sound';
 import { EditorialMenu } from './EditorialMenu';
 import { CommandPalette } from './CommandPalette';
 
@@ -12,7 +10,6 @@ const isMac = typeof navigator !== 'undefined' && /Mac|iPhone|iPad|iPod/.test(na
 export const Navbar: React.FC = () => {
   const [open, setOpen] = useState(false);
   const [paletteOpen, setPaletteOpen] = useState(false);
-  const [soundOn, setSoundOn] = useState(() => !isMuted());
   const trigger = useRef<HTMLButtonElement>(null);
   const wasOpen = useRef(false);
   const close = useCallback(() => setOpen(false), []);
@@ -76,24 +73,6 @@ export const Navbar: React.FC = () => {
           </ul>
 
           
-          <button
-            type="button"
-            className="nav-cmdk-hint"
-            onClick={() => {
-              const next = !soundOn;
-              setMuted(!next);
-              setSoundOn(next);
-            }}
-            aria-label={soundOn ? 'Mute sound effects' : 'Unmute sound effects'}
-            aria-pressed={!soundOn}
-          >
-            {soundOn ? (
-              <Volume2 className="h-4 w-4" aria-hidden="true" />
-            ) : (
-              <VolumeX className="h-4 w-4" aria-hidden="true" />
-            )}
-          </button>
-
           <button
             type="button"
             className="nav-cmdk-hint"
