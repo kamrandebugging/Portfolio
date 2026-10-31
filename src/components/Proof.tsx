@@ -1,5 +1,6 @@
 import React, { useRef } from 'react';
-import { gsap, useGSAP, MOTION_OK, motionMatchMedia } from '../engine/gsap';
+import { gsap, ScrollTrigger, useGSAP, MOTION_OK, motionMatchMedia } from '../engine/gsap';
+import { isReduced } from '../engine/motion';
 import { portfolioData } from '../data/portfolio';
 import { useReveals } from '../hooks/useReveals';
 
@@ -14,7 +15,6 @@ export const Proof: React.FC = () => {
     () => {
       const mm = motionMatchMedia();
       mm.add(MOTION_OK, () => {
-        const counters = gsap.utils.toArray<HTMLElement>('[data-count]', root.current);
         const cells = gsap.utils.toArray<HTMLElement>('.stat-cell', root.current);
 
         if (cells.length) {
@@ -24,11 +24,12 @@ export const Proof: React.FC = () => {
             duration: 1,
             ease: 'expo.out',
             stagger: 0.08,
-            scrollTrigger: { trigger: cells[0], start: 'top 90%', once: true },
+            scrollTrigger: { trigger: cells[0], start: 'top 92%', once: true },
           });
         }
 
-        const timelines: gsap.core.Timeline[] = [];
+        const counters = gsap.utils.toArray<HTMLElement>('[data-count]', root.current);
+        const activeCleanups: (() => void)[] = [];
 
         counters.forEach((el, i) => {
           const raw = el.dataset.count ?? '';
@@ -40,42 +41,77 @@ export const Proof: React.FC = () => {
           const state = { v: 0 };
           const len = raw.length;
 
-          const tl = gsap.timeline({
-            scrollTrigger: { trigger: el, start: 'top 88%', once: true },
-            delay: i * 0.1,
-          });
+          let hasTriggered = false;
+          let scrambleTimer: ReturnType<typeof setInterval> | null = null;
+          let delayTimer: ReturnType<typeof setTimeout> | null = null;
+          let countTween: gsap.core.Tween | null = null;
 
-          // Scramble phase: random chars from A-Z0-9+/ for ~0.7s
-          tl.to(
-            { p: 0 },
-            {
-              p: 1,
-              duration: 0.7,
-              ease: 'none',
-              onUpdate: () => {
-                let scrambled = '';
-                for (let c = 0; c < len; c++) {
-                  scrambled += SCRAMBLE_CHARS[Math.floor(Math.random() * SCRAMBLE_CHARS.length)];
+          const triggerAnimation = () => {
+            if (hasTriggered || isReduced()) return;
+            hasTriggered = true;
+
+            delayTimer = setTimeout(() => {
+              const startTime = Date.now();
+              const scrambleDuration = 700; // ~0.7s
+
+              scrambleTimer = setInterval(() => {
+                const elapsed = Date.now() - startTime;
+                if (elapsed >= scrambleDuration) {
+                  if (scrambleTimer) clearInterval(scrambleTimer);
+                  scrambleTimer = null;
+                  el.textContent = (0).toFixed(decimals) + suffix;
+                  countTween = gsap.to(state, {
+                    v: target,
+                    duration: 1.9,
+                    ease: 'power3.out',
+                    onUpdate: () => {
+                      el.textContent = state.v.toFixed(decimals) + suffix;
+                    },
+                  });
+                } else {
+                  let scrambled = '';
+                  for (let c = 0; c < len; c++) {
+                    scrambled += SCRAMBLE_CHARS[Math.floor(Math.random() * SCRAMBLE_CHARS.length)];
+                  }
+                  el.textContent = scrambled;
                 }
-                el.textContent = scrambled;
+              }, 40);
+            }, i * 100);
+          };
+
+          // 1. ScrollTrigger trigger
+          const st = ScrollTrigger.create({
+            trigger: el,
+            start: 'top 92%',
+            once: true,
+            onEnter: triggerAnimation,
+          });
+
+          // 2. IntersectionObserver fallback (guarantees execution on mobile browsers)
+          let observer: IntersectionObserver | null = null;
+          if (typeof IntersectionObserver !== 'undefined') {
+            observer = new IntersectionObserver(
+              (entries) => {
+                entries.forEach((entry) => {
+                  if (entry.isIntersecting) {
+                    observer?.disconnect();
+                    triggerAnimation();
+                  }
+                });
               },
-            }
-          );
+              { threshold: 0.15 }
+            );
+            observer.observe(el);
+          }
 
-          // Hand off to existing data-count count-up (0 -> target)
-          tl.call(() => {
-            el.textContent = (0).toFixed(decimals) + suffix;
+          activeCleanups.push(() => {
+            if (delayTimer) clearTimeout(delayTimer);
+            if (scrambleTimer) clearInterval(scrambleTimer);
+            if (countTween) countTween.kill();
+            st.kill();
+            observer?.disconnect();
+            el.textContent = el.dataset.count ?? '';
           });
-          tl.to(state, {
-            v: target,
-            duration: 1.9,
-            ease: 'power3.out',
-            onUpdate: () => {
-              el.textContent = state.v.toFixed(decimals) + suffix;
-            },
-          });
-
-          timelines.push(tl);
         });
 
         const frame = root.current?.querySelector<HTMLElement>('.reveal-frame');
@@ -98,10 +134,7 @@ export const Proof: React.FC = () => {
         }
 
         return () => {
-          timelines.forEach((tl) => tl.kill());
-          counters.forEach((el) => {
-            el.textContent = el.dataset.count ?? '';
-          });
+          activeCleanups.forEach((cleanup) => cleanup());
         };
       });
     },
@@ -132,11 +165,8 @@ export const Proof: React.FC = () => {
                   i % 2 === 0 ? 'border-r' : ''
                 } ${i < 2 ? 'border-b' : ''} border-[var(--line)]`}
               >
-                <span className="font-mono text-xs uppercase tracking-[0.16em] text-[var(--fg-muted)]">
-                  STATS // {String(i + 1).padStart(2, '0')}
-                </span>
                 <dd
-                  className="my-4 sm:my-6 font-display font-semibold text-[clamp(2.75rem,7vw,6rem)] leading-none tracking-tight text-[var(--accent,var(--color-leaf))] tabular-nums"
+                  className="mb-3 sm:mb-4 font-display font-semibold text-[clamp(2.75rem,7vw,6rem)] leading-none tracking-tight text-[var(--accent,var(--color-leaf))] tabular-nums"
                   data-count={stat.value}
                 >
                   {stat.value}
