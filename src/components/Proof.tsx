@@ -17,11 +17,11 @@ export const Proof: React.FC = () => {
         const cells = gsap.utils.toArray<HTMLElement>('.stat-cell', root.current);
         const cleanups: (() => void)[] = [];
 
-        // Pop-up stat badges: each cell pops with back.out overshoot + a
-        // synthesized pop sound, staggered 0.12s apart. Number counts up
+        // Pop-up stat badges: each cell pops with a strong back.out overshoot +
+        // a synthesized pop sound, staggered 0.15s apart. Number counts up
         // inside while the cell pops (no scramble — pop + scramble is noise).
         if (grid && cells.length) {
-          gsap.set(cells, { scale: 0.85, autoAlpha: 0, transformOrigin: '50% 50%' });
+          gsap.set(cells, { scale: 0.6, autoAlpha: 0, transformOrigin: '50% 50%' });
 
           const startCount = (el: HTMLElement, delay: number) => {
             const raw = el.dataset.count ?? '';
@@ -51,16 +51,16 @@ export const Proof: React.FC = () => {
             if (played) return;
             played = true;
             cells.forEach((cell, i) => {
-              const delay = i * 0.12;
+              const delay = i * 0.15;
               const tween = gsap.fromTo(
                 cell,
-                { scale: 0.85, autoAlpha: 0 },
+                { scale: 0.6, autoAlpha: 0 },
                 {
                   scale: 1,
                   autoAlpha: 1,
-                  duration: 0.5,
+                  duration: 0.6,
                   delay,
-                  ease: 'back.out(1.7)',
+                  ease: 'back.out(2.2)',
                   onStart: () => playPop(),
                 }
               );
