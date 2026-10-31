@@ -1,7 +1,6 @@
 import React, { useRef } from 'react';
 import { Calendar } from 'lucide-react';
 import { gsap, ScrollTrigger, useGSAP } from '../engine/gsap';
-import { playTick } from '../engine/sound';
 
 /**
  * One fixed control instead of three: it travels along the bottom edge with
@@ -54,7 +53,6 @@ export const ProgressPill: React.FC = () => {
           end: 'bottom 60%',
           onToggle: (self) => {
             if (!self.isActive) return;
-            if (title.current && title.current.textContent !== chapterTitle) playTick(0.05);
             if (title.current) title.current.textContent = chapterTitle ?? '';
             el.style.opacity = hide ? '0' : '1';
             el.style.pointerEvents = hide ? 'none' : 'auto';

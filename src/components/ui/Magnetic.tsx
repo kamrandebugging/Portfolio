@@ -1,6 +1,5 @@
 import React, { useRef } from 'react';
 import { gsap, useGSAP, motionMatchMedia } from '../../engine/gsap';
-import { playTick } from '../../engine/sound';
 
 interface MagneticProps {
   children: React.ReactNode;
@@ -29,17 +28,14 @@ export const Magnetic: React.FC<MagneticProps> = ({ children, strength = 0.3, cl
             xTo((e.clientX - (r.left + r.width / 2)) * strength);
             yTo((e.clientY - (r.top + r.height / 2)) * strength);
           };
-          const onEnter = () => playTick();
           const onLeave = () => {
             xTo(0);
             yTo(0);
           };
 
-          el.addEventListener('pointerenter', onEnter);
           el.addEventListener('pointermove', onMove);
           el.addEventListener('pointerleave', onLeave);
           return () => {
-            el.removeEventListener('pointerenter', onEnter);
             el.removeEventListener('pointermove', onMove);
             el.removeEventListener('pointerleave', onLeave);
             gsap.set(el, { x: 0, y: 0 });

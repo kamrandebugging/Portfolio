@@ -1,6 +1,5 @@
 import React, { useRef } from 'react';
 import { gsap, ScrollTrigger, useGSAP, MOTION_OK, motionMatchMedia } from '../engine/gsap';
-import { playPop } from '../engine/sound';
 import { portfolioData } from '../data/portfolio';
 import { useReveals } from '../hooks/useReveals';
 
@@ -61,7 +60,6 @@ export const Proof: React.FC = () => {
                   duration: 0.6,
                   delay,
                   ease: 'back.out(2.2)',
-                  onStart: () => playPop(),
                 }
               );
               cleanups.push(() => tween.kill());

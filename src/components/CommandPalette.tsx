@@ -2,7 +2,6 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom';
 import { portfolioData } from '../data/portfolio';
 import { goToSection } from '../engine/scroll';
-import { playOpen, playClose, playTick, playPop } from '../engine/sound';
 
 interface Command {
   id: string;
@@ -167,15 +166,7 @@ export const CommandPalette: React.FC<Props> = ({ open, onClose }) => {
     );
   }, [query, commands]);
 
-  const mounted = useRef(false);
-
   useEffect(() => {
-    if (mounted.current) {
-      if (open) playOpen();
-      else playClose();
-    }
-    mounted.current = true;
-
     if (open) {
       setQuery('');
       setActive(0);
@@ -196,15 +187,12 @@ export const CommandPalette: React.FC<Props> = ({ open, onClose }) => {
     (e: React.KeyboardEvent) => {
       if (e.key === 'ArrowDown') {
         e.preventDefault();
-        playTick(0.08);
         setActive((i) => Math.min(i + 1, filtered.length - 1));
       } else if (e.key === 'ArrowUp') {
         e.preventDefault();
-        playTick(0.08);
         setActive((i) => Math.max(i - 1, 0));
       } else if (e.key === 'Enter') {
         e.preventDefault();
-        playPop(0.3);
         filtered[active]?.run();
       }
     },
