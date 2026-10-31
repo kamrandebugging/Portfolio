@@ -38,7 +38,7 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
   <>
     <div className="flex h-full flex-col justify-between gap-8">
       <div>
-        <div className="flex flex-wrap items-center justify-between gap-3 font-mono text-[0.7rem] uppercase tracking-[0.14em] text-[var(--fg-muted)]">
+        <div className="flex flex-wrap items-center justify-between gap-3 font-sans text-xs uppercase tracking-wider text-[var(--fg-muted)]">
           <span>{project.cat}</span>
           <span>
             {project.year} · {project.outcome}

@@ -14,7 +14,6 @@ import {
 import { scrollToTarget } from '../engine/scroll';
 import { portfolioData } from '../data/portfolio';
 import { Magnetic } from './ui/Magnetic';
-import { LocalTime } from './ui/LocalTime';
 
 interface TerminalStep {
   cmd: string;
@@ -114,7 +113,7 @@ const HeroTerminal: React.FC = () => {
           <span className="h-2 w-2 rounded-full bg-[#52b788]" />
         </div>
         <span className="font-mono text-[11px] text-[#95d5b2]/80">bash ~ kamran</span>
-        <span className="w-10 text-right font-mono text-[10px] text-[#74c69d]/60">80×24</span>
+        <div className="w-10" aria-hidden="true" />
       </div>
 
       {/* Terminal Output */}
@@ -291,17 +290,16 @@ export const Hero: React.FC = () => {
       <div className="hero-grid">
         <div className="hero-copy relative z-10 flex flex-col items-start gap-3 sm:gap-4 lg:gap-4 justify-center">
           <div className="hero-header flex flex-col items-start gap-2.5 sm:gap-3 w-full">
-            <div data-intro className="status-pill font-semibold text-xs sm:text-sm tracking-wide bg-[#1b4332]/60 border border-[#52b788]/40 shadow-md px-3.5 py-1.5 rounded-full inline-flex items-center gap-2">
-              <span className="status-dot animate-pulse" aria-hidden="true" />
-              Open to internships + junior roles
-            </div>
-
             <h1
               data-title
               className="display hero-title"
               aria-label={personal.headline.join(' ').replace(/<[^>]+>/g, '')}
               dangerouslySetInnerHTML={{ __html: personal.headline.join('<br />') }}
             />
+
+            <p data-intro className="font-sans text-base sm:text-lg text-[var(--color-mint)]">
+              Open to internships and junior roles.
+            </p>
 
             <div
               data-intro
@@ -347,8 +345,7 @@ export const Hero: React.FC = () => {
 
             <div data-intro className="flex items-center gap-4 text-paper/60">
               <span className="scroll-cue" aria-hidden="true" />
-              <LocalTime />
-            </div>
+                          </div>
           </div>
         </div>
 

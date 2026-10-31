@@ -9,8 +9,7 @@ import { scrollToTarget } from '../engine/scroll';
  */
 export const ProgressPill: React.FC = () => {
   const pill = useRef<HTMLDivElement>(null);
-  const num = useRef<HTMLSpanElement>(null);
-  const title = useRef<HTMLSpanElement>(null);
+    const title = useRef<HTMLSpanElement>(null);
 
   useGSAP(
     () => {
@@ -45,7 +44,7 @@ export const ProgressPill: React.FC = () => {
       // Explicit `document` scope: inside useGSAP, bare selectors resolve within `scope` (the pill).
       gsap.utils.toArray<HTMLElement>('[data-chapter]', document).forEach((section) => {
         const target = resolve(section);
-        const { chapter, chapterTitle, tone = 'dark' } = section.dataset;
+        const { chapterTitle, tone = 'dark' } = section.dataset;
         const hide = chapterTitle === 'Contact';
 
         ScrollTrigger.create({
@@ -54,8 +53,7 @@ export const ProgressPill: React.FC = () => {
           end: 'bottom 60%',
           onToggle: (self) => {
             if (!self.isActive) return;
-            if (num.current) num.current.textContent = chapter ?? '';
-            if (title.current) title.current.textContent = chapterTitle ?? '';
+                        if (title.current) title.current.textContent = chapterTitle ?? '';
             el.style.opacity = hide ? '0' : '1';
             el.style.pointerEvents = hide ? 'none' : 'auto';
           },
@@ -88,7 +86,7 @@ export const ProgressPill: React.FC = () => {
       <div className="scroll-progress" aria-hidden="true" />
       <div ref={pill} className="pill" role="group" aria-label="Page position">
       <span className="pill-label">
-        <span ref={num}>01</span> / <span ref={title}>Intro</span>
+        <span ref={title}>Intro</span>
       </span>
       <button
         type="button"

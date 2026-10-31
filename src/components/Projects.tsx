@@ -183,15 +183,12 @@ export const Projects: React.FC = () => {
       <div className="mx-auto max-w-[88rem]">
         <div className="mb-16 flex flex-wrap items-end justify-between gap-6">
           <div>
-            <span data-fade className="eyebrow">
-              Featured work
-            </span>
-            <h2 data-split className="display mt-6 text-[clamp(3.25rem,8vw,8rem)]">
+            <h2 data-split className="display text-[clamp(3.25rem,8vw,8rem)]">
               Featured <em>Projects.</em>
             </h2>
           </div>
-          <span data-fade className="font-mono text-xs uppercase tracking-[0.16em] muted">
-            {String(projects.length).padStart(2, '0')} projects · 03 featured
+          <span data-fade className="font-sans text-xs tracking-wider muted">
+            {projects.length} projects · 3 featured
           </span>
         </div>
 
@@ -231,8 +228,8 @@ export const Projects: React.FC = () => {
 
         <div className="mt-24">
           <div className="mb-6 flex items-center justify-between" data-fade>
-            <span className="eyebrow">More work</span>
-            <span className="font-mono text-xs uppercase tracking-[0.16em] muted">
+            <h3 className="display text-2xl">More work</h3>
+            <span className="font-sans text-xs tracking-wider muted">
               Hover to preview · click to open
             </span>
           </div>
@@ -247,12 +244,9 @@ export const Projects: React.FC = () => {
                   aria-haspopup="dialog"
                   onClick={() => openRow(i)}
                 >
-                  <span className="font-mono text-xs tabular-nums muted">
-                    {String(featured.length + i + 1).padStart(2, '0')}
-                  </span>
-                  <span className="display text-[clamp(1.6rem,3vw,2.6rem)]">{project.name}</span>
+                                    <span className="display text-[clamp(1.6rem,3vw,2.6rem)]">{project.name}</span>
                   <span className="text-sm muted">{project.cat}</span>
-                  <span className="font-mono text-xs uppercase tracking-[0.1em] muted">
+                  <span className="font-sans text-sm muted">
                     {project.outcome}
                   </span>
                 </button>

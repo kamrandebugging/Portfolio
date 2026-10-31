@@ -73,37 +73,28 @@ export const Proof: React.FC = () => {
       className="tone-light px-[var(--pad-x)] py-28 md:py-36"
     >
       <div className="mx-auto max-w-[88rem]">
-        <span data-fade className="eyebrow">
-          {impact.eyebrow}
-        </span>
-        <h2 data-split className="display mt-6 text-[clamp(3.25rem,8vw,8rem)]">
+        <h2 data-split className="display text-[clamp(3.25rem,8vw,8rem)]">
           {impact.heading[0]} <em>{impact.heading[1]}</em>
         </h2>
 
-        {/* Bento Stats Terminal Card (Old duplicate stats row removed) */}
-        <div className="proof-labflow-bento mt-16 w-full max-w-[56rem]" data-fade>
-          <div className="proof-bento-header" aria-hidden="true">
-            <span className="proof-bento-dot" />
-            <span className="proof-bento-dot" />
-            <span className="proof-bento-dot" />
-            <span className="proof-bento-title">kamran — proof</span>
-          </div>
-          <dl className="proof-bento-grid">
-            <div className="proof-bento-tile">
-              <dd className="proof-bento-num" data-count="1+">1+</dd>
-              <dt className="proof-bento-label">Years production backend experience</dt>
+        {/* Composed Stats Strip */}
+        <div className="proof-stats-strip mt-16 w-full max-w-[64rem]" data-fade>
+          <dl className="proof-stats-grid">
+            <div className="proof-stats-tile">
+              <dd className="proof-stats-num tabular-nums" data-count="1+">1+</dd>
+              <dt className="proof-stats-label">Years production backend experience</dt>
             </div>
-            <div className="proof-bento-tile">
-              <dd className="proof-bento-num" data-count="7">7</dd>
-              <dt className="proof-bento-label">Real projects shipped</dt>
+            <div className="proof-stats-tile">
+              <dd className="proof-stats-num tabular-nums" data-count="7">7</dd>
+              <dt className="proof-stats-label">Real projects shipped</dt>
             </div>
-            <div className="proof-bento-tile">
-              <dd className="proof-bento-num" data-count="2">2</dd>
-              <dt className="proof-bento-label">CodeExcellence 1st places</dt>
+            <div className="proof-stats-tile">
+              <dd className="proof-stats-num tabular-nums" data-count="2">2</dd>
+              <dt className="proof-stats-label">CodeExcellence 1st places</dt>
             </div>
-            <div className="proof-bento-tile">
-              <dd className="proof-bento-num" data-count="3.61">3.61</dd>
-              <dt className="proof-bento-label">CGPA</dt>
+            <div className="proof-stats-tile">
+              <dd className="proof-stats-num tabular-nums" data-count="3.61">3.61</dd>
+              <dt className="proof-stats-label">CGPA</dt>
             </div>
           </dl>
         </div>
@@ -119,10 +110,7 @@ export const Proof: React.FC = () => {
             />
           </figure>
           <div className="lg:col-span-6 lg:col-start-7">
-            <span data-fade className="eyebrow">
-              {achievements.eyebrow}
-            </span>
-            <h3 data-split className="display mt-6 text-[clamp(2.4rem,5vw,5rem)]">
+            <h3 data-split className="display text-[clamp(2.4rem,5vw,5rem)]">
               {achievements.title}
             </h3>
             <p data-fade className="muted mt-6 max-w-[34rem] text-lg leading-relaxed">

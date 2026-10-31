@@ -30,7 +30,7 @@ export const About: React.FC = () => {
             <div className="jira-title font-medium text-sm text-[var(--color-ink)]">
               KAN-53 · Tenant provisioning
             </div>
-            <div className="jira-meta mt-3 flex items-center justify-between text-[11px] text-[var(--fg-muted)] font-mono">
+            <div className="jira-meta mt-3 flex items-center justify-between text-xs text-[var(--fg-muted)] font-sans">
               <span>Assignee: MK</span>
               <span>Priority: High</span>
             </div>
@@ -153,7 +153,7 @@ export const About: React.FC = () => {
                 merged into main · deployed
               </div>
             </div>
-            <span className="font-mono text-[11px] text-[var(--fg-muted)]">
+            <span className="font-sans text-xs text-[var(--fg-muted)]">
               Production v1.4.2
             </span>
           </div>
@@ -175,10 +175,7 @@ export const About: React.FC = () => {
     >
       <div className="mx-auto grid max-w-[88rem] gap-16 lg:grid-cols-12">
         <div className="lg:col-span-5">
-          <span data-fade className="eyebrow">
-            {story.eyebrow}
-          </span>
-          <h2 data-split className="display mt-6 text-[clamp(3.5rem,9vw,8.5rem)]">
+          <h2 data-split className="display text-[clamp(3.5rem,9vw,8.5rem)]">
             {story.heading[0]} <em>{story.heading[1]}</em>
           </h2>
           <p data-fade className="muted mt-8 max-w-[32rem] text-lg leading-relaxed">
@@ -187,14 +184,9 @@ export const About: React.FC = () => {
         </div>
 
         <div className="pipeline-container lg:col-span-7 lg:pt-4">
-          <div className="pipeline-header flex items-center justify-between pb-4 border-b border-[var(--line)]">
-            <div className="flex items-center gap-2">
-              <span className="inline-block w-2 h-2 rounded-full bg-[var(--accent)] animate-pulse" />
-              <span className="font-mono text-xs uppercase tracking-wider text-[var(--fg-muted)]">
-                Pipeline · Ticket to Ship
-              </span>
-            </div>
-            <span className="pipeline-scroll-hint font-mono text-xs text-[var(--fg-muted)] tracking-wider">scroll to run ↓</span>
+          <div className="pipeline-header flex items-center justify-end pb-4 border-b border-[var(--line)]">
+            
+            <span className="pipeline-scroll-hint font-sans text-xs text-[var(--fg-muted)] tracking-wider">scroll to run ↓</span>
           </div>
 
           <div className="pipeline-track relative w-full h-1 bg-[var(--line)] rounded-full overflow-hidden my-4" aria-hidden="true">
@@ -215,7 +207,7 @@ export const About: React.FC = () => {
               >
                 <div className="pipeline-node flex items-center gap-3 is-upcoming">
                   <span className="pipeline-node-dot relative flex items-center justify-center w-7 h-7 rounded-full border border-[var(--line)] bg-[var(--color-paper)] font-mono text-xs font-bold text-[var(--color-forest)] transition-colors">
-                    <span className="pipeline-node-num">{index + 1}</span>
+                    <span className="pipeline-node-num tabular-nums">{index + 1}</span>
                     <svg
                       className="pipeline-node-check hidden w-3.5 h-3.5 text-white"
                       viewBox="0 0 24 24"
@@ -228,7 +220,7 @@ export const About: React.FC = () => {
                       <polyline points="20 6 9 17 4 12" />
                     </svg>
                   </span>
-                  <span className="pipeline-node-label font-mono text-xs font-bold uppercase tracking-wider text-[var(--color-ink)]">
+                  <span className="pipeline-node-label font-sans text-xs font-bold uppercase tracking-wider text-[var(--color-ink)]">
                     {stage.label}
                   </span>
                 </div>
@@ -237,7 +229,7 @@ export const About: React.FC = () => {
                   {renderStageVisual(stage.id)}
                 </div>
 
-                <div className="pipeline-caption pl-10 font-mono text-xs text-[var(--fg-muted)] leading-relaxed">
+                <div className="pipeline-caption pl-10 font-sans text-sm text-[var(--fg-muted)] leading-relaxed">
                   {stage.caption}
                 </div>
               </div>

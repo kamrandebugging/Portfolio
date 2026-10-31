@@ -10,7 +10,6 @@ import {
   motionMatchMedia,
 } from '../engine/gsap';
 import { portfolioData } from '../data/portfolio';
-import { LocalTime } from './ui/LocalTime';
 import { Magnetic } from './ui/Magnetic';
 
 interface Social { name: string; url: string; }
@@ -172,12 +171,9 @@ export const Contact: React.FC = () => {
     >
       <div className="mx-auto flex min-h-[inherit] max-w-[88rem] flex-col justify-between gap-16 px-[var(--pad-x)] pb-10 pt-28">
         <div>
-          <span data-contact-fade className="eyebrow">
-            {contact.eyebrow}
-          </span>
           <h2
             data-contact-title
-            className="display mt-6 text-[clamp(3rem,8.4vw,9rem)]"
+            className="display text-[clamp(3rem,8.4vw,9rem)]"
           >
             {contact.heading[0]} {contact.heading[1]} <em>{contact.heading[2]}</em>
           </h2>
@@ -213,8 +209,7 @@ export const Contact: React.FC = () => {
           <div className="md:col-span-5">
             <p className="display text-3xl">{personal.name}</p>
             <p className="muted mt-2 text-sm">{personal.tagline}</p>
-            <LocalTime className="muted mt-3 block" />
-          </div>
+                      </div>
 
           <nav className="md:col-span-4" aria-label="Social profiles">
             <ul className="flex flex-col gap-1">
@@ -236,7 +231,7 @@ export const Contact: React.FC = () => {
             </ul>
           </nav>
 
-          <p className="muted font-mono text-xs uppercase tracking-[0.12em] md:col-span-3 md:text-right">
+          <p className="muted font-sans text-xs md:col-span-3 md:text-right">
             {personal.copyright}
           </p>
         </div>

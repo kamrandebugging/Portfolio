@@ -4,7 +4,6 @@ import { gsap, useGSAP } from '../engine/gsap';
 import { getLenis } from '../engine/scroll';
 import { isReduced, setMotionPref, systemReducesMotion } from '../engine/motion';
 import { portfolioData } from '../data/portfolio';
-import { LocalTime } from './ui/LocalTime';
 
 interface EditorialMenuProps {
   open: boolean;
@@ -104,7 +103,7 @@ export const EditorialMenu: React.FC<EditorialMenuProps> = ({ open, onClose, go:
       style={{ visibility: 'hidden' }}
     >
       <div className="menu-top">
-        <span className="font-mono text-xs uppercase tracking-[0.16em] text-paper/70">
+        <span className="font-sans text-xs uppercase tracking-wider text-paper/70">
           Index · {portfolioData.personal.name}
         </span>
         <button
@@ -132,10 +131,7 @@ export const EditorialMenu: React.FC<EditorialMenuProps> = ({ open, onClose, go:
             data-cursor="Go"
             className={`menu-panel ${PANEL_TONES[i % PANEL_TONES.length]}`}
           >
-            <span className="font-mono text-xs tabular-nums opacity-80">
-              {String(i + 1).padStart(2, '0')}
-            </span>
-            <span>
+                        <span>
               <span className="block overflow-hidden">
                 <span className="menu-rise display block text-[clamp(2rem,4.2vw,4.25rem)]">
                   {link.label}
@@ -152,8 +148,7 @@ export const EditorialMenu: React.FC<EditorialMenuProps> = ({ open, onClose, go:
 
       <div className="menu-bottom">
         <div className="flex flex-wrap items-center gap-x-5 gap-y-2">
-          <LocalTime className="text-paper/70" />
-          <button
+                    <button
             type="button"
             className="motion-toggle"
             tabIndex={open ? 0 : -1}

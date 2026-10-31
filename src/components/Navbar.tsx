@@ -3,7 +3,6 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { portfolioData } from '../data/portfolio';
 import { goToSection } from '../engine/scroll';
 import { EditorialMenu } from './EditorialMenu';
-import { LocalTime } from './ui/LocalTime';
 import { CommandPalette } from './CommandPalette';
 
 const isMac = typeof navigator !== 'undefined' && /Mac|iPhone|iPad|iPod/.test(navigator.platform);
@@ -73,8 +72,7 @@ export const Navbar: React.FC = () => {
             ))}
           </ul>
 
-          <LocalTime className="hidden text-[var(--ui-fg-muted)] md:inline" />
-
+          
           <button
             type="button"
             className="nav-cmdk-hint"
