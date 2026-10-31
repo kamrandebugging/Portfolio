@@ -1,5 +1,13 @@
 import { RefObject } from 'react';
-import { gsap, useGSAP, MOTION_OK, motionMatchMedia } from '../engine/gsap';
+import {
+  gsap,
+  ScrollTrigger,
+  useGSAP,
+  MOTION_OK,
+  SCENES_ON,
+  MOBILE_SCENES,
+  motionMatchMedia,
+} from '../engine/gsap';
 
 export function usePipeline(root: RefObject<HTMLElement | null>): void {
   useGSAP(
@@ -127,6 +135,66 @@ export function usePipeline(root: RefObject<HTMLElement | null>): void {
         };
 
         resetInitial();
+
+        // ---- Mobile helper: reveal one stage in its final animated state (no pin on phones) ----
+        const revealStage = (id: string) => {
+          if (id === 'ticket' && jiraCard) {
+            gsap.to(jiraCard, { autoAlpha: 1, x: 0, y: 0, duration: 0.7, ease: 'expo.out' });
+          } else if (id === 'branch') {
+            if (terminalTyping) {
+              const o = { n: 0 };
+              gsap.to(o, {
+                n: fullBranchCommand.length,
+                duration: 0.9,
+                ease: 'none',
+                onUpdate: () => {
+                  if (terminalTyping)
+                    terminalTyping.textContent = fullBranchCommand.slice(0, Math.round(o.n));
+                },
+              });
+            }
+            if (terminalOutput)
+              gsap.to(terminalOutput, { autoAlpha: 1, y: 0, duration: 0.4, delay: 0.9 });
+            if (terminalPromptNext)
+              gsap.to(terminalPromptNext, { autoAlpha: 1, y: 0, duration: 0.4, delay: 1.0 });
+          } else if (id === 'tdd') {
+            const passTag =
+              'tdd-status-tag px-2 py-0.5 rounded text-[10px] font-bold font-mono tracking-wider uppercase bg-emerald-500/15 text-emerald-600 border border-emerald-500/30';
+            tddRows.forEach((row, i) => {
+              gsap.to(row, { autoAlpha: 1, y: 0, duration: 0.4, delay: i * 0.12, ease: 'expo.out' });
+              gsap.delayedCall(i * 0.12 + 0.35, () => {
+                const dot = row.querySelector<HTMLElement>('.tdd-dot');
+                const tag = row.querySelector<HTMLElement>('.tdd-status-tag');
+                if (dot) dot.style.backgroundColor = '#10b981';
+                if (tag) {
+                  tag.textContent = 'PASS';
+                  tag.className = passTag;
+                }
+              });
+            });
+          } else if (id === 'ci') {
+            ciRows.forEach((row, i) => {
+              gsap.to(row, { autoAlpha: 1, y: 0, duration: 0.4, delay: i * 0.12, ease: 'expo.out' });
+              gsap.delayedCall(i * 0.12 + 0.45, () => {
+                const spinner = row.querySelector<HTMLElement>('.ci-spinner');
+                const tick = row.querySelector<HTMLElement>('.ci-tick');
+                if (spinner) spinner.classList.add('hidden');
+                if (tick) tick.classList.remove('hidden');
+              });
+            });
+          } else if (id === 'ship' && shipBadge) {
+            gsap.to(shipBadge, {
+              autoAlpha: 1,
+              scale: 1,
+              boxShadow: '0 0 24px rgba(16, 185, 129, 0.45)',
+              duration: 0.5,
+              ease: 'back.out(1.6)',
+            });
+          }
+        };
+
+        // ---- Desktop / tablet: pinned scrub timeline (unchanged behaviour) ----
+        mm.add(SCENES_ON, () => {
 
         // PIN the section during sequence:
         // ScrollTrigger on section#about: pin: true, pinSpacing: true, start: "top top", end: "+=300%", scrub: 0.5.
@@ -350,6 +418,44 @@ export function usePipeline(root: RefObject<HTMLElement | null>): void {
         return () => {
           tl.kill();
         };
+        });
+
+        // ---- Phones: no pin. Each stage reveals once as it scrolls into view.
+        // Permanent fix: the pinned scrub timeline gets stuck on mobile. ----
+        mm.add(MOBILE_SCENES, () => {
+          if (scrollHint) gsap.set(scrollHint, { autoAlpha: 0 });
+
+          if (connectorFill) {
+            gsap.fromTo(
+              connectorFill,
+              { scaleX: 0, scaleY: 0 },
+              {
+                scaleX: 1,
+                scaleY: 1,
+                ease: 'none',
+                scrollTrigger: { trigger: container, start: 'top 75%', end: 'bottom 60%', scrub: 0.6 },
+              }
+            );
+          }
+
+          const stages = gsap.utils.toArray<HTMLElement>('.pipeline-stage', container);
+          stages.forEach((stage) => {
+            const id = stage.dataset.stage ?? '';
+            const node = stage.querySelector<HTMLElement>('.pipeline-node');
+            ScrollTrigger.create({
+              trigger: stage,
+              start: 'top 80%',
+              once: true,
+              onEnter: () => {
+                if (node) {
+                  node.classList.remove('is-upcoming', 'is-active');
+                  node.classList.add('is-done');
+                }
+                revealStage(id);
+              },
+            });
+          });
+        });
       });
 
     },
