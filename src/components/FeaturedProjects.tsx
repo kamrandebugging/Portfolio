@@ -1,17 +1,8 @@
 import React, { useRef } from 'react';
-import { Link } from 'react-router-dom';
-import { ArrowUpRight } from 'lucide-react';
 import { portfolioData, type ProjectItem } from '../data/portfolio';
 import { useReveals } from '../hooks/useReveals';
 import { ScrollTrigger, useGSAP } from '../engine/gsap';
 import SkelImage from './ui/SkelImage';
-
-/** Maps a homepage project id to its dedicated case-study route. */
-const ROUTES: Partial<Record<ProjectItem['id'], string>> = {
-  labflow: '/projects/labflow',
-  'fbr-invoicing': '/projects/fbr',
-  'fundora-global': '/projects/fundoraglobal',
-};
 
 const ORDER: ProjectItem['id'][] = ['labflow', 'fbr-invoicing', 'fundora-global'];
 
@@ -70,15 +61,11 @@ export const FeaturedProjects: React.FC = () => {
 
         <div className="mt-16 flex flex-col gap-6">
           {featured.map((project, i) => {
-            const to = ROUTES[project.id];
-            if (!to) return null;
             const reverse = i % 2 === 1;
             return (
-              <Link
+              <article
                 key={project.id}
-                to={to}
                 data-fade
-                data-cursor="View"
                 className="group grid items-center gap-10 rounded-[1.5rem] px-6 py-14 md:grid-cols-2 md:gap-16"
                 style={
                   i % 2 === 1
@@ -103,15 +90,8 @@ export const FeaturedProjects: React.FC = () => {
                   <span className="text-sm muted">{project.cat}</span>
                   <h3 className="display mt-4 text-[clamp(2rem,4vw,3.25rem)]">{project.name}</h3>
                   <p className="mt-5 max-w-[42ch] text-lg leading-relaxed muted">{project.blurb}</p>
-                  <span className="mt-7 inline-flex items-center gap-2 text-base font-medium text-[var(--accent)]">
-                    View case study
-                    <ArrowUpRight
-                      className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1 group-hover:-translate-y-1"
-                      aria-hidden="true"
-                    />
-                  </span>
                 </div>
-              </Link>
+              </article>
             );
           })}
         </div>
