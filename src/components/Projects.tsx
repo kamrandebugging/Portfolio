@@ -194,14 +194,6 @@ export const Projects: React.FC = () => {
 
         <div>
           {featured.map((project, index) => {
-            const caseStudyUrl =
-              project.id === 'labflow'
-                ? '/projects/labflow'
-                : project.id === 'fbr-invoicing'
-                ? '/projects/fbr'
-                : project.id === 'fundora-global'
-                ? '/projects/fundoraglobal'
-                : null;
             return (
               <article
                 key={project.id}
@@ -211,7 +203,6 @@ export const Projects: React.FC = () => {
                 <ProjectCard
                   project={project}
                   eager={index === 0}
-                  caseStudyUrl={caseStudyUrl}
                   onCaseStudy={
                     project.id === 'labflow' || project.id === 'fbr-invoicing'
                       ? () => setCaseStudy(project.id as CaseStudyId)
