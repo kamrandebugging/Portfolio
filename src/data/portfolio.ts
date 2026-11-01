@@ -139,7 +139,7 @@ export const portfolioData: PortfolioData = {
     timezone: 'Asia/Karachi',
     heroImage: heroImg,
     heroImageAlt: 'Muhammad Kamran, hero portrait',
-    email: 'kamran.debug@gmail.com',
+    email: 'kamrandebugging@gmail.com',
     location: 'Lahore, Pakistan',
     tagline: 'Full-stack developer · Lahore, Pakistan.',
     copyright: '© 2026 Muhammad Kamran. All rights reserved.',
@@ -383,7 +383,7 @@ export const portfolioData: PortfolioData = {
     eyebrow: "Let's Work Together",
     heading: ['Have a paid', 'remote internship', 'in mind?'],
     lead: "That's what I'm looking for next. Email is best — I read every message I'm sent.",
-    email: 'kamran.debug@gmail.com',
+    email: 'kamrandebugging@gmail.com',
     socials: [
       { name: 'LinkedIn', url: 'https://linkedin.com/in/kamran-debug' },
       { name: 'GitHub', url: 'https://github.com/kamrandebugging' },
