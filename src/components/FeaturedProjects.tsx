@@ -1,4 +1,5 @@
 import React, { useRef } from 'react';
+import { Link } from 'react-router-dom';
 import { portfolioData, type ProjectItem } from '../data/portfolio';
 import { useReveals } from '../hooks/useReveals';
 import { ScrollTrigger, useGSAP } from '../engine/gsap';
@@ -62,17 +63,10 @@ export const FeaturedProjects: React.FC = () => {
         <div className="mt-16 flex flex-col gap-6">
           {featured.map((project, i) => {
             const reverse = i % 2 === 1;
-            return (
-              <article
-                key={project.id}
-                data-fade
-                className="group grid items-center gap-10 rounded-[1.5rem] px-6 py-14 md:grid-cols-2 md:gap-16"
-                style={
-                  i % 2 === 1
-                    ? { background: 'color-mix(in srgb, var(--color-ink) 4%, transparent)' }
-                    : undefined
-                }
-              >
+            // Only LabFlow has a dedicated case-study route so far.
+            const to = project.id === 'labflow' ? '/projects/labflow' : undefined;
+            const body = (
+              <>
                 {project.image && (
                   <div
                     className={`overflow-hidden rounded-[1.25rem] ${reverse ? 'md:order-2' : ''}`}
@@ -91,6 +85,28 @@ export const FeaturedProjects: React.FC = () => {
                   <h3 className="display mt-4 text-[clamp(2rem,4vw,3.25rem)]">{project.name}</h3>
                   <p className="mt-5 max-w-[42ch] text-lg leading-relaxed muted">{project.blurb}</p>
                 </div>
+              </>
+            );
+            const className =
+              'group grid items-center gap-10 rounded-[1.5rem] px-6 py-14 md:grid-cols-2 md:gap-16';
+            const style =
+              i % 2 === 1
+                ? { background: 'color-mix(in srgb, var(--color-ink) 4%, transparent)' }
+                : undefined;
+            return to ? (
+              <Link
+                key={project.id}
+                to={to}
+                data-fade
+                data-cursor="View"
+                className={className}
+                style={style}
+              >
+                {body}
+              </Link>
+            ) : (
+              <article key={project.id} data-fade className={className} style={style}>
+                {body}
               </article>
             );
           })}

@@ -4,6 +4,7 @@ import { initScroll } from './engine/scroll';
 import { Navbar } from './components/Navbar';
 import { Cursor } from './components/ui/Cursor';
 import { Home } from './pages/Home';
+import { LabFlowCaseStudy } from './pages/LabFlowCaseStudy';
 
 export const App: React.FC = () => {
   useEffect(() => initScroll(), []);
@@ -22,6 +23,7 @@ export const App: React.FC = () => {
 
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="/projects/labflow" element={<LabFlowCaseStudy />} />
       </Routes>
     </>
   );
