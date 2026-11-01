@@ -1,5 +1,4 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import { ArrowUpRight, BookOpen } from 'lucide-react';
 import type { ProjectItem } from '../data/portfolio';
 import { Magnetic } from './ui/Magnetic';
@@ -13,8 +12,6 @@ interface ProjectCardProps {
   project: ProjectItem;
   /** First card loads its image eagerly. */
   eager?: boolean;
-  /** Dedicated route link e.g. /projects/labflow */
-  caseStudyUrl?: string | null;
   /** Present only for projects that have a case study (LabFlow, FBR). */
   onCaseStudy?: () => void;
   caseStudyRef?: React.Ref<HTMLButtonElement | HTMLAnchorElement>;
@@ -30,7 +27,6 @@ interface ProjectCardProps {
 export const ProjectCard: React.FC<ProjectCardProps> = ({
   project,
   eager = false,
-  caseStudyUrl,
   onCaseStudy,
   caseStudyRef,
   headingId,
@@ -65,21 +61,9 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
             </li>
           ))}
         </ul>
-        {(caseStudyUrl || onCaseStudy || project.link) && (
+        {(onCaseStudy || project.link) && (
           <div className="mt-6 flex flex-wrap items-center gap-3">
-            {caseStudyUrl ? (
-              <Magnetic>
-                <Link
-                  ref={caseStudyRef as React.Ref<HTMLAnchorElement>}
-                  to={caseStudyUrl}
-                  className="btn btn-solid"
-                  data-cursor="Open"
-                >
-                  <BookOpen className="h-4 w-4" aria-hidden="true" />
-                  View case study
-                </Link>
-              </Magnetic>
-            ) : onCaseStudy ? (
+            {onCaseStudy ? (
               <Magnetic>
                 <button
                   ref={caseStudyRef as React.Ref<HTMLButtonElement>}
