@@ -340,15 +340,15 @@ export const Hero: React.FC = () => {
         </div>
 
         <div className="hero-portrait" data-portrait>
-          <div className="hero-glow" aria-hidden="true" />
-          <div className="hero-ring" aria-hidden="true" />
-          <img
-            src={personal.heroImage}
-            alt={personal.heroImageAlt}
-            width={1000}
-            height={1500}
-            fetchPriority="high"
-          />
+          <figure className="portrait-duotone">
+            <img
+              src={personal.heroImage}
+              alt={personal.heroImageAlt}
+              width={1000}
+              height={1500}
+              fetchPriority="high"
+            />
+          </figure>
         </div>
       </div>
     </section>

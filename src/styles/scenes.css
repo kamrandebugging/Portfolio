@@ -132,56 +132,53 @@
   min-height: 0;
   height: 100%;
 }
-.hero-portrait img {
+/* Rank-1 anti-slop portrait treatment: brand duotone (Brittany Chiang v4
+   pattern). Grayscale photo multiply-blended over the green accent, deepened
+   toward the page bg with a screen overlay; 2px offset frame slides on hover.
+   Hover/focus reveals the full-color photo. No circle, no glow, no rings. */
+.portrait-duotone {
   position: relative;
   z-index: 2;
-  width: min(24rem, 67%);
-  aspect-ratio: 1;
-  object-fit: cover;
-  object-position: 50% 25%;
-  border-radius: 9999px;
-  border: 1px solid rgb(149 213 178 / 0.35);
+  width: min(21rem, 72%);
+  aspect-ratio: 4 / 5;
+  margin: 0;
+  background: var(--color-leaf);
   transform: translateY(calc(var(--cover, 0) * 4svh));
 }
-.hero-ring {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: min(32rem, 90%);
-  aspect-ratio: 1;
-  translate: -50% -50%;
-  border-radius: 9999px;
-  border: 1px solid rgb(149 213 178 / 0.28);
-  rotate: calc(var(--cover, 0) * 90deg);
+.portrait-duotone img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 22%;
+  filter: grayscale(1) contrast(1.05);
+  mix-blend-mode: multiply;
 }
-.hero-ring::before,
-.hero-ring::after {
-  content: '';
+.portrait-duotone::before {
+  content: "";
   position: absolute;
-  inset: 12%;
-  border-radius: inherit;
-  border: 1px solid rgb(149 213 178 / 0.18);
+  inset: 0;
+  background: #081c15;
+  mix-blend-mode: screen;
+  pointer-events: none;
 }
-.hero-ring::after {
-  inset: 26%;
-  border-color: rgb(149 213 178 / 0.12);
-}
-.hero-glow {
+.portrait-duotone::after {
+  content: "";
   position: absolute;
-  top: 50%;
-  left: 50%;
-  width: min(38rem, 105%);
-  aspect-ratio: 1;
-  translate: -50% -50%;
-  border-radius: 9999px;
-  background: radial-gradient(
-    circle,
-    rgb(82 183 136 / 0.42) 0%,
-    rgb(45 106 79 / 0.28) 38%,
-    transparent 68%
-  );
-  filter: blur(8px);
-  z-index: 1;
+  inset: 0;
+  z-index: -1;
+  border: 2px solid var(--color-leaf);
+  transform: translate(18px, 18px);
+  transition: transform 0.25s ease;
+}
+.portrait-duotone:hover img,
+.portrait-duotone:focus-within img {
+  filter: none;
+  mix-blend-mode: normal;
+}
+.portrait-duotone:hover::after,
+.portrait-duotone:focus-within::after {
+  transform: translate(10px, 10px);
 }
 .scroll-cue {
   position: relative;
@@ -250,20 +247,9 @@
     align-items: center;
     justify-content: center;
   }
-  .hero-portrait img {
-    width: min(15rem, 60%);
-    aspect-ratio: 1;
-    object-fit: cover;
-    object-position: 50% 25%;
-    border-radius: 9999px;
-    border: 1px solid rgb(149 213 178 / 0.35);
+  .portrait-duotone {
+    width: min(15rem, 62%);
     transform: none;
-  }
-  .hero-ring {
-    width: min(20rem, 80%);
-  }
-  .hero-glow {
-    width: min(22rem, 88%);
   }
   .hero-terminal-wrap {
     order: 3;
@@ -277,7 +263,7 @@
 
 /* Reduced motion (device setting or the menu toggle): one static layout. */
 html[data-motion='reduced'] .hero-copy,
-html[data-motion='reduced'] .hero-portrait img {
+html[data-motion='reduced'] .portrait-duotone {
   transform: none;
   opacity: 1;
 }
@@ -288,9 +274,6 @@ html[data-motion='reduced'] .hero-portrait img {
     gap: 1.5rem;
     padding-top: 5.5rem;
     padding-bottom: 3.5rem;
-  }
-  .hero-portrait img {
-    max-height: min(55svh, 28rem);
   }
 }
 
