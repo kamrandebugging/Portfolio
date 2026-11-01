@@ -39,7 +39,7 @@
       overscroll-behavior: none;
       pointer-events: auto;
       opacity: 1;
-      transition: opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1);
     }
     #mk-preloader.mk-fading {
       opacity: 0;
@@ -82,33 +82,37 @@
       text-indent: 0.12em;
       text-transform: uppercase;
       color: #d8f3dc;
-      will-change: transform, opacity;
+      will-change: transform, opacity, filter;
       white-space: nowrap;
     }
     #mk-preloader.mk-running .mk-word {
-      animation: mkWordCycle 0.45s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+      animation: mkWordCycle 0.65s cubic-bezier(0.16, 1, 0.3, 1) forwards;
     }
     #mk-preloader.mk-running .mk-w-1 { animation-delay: 0s; }
-    #mk-preloader.mk-running .mk-w-2 { animation-delay: 0.45s; }
-    #mk-preloader.mk-running .mk-w-3 { animation-delay: 0.9s; }
-    #mk-preloader.mk-running .mk-w-4 { animation-delay: 1.35s; }
+    #mk-preloader.mk-running .mk-w-2 { animation-delay: 0.65s; }
+    #mk-preloader.mk-running .mk-w-3 { animation-delay: 1.30s; }
+    #mk-preloader.mk-running .mk-w-4 { animation-delay: 1.95s; }
 
     @keyframes mkWordCycle {
       0% {
         opacity: 0;
-        transform: translateY(16px);
+        transform: translateY(20px) scale(0.97);
+        filter: blur(4px);
       }
-      16% {
+      18% {
         opacity: 1;
-        transform: translateY(0);
+        transform: translateY(0) scale(1);
+        filter: blur(0px);
       }
       82% {
         opacity: 1;
-        transform: translateY(0);
+        transform: translateY(0) scale(1);
+        filter: blur(0px);
       }
       100% {
         opacity: 0;
-        transform: translateY(-16px);
+        transform: translateY(-20px) scale(0.97);
+        filter: blur(4px);
       }
     }
 
@@ -130,26 +134,28 @@
     .mk-char {
       display: inline-block;
       opacity: 0;
-      will-change: transform, opacity;
+      will-change: transform, opacity, filter;
     }
     #mk-preloader.mk-running .mk-char {
-      animation: mkLetterIn 0.22s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      animation: mkLetterIn 0.45s cubic-bezier(0.16, 1, 0.3, 1) forwards;
     }
-    #mk-preloader.mk-running .mk-c-1 { animation-delay: 1.80s; }
-    #mk-preloader.mk-running .mk-c-2 { animation-delay: 1.84s; }
-    #mk-preloader.mk-running .mk-c-3 { animation-delay: 1.88s; }
-    #mk-preloader.mk-running .mk-c-4 { animation-delay: 1.92s; }
-    #mk-preloader.mk-running .mk-c-5 { animation-delay: 1.96s; }
-    #mk-preloader.mk-running .mk-c-6 { animation-delay: 2.00s; }
+    #mk-preloader.mk-running .mk-c-1 { animation-delay: 2.60s; }
+    #mk-preloader.mk-running .mk-c-2 { animation-delay: 2.68s; }
+    #mk-preloader.mk-running .mk-c-3 { animation-delay: 2.76s; }
+    #mk-preloader.mk-running .mk-c-4 { animation-delay: 2.84s; }
+    #mk-preloader.mk-running .mk-c-5 { animation-delay: 2.92s; }
+    #mk-preloader.mk-running .mk-c-6 { animation-delay: 3.00s; }
 
     @keyframes mkLetterIn {
       0% {
         opacity: 0;
-        transform: translateY(14px);
+        transform: translateY(18px) scale(0.96);
+        filter: blur(3px);
       }
       100% {
         opacity: 1;
-        transform: translateY(0);
+        transform: translateY(0) scale(1);
+        filter: blur(0px);
       }
     }
 
@@ -157,14 +163,14 @@
       width: clamp(140px, 36vw, 240px);
       height: 1px;
       background-color: #52b788;
-      margin: clamp(12px, 2vh, 18px) auto;
+      margin: clamp(14px, 2.2vh, 20px) auto;
       opacity: 0;
       transform: scaleX(0);
       transform-origin: center;
       will-change: transform, opacity;
     }
     #mk-preloader.mk-running .mk-rule {
-      animation: mkRuleIn 0.24s cubic-bezier(0.16, 1, 0.3, 1) 2.08s forwards;
+      animation: mkRuleIn 0.50s cubic-bezier(0.16, 1, 0.3, 1) 3.05s forwards;
     }
 
     @keyframes mkRuleIn {
@@ -186,21 +192,23 @@
       text-indent: clamp(0.14em, 1.8vw, 0.22em);
       color: #d8f3dc;
       opacity: 0;
-      will-change: transform, opacity;
+      will-change: transform, opacity, filter;
       white-space: nowrap;
     }
     #mk-preloader.mk-running .mk-sub {
-      animation: mkSubIn 0.24s cubic-bezier(0.16, 1, 0.3, 1) 2.14s forwards;
+      animation: mkSubIn 0.50s cubic-bezier(0.16, 1, 0.3, 1) 3.15s forwards;
     }
 
     @keyframes mkSubIn {
       0% {
         opacity: 0;
-        transform: translateY(8px);
+        transform: translateY(10px);
+        filter: blur(2px);
       }
       100% {
         opacity: 0.9;
         transform: translateY(0);
+        filter: blur(0px);
       }
     }
   </style>
@@ -283,8 +291,8 @@
         sessionStorage.setItem('mk_preloader_seen', '1');
       } catch (err) {}
 
-      // Hard failsafe: force-remove node after 5s no matter what
-      var failsafeTimer = setTimeout(removePreloader, 5000);
+      // Hard failsafe: force-remove node after 7.5s no matter what
+      var failsafeTimer = setTimeout(removePreloader, 7500);
 
       var sequenceStarted = false;
       function runSequence() {
@@ -293,17 +301,17 @@
         try {
           preloader.classList.add('mk-running');
 
-          // Active sequence ~2.4s, then 400ms fade-out
+          // Active sequence ~3.95s, then 600ms fade-out
           setTimeout(function () {
             if (isCleanedUp) return;
             preloader.classList.add('mk-fading');
-          }, 2400);
+          }, 3950);
 
           // Remove node completely from DOM after fade-out finishes
           setTimeout(function () {
             clearTimeout(failsafeTimer);
             removePreloader();
-          }, 2800);
+          }, 4600);
         } catch (err) {
           clearTimeout(failsafeTimer);
           removePreloader();
