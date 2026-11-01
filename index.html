@@ -11,6 +11,200 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Rajdhani:wght@600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet" />
   <script>
+    // Synchronous pre-paint check: if the preloader was already seen in this session,
+    // immediately hide it via CSS class to prevent any flash before DOM removal.
+    try {
+      if (sessionStorage.getItem('mk_preloader_seen')) {
+        document.documentElement.classList.add('mk-preload-done');
+      }
+    } catch (e) {}
+  </script>
+  <style>
+    html.mk-preload-done #mk-preloader {
+      display: none !important;
+    }
+    #mk-preloader {
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      background-color: #081c15;
+      color: #d8f3dc;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      user-select: none;
+      -webkit-user-select: none;
+      touch-action: none;
+      overscroll-behavior: none;
+      pointer-events: auto;
+      opacity: 1;
+      transition: opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    #mk-preloader.mk-fading {
+      opacity: 0;
+      pointer-events: none;
+    }
+    .mk-stage-wrap {
+      position: relative;
+      display: grid;
+      place-items: center;
+      width: 100%;
+      max-width: 640px;
+      padding: 0 1.5rem;
+      box-sizing: border-box;
+    }
+    .mk-word-stage,
+    .mk-identity-stage {
+      grid-area: 1 / 1;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      pointer-events: none;
+    }
+    .mk-words-box {
+      display: grid;
+      place-items: center;
+      width: 100%;
+      height: clamp(3.5rem, 11vw, 6.5rem);
+    }
+    .mk-word {
+      grid-area: 1 / 1;
+      opacity: 0;
+      font-family: 'Rajdhani', sans-serif;
+      font-weight: 600;
+      font-size: clamp(2.75rem, 8.5vw, 5.5rem);
+      line-height: 1;
+      letter-spacing: 0.12em;
+      text-indent: 0.12em;
+      text-transform: uppercase;
+      color: #d8f3dc;
+      will-change: transform, opacity;
+      white-space: nowrap;
+    }
+    #mk-preloader.mk-running .mk-word {
+      animation: mkWordCycle 0.45s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    }
+    #mk-preloader.mk-running .mk-w-1 { animation-delay: 0s; }
+    #mk-preloader.mk-running .mk-w-2 { animation-delay: 0.45s; }
+    #mk-preloader.mk-running .mk-w-3 { animation-delay: 0.9s; }
+    #mk-preloader.mk-running .mk-w-4 { animation-delay: 1.35s; }
+
+    @keyframes mkWordCycle {
+      0% {
+        opacity: 0;
+        transform: translateY(16px);
+      }
+      16% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+      82% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+      100% {
+        opacity: 0;
+        transform: translateY(-16px);
+      }
+    }
+
+    .mk-identity-stage {
+      pointer-events: none;
+    }
+    .mk-name {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: clamp(0.12em, 1.8vw, 0.28em);
+      font-family: 'Rajdhani', sans-serif;
+      font-weight: 700;
+      font-size: clamp(2.5rem, 7.5vw, 4.75rem);
+      line-height: 1;
+      color: #d8f3dc;
+      text-transform: uppercase;
+    }
+    .mk-char {
+      display: inline-block;
+      opacity: 0;
+      will-change: transform, opacity;
+    }
+    #mk-preloader.mk-running .mk-char {
+      animation: mkLetterIn 0.22s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+    #mk-preloader.mk-running .mk-c-1 { animation-delay: 1.80s; }
+    #mk-preloader.mk-running .mk-c-2 { animation-delay: 1.84s; }
+    #mk-preloader.mk-running .mk-c-3 { animation-delay: 1.88s; }
+    #mk-preloader.mk-running .mk-c-4 { animation-delay: 1.92s; }
+    #mk-preloader.mk-running .mk-c-5 { animation-delay: 1.96s; }
+    #mk-preloader.mk-running .mk-c-6 { animation-delay: 2.00s; }
+
+    @keyframes mkLetterIn {
+      0% {
+        opacity: 0;
+        transform: translateY(14px);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .mk-rule {
+      width: clamp(140px, 36vw, 240px);
+      height: 1px;
+      background-color: #52b788;
+      margin: clamp(12px, 2vh, 18px) auto;
+      opacity: 0;
+      transform: scaleX(0);
+      transform-origin: center;
+      will-change: transform, opacity;
+    }
+    #mk-preloader.mk-running .mk-rule {
+      animation: mkRuleIn 0.24s cubic-bezier(0.16, 1, 0.3, 1) 2.08s forwards;
+    }
+
+    @keyframes mkRuleIn {
+      0% {
+        opacity: 0;
+        transform: scaleX(0);
+      }
+      100% {
+        opacity: 1;
+        transform: scaleX(1);
+      }
+    }
+
+    .mk-sub {
+      font-family: 'Share Tech Mono', ui-monospace, monospace;
+      font-size: clamp(0.72rem, 2vw, 0.92rem);
+      line-height: 1.4;
+      letter-spacing: clamp(0.14em, 1.8vw, 0.22em);
+      text-indent: clamp(0.14em, 1.8vw, 0.22em);
+      color: #d8f3dc;
+      opacity: 0;
+      will-change: transform, opacity;
+      white-space: nowrap;
+    }
+    #mk-preloader.mk-running .mk-sub {
+      animation: mkSubIn 0.24s cubic-bezier(0.16, 1, 0.3, 1) 2.14s forwards;
+    }
+
+    @keyframes mkSubIn {
+      0% {
+        opacity: 0;
+        transform: translateY(8px);
+      }
+      100% {
+        opacity: 0.9;
+        transform: translateY(0);
+      }
+    }
+  </style>
+  <script>
     // Pairs with public/404.html: restores the real path (and any hash) that
     // GitHub Pages' 404 redirect encoded into ?redirect=... before React Router mounts.
     (function () {
@@ -26,6 +220,117 @@
   </script>
 </head>
 <body>
+  <div id="mk-preloader" aria-hidden="true">
+    <div class="mk-stage-wrap">
+      <div class="mk-word-stage">
+        <div class="mk-words-box">
+          <span class="mk-word mk-w-1">DESIGN</span>
+          <span class="mk-word mk-w-2">BUILD</span>
+          <span class="mk-word mk-w-3">TEST</span>
+          <span class="mk-word mk-w-4">SHIP</span>
+        </div>
+      </div>
+      <div class="mk-identity-stage">
+        <div class="mk-name" aria-label="KAMRAN">
+          <span class="mk-char mk-c-1">K</span>
+          <span class="mk-char mk-c-2">A</span>
+          <span class="mk-char mk-c-3">M</span>
+          <span class="mk-char mk-c-4">R</span>
+          <span class="mk-char mk-c-5">A</span>
+          <span class="mk-char mk-c-6">N</span>
+        </div>
+        <div class="mk-rule"></div>
+        <div class="mk-sub">Full-Stack Developer · 2026</div>
+      </div>
+    </div>
+  </div>
+  <script>
+    (function () {
+      var preloader = document.getElementById('mk-preloader');
+      if (!preloader) return;
+
+      var isCleanedUp = false;
+      function removePreloader() {
+        if (isCleanedUp) return;
+        isCleanedUp = true;
+        try {
+          document.body.style.overflow = '';
+        } catch (e) {}
+        try {
+          if (preloader && preloader.parentNode) {
+            preloader.parentNode.removeChild(preloader);
+          }
+        } catch (e) {}
+        try {
+          window.dispatchEvent(new Event('mk:preloader-done'));
+        } catch (e) {}
+      }
+
+      try {
+        // If already seen in this session: remove synchronously before first paint
+        if (sessionStorage.getItem('mk_preloader_seen')) {
+          removePreloader();
+          return;
+        }
+      } catch (err) {
+        removePreloader();
+        return;
+      }
+
+      // First visit: lock body overflow and mark seen in sessionStorage
+      try {
+        document.body.style.overflow = 'hidden';
+        sessionStorage.setItem('mk_preloader_seen', '1');
+      } catch (err) {}
+
+      // Hard failsafe: force-remove node after 5s no matter what
+      var failsafeTimer = setTimeout(removePreloader, 5000);
+
+      var sequenceStarted = false;
+      function runSequence() {
+        if (sequenceStarted || isCleanedUp) return;
+        sequenceStarted = true;
+        try {
+          preloader.classList.add('mk-running');
+
+          // Active sequence ~2.4s, then 400ms fade-out
+          setTimeout(function () {
+            if (isCleanedUp) return;
+            preloader.classList.add('mk-fading');
+          }, 2400);
+
+          // Remove node completely from DOM after fade-out finishes
+          setTimeout(function () {
+            clearTimeout(failsafeTimer);
+            removePreloader();
+          }, 2800);
+        } catch (err) {
+          clearTimeout(failsafeTimer);
+          removePreloader();
+        }
+      }
+
+      try {
+        // Wait for document.fonts.ready with 1500ms fallback timeout
+        var fontTimeout = setTimeout(runSequence, 1500);
+        if (document.fonts && document.fonts.ready) {
+          document.fonts.ready.then(function () {
+            clearTimeout(fontTimeout);
+            runSequence();
+          }).catch(function () {
+            clearTimeout(fontTimeout);
+            runSequence();
+          });
+        } else {
+          clearTimeout(fontTimeout);
+          runSequence();
+        }
+      } catch (err) {
+        clearTimeout(failsafeTimer);
+        removePreloader();
+      }
+    })();
+  </script>
   <div id="root"></div>
   <script type="module" src="/src/main.tsx"></script>
 </body>
