@@ -51,12 +51,9 @@ export const CommandPalette: React.FC<Props> = ({ open, onClose }) => {
         id: 'labflow-nav',
         label: 'Go to LabFlow',
         glyph: '-->',
-        hint: '/projects/labflow',
+        hint: '#featured-projects',
         keywords: 'labflow saas django react',
-        run: () => {
-          navigate('/projects/labflow');
-          onClose();
-        },
+        run: () => go('#featured-projects'),
       },
       {
         id: 'projects',
@@ -89,39 +86,6 @@ export const CommandPalette: React.FC<Props> = ({ open, onClose }) => {
         hint: '#contact',
         keywords: 'contact email hire internship',
         run: () => go('#contact'),
-      },
-      {
-        id: 'cs-labflow',
-        label: 'Open LabFlow case study',
-        glyph: '[*]',
-        hint: 'case-study',
-        keywords: 'labflow case study open multi-tenant',
-        run: () => {
-          navigate('/projects/labflow');
-          onClose();
-        },
-      },
-      {
-        id: 'cs-fbr',
-        label: 'Open FBR case study',
-        glyph: '[*]',
-        hint: 'case-study',
-        keywords: 'fbr invoicing laravel production case study',
-        run: () => {
-          navigate('/projects/fbr');
-          onClose();
-        },
-      },
-      {
-        id: 'cs-fundora',
-        label: 'Open FundoraGlobal case study',
-        glyph: '[*]',
-        hint: 'case-study',
-        keywords: 'fundora global trading nextjs nestjs case study',
-        run: () => {
-          navigate('/projects/fundoraglobal');
-          onClose();
-        },
       },
       {
         id: 'copy-email',
