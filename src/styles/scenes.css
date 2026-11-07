@@ -719,6 +719,57 @@ html[data-motion='reduced'] .psheet {
 }
 
 /* ============================================================
+   LabFlow case study (dedicated page) — simplified, 2026-11-07.
+   Reuses the site's own tokens/fonts throughout (no separate
+   palette). Scoped under .labflow-cs; only the beam mechanisms and
+   the document-card shadow live here as real custom CSS.
+   ============================================================ */
+
+/* ---------- Architecture — animated conduit beams ----------
+   Pulses travel the SVG paths between nodes; always-on, decorative,
+   not scroll-linked. Recolored to the site's green scale. */
+.labflow-cs .lf-arch-svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 10;
+}
+.labflow-cs .lf-conduit-rail {
+  stroke: rgb(216 243 220 / 0.08);
+  stroke-width: 2;
+  stroke-linecap: round;
+}
+.labflow-cs .lf-conduit-stream {
+  stroke: var(--color-leaf);
+  stroke-width: 2;
+  stroke-dasharray: 16 110;
+  animation: lf-flow 2.6s linear infinite;
+  filter: drop-shadow(0 0 5px rgb(82 183 136 / 0.6));
+}
+@keyframes lf-flow {
+  0% {
+    stroke-dashoffset: 150;
+  }
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .labflow-cs .lf-conduit-stream {
+    animation: none;
+  }
+}
+
+/* ---------- Document card ---------- */
+.labflow-cs .lf-doc-card {
+  background: var(--color-paper);
+  color: var(--color-ink);
+  box-shadow: 0 30px 70px -24px rgb(0 0 0 / 0.55);
+}
+
+/* ============================================================
    Ticket-to-Ship Pipeline (How I work section)
    ============================================================ */
 

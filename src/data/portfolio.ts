@@ -392,6 +392,7 @@ export const portfolioData: PortfolioData = {
   },
   navLinks: [
     { label: 'About', href: '#about', blurb: 'Who I am and how I work' },
+    { label: 'LabFlow', href: '/projects/labflow', blurb: 'Patient to report, end to end' },
     { label: 'Projects', href: '#projects', blurb: 'Seven projects, three in depth' },
     { label: 'Proof', href: '#proof', blurb: 'Numbers and recognition' },
     { label: 'Experience', href: '#experience', blurb: 'Roles and the stack' },

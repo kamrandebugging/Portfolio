@@ -7,11 +7,14 @@
 
 const STORE_KEY = 'portfolio-sound'; // 'on' | 'off'
 
+// Owner decision 2026-11-07: sound off by default for every visitor. The
+// existing mute toggle still works — it just now opts in to 'on' instead of
+// opting out of 'off'.
 function readMuted(): boolean {
   try {
-    return typeof window !== 'undefined' && window.localStorage.getItem(STORE_KEY) === 'off';
+    return typeof window === 'undefined' || window.localStorage.getItem(STORE_KEY) !== 'on';
   } catch {
-    return false;
+    return true;
   }
 }
 

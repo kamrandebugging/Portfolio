@@ -63,8 +63,8 @@ export const FeaturedProjects: React.FC = () => {
         <div className="mt-16 flex flex-col gap-6">
           {featured.map((project, i) => {
             const reverse = i % 2 === 1;
-            // No project currently has a dedicated case-study route.
-            const to: string | undefined = undefined;
+            // Only LabFlow has a dedicated case-study route so far.
+            const to = project.id === 'labflow' ? '/projects/labflow' : undefined;
             const body = (
               <>
                 {project.image && (
