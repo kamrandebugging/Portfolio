@@ -48,14 +48,6 @@ export const CommandPalette: React.FC<Props> = ({ open, onClose }) => {
         run: () => go('#about'),
       },
       {
-        id: 'labflow-nav',
-        label: 'Go to LabFlow',
-        glyph: '-->',
-        hint: '/projects/labflow',
-        keywords: 'labflow saas django react',
-        run: () => go('/projects/labflow'),
-      },
-      {
         id: 'projects',
         label: 'Go to Projects',
         glyph: '-->',
